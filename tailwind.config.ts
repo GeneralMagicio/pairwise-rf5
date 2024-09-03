@@ -8,6 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: "#FF0420"
+      },
+      fontFamily: {
+        inter: ['var(--font-inter)'],
+        mono: ['var(--font-roboto-mono)'],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

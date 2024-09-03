@@ -3,7 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppKitProvider from "./utils/wallet/provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${inter.variable}`}>
+      <body >
         <AppKitProvider>{children}</AppKitProvider>
       </body>
     </html>
