@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const LandingPart2 = () => {
   return (
-    <div className="h-screen w-full">
+    <div className="h-[calc(0.65*100vh)] w-full">
       <div className="flex justify-between items-center w-full">
         <div className="relative">
           <Image

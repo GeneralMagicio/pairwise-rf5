@@ -3,6 +3,7 @@ import ConnectButton from "../utils/wallet/Connect";
 import Image from "next/image";
 import { LandingPart1 } from "./part1";
 import { LandingPart2 } from "./part2";
+import { LandingPart3 } from "./part3";
 
 const Landing = () => {
   return (
@@ -14,6 +15,7 @@ const Landing = () => {
         </div>
         <LandingPart1/>
         <LandingPart2/>
+        <LandingPart3/>
       </div>
     </div>
   );
