@@ -1,5 +1,5 @@
 import { PwLogo } from "@/public/assets/icon-components/PairwiseLogo";
-import ConnectButton from "../utils/wallet/Connect";
+import ConnectWalletModal, {ConnectButton} from "../utils/wallet/Connect";
 import Image from "next/image";
 import { LandingPart1 } from "./part1";
 import { LandingPart2 } from "./part2";
@@ -13,6 +13,7 @@ const Landing = () => {
           <PwLogo />
           <ConnectButton />
         </div>
+        <ConnectWalletModal/>
         <LandingPart1/>
         <LandingPart2/>
         <LandingPart3/>

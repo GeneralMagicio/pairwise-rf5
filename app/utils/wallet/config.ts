@@ -1,7 +1,9 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
+import { createClient } from 'viem'
 
-import { cookieStorage, createStorage } from 'wagmi'
+import { cookieStorage, createStorage, http } from 'wagmi'
 import { mainnet, optimism, optimismSepolia, sepolia } from 'wagmi/chains'
+import { coinbaseWallet, walletConnect } from 'wagmi/connectors'
 
 // Get projectId from https://cloud.walletconnect.com
 // export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
@@ -18,10 +20,16 @@ export const metadata = {
 }
 
 // Create wagmiConfig
-const chains = [mainnet, sepolia, optimism, optimismSepolia] as const
+const chains = [mainnet, optimism] as const
 export const config = defaultWagmiConfig({
   chains,
   projectId,
+  auth: {
+    email: false,
+    socials: [],
+    showWallets: false,
+    walletFeatures:false,
+  },
   metadata,
   ssr: true,
 })
