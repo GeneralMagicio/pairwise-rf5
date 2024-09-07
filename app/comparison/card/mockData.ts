@@ -1,3 +1,4 @@
+// rename this
 export interface Protocol {
   name: string;
   profileImage: string;
@@ -7,6 +8,7 @@ export interface Protocol {
     x: string;
     website: string;
     warpcast: string;
+    mirror: string;
   };
   repos: {
     url: string;
@@ -62,6 +64,7 @@ export const acrossProtocol: Protocol = {
     x: "https://x.com/across_protocol",
     website: "https://across.to",
     warpcast: "https://warpcast.com/across_protocol",
+    mirror: "https://mirror.com/across_protocol",
   },
   repos: [
     {

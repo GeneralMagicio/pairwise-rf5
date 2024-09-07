@@ -1,37 +1,43 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Protocol } from "./mockData";
+import { ExternalLink } from "./ExternalLink";
+import GithubBox from "./GithubBox";
 
 interface CollapsibleProps {
   title: string;
   children: React.ReactNode;
 }
 
-const Collapsible: React.FC<CollapsibleProps> = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(true);
 
-  const handleClick = () => {
-    console.log("click!!")
-    setIsOpen(!isOpen);
-  }
+  // const handleClick = () => {
+  //   console.log("click!!");
+  //   setIsOpen(!isOpen);
+  // };
 
   return (
     <div className="border rounded-lg mb-4">
-      <button
-        className="w-full text-left p-4 font-semibold flex justify-between items-center"
-        onClick={handleClick}
-      >
-        {title}
-        <span>{isOpen ? "▲" : "▼"}</span>
-      </button>
-      {isOpen && <div className="p-4 border-t">{children}</div>}
+      <div className="flex flex-col p-4 gap-4 items-start">
+        <button
+          className="font-semibold text-xl"
+          // onClick={handleClick}
+        >
+          {title}
+        </button>
+        <span className="text-primary text-sm cursor-pointer"> View Less </span>
+      </div>
+      {isOpen && <div className="p-4">{children}</div>}
     </div>
   );
 };
 
-export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => {
+export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
+  protocol,
+}) => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container bg-yellow-50 mx-auto p-2 max-w-[40vw] rounded-xl border-4 border-yellow-200 rounded-t-4 mt-4 mb-16">
       <div className="relative h-40">
         <Image
           src={protocol.bannerImage}
@@ -39,52 +45,42 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
           alt="Banner"
           layout="fill"
           objectFit="cover"
-          className="rounded-t-lg"
+          className="rounded-lg"
         />
       </div>
-      <div className="bg-gray-100 p-6 rounded-b-lg shadow-md">
-        <div className="flex items-center mb-4">
-          <Image
-            src={protocol.profileImage}
-            unoptimized
-            alt={protocol.name}
-            width={64}
-            height={64}
-            className="rounded-full mr-4"
-          />
+      <div className="relative bg-yellow-50 p-6 shadow-md">
+        <Image
+          src={protocol.profileImage}
+          unoptimized
+          alt={protocol.name}
+          width={80}
+          height={80}
+          className="absolute rounded-md -top-12 mr-4"
+        />
+        <div className="flex items-center my-4">
           <h1 className="text-3xl font-bold">{protocol.name}</h1>
         </div>
         <p className="mb-4">{protocol.description}</p>
-        <div className="flex space-x-4 mb-6">
-          <a
-            href={protocol.socialLinks.x}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            X
-          </a>
-          <a
-            href={protocol.socialLinks.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            Website
-          </a>
-          <a
-            href={protocol.socialLinks.warpcast}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            Warpcast
-          </a>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+          <ExternalLink address={protocol.socialLinks.website} type="website" />
+          <ExternalLink
+            address={protocol.socialLinks.warpcast}
+            type="warpcast"
+          />
+          <ExternalLink address={protocol.socialLinks.x} type="x" />
+          <ExternalLink address={protocol.socialLinks.mirror} type="mirror" />
         </div>
 
-        <Collapsible title="Repos, links, and contracts">
+        <Section title="Repos, links, and contracts">
           <div className="space-y-4">
             {protocol.repos.map((repo, index) => (
+              <GithubBox repo={repo} />
+            ))}
+          </div>
+        </Section>
+        <Section title="Repos, links, and contracts">
+          <div className="space-y-4">
+            {/* {protocol.repos.map((repo, index) => (
               <div key={index} className="border p-4 rounded">
                 <h3 className="font-semibold">{repo.url}</h3>
                 <p>{repo.description}</p>
@@ -97,7 +93,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
                   <span>👥 {repo.contributors}</span>
                 </div>
               </div>
-            ))}
+            ))} */}
             {protocol.contracts.map((contract, index) => (
               <div key={index} className="border p-4 rounded">
                 <h3 className="font-semibold">{contract.address}</h3>
@@ -105,9 +101,9 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
               </div>
             ))}
           </div>
-        </Collapsible>
+        </Section>
 
-        <Collapsible title="Testimonials">
+        <Section title="Testimonials">
           <div className="space-y-4">
             {protocol.testimonials.map((testimonial, index) => (
               <div key={index} className="border p-4 rounded">
@@ -116,9 +112,9 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
               </div>
             ))}
           </div>
-        </Collapsible>
+        </Section>
 
-        <Collapsible title="Impact statement">
+        <Section title="Impact statement">
           <div>
             <p>
               <strong>Category:</strong> {protocol.impactStatement.category}
@@ -132,22 +128,22 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
               <strong>Date Range:</strong> {protocol.impactStatement.dateRange}
             </p>
           </div>
-        </Collapsible>
+        </Section>
 
-        <Collapsible title="Project Support">
+        <Section title="Project Support">
           <p>{protocol.projectSupport}</p>
-        </Collapsible>
+        </Section>
 
-        <Collapsible title="Pricing model">
+        <Section title="Pricing model">
           <div>
             <h3 className="font-semibold">Freemium</h3>
             <p>{protocol.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
             <p>{protocol.pricingModel.payToUse}</p>
           </div>
-        </Collapsible>
+        </Section>
 
-        <Collapsible title="Grants, funding, and revenue">
+        <Section title="Grants, funding, and revenue">
           <div>
             <h3 className="font-semibold">Grants</h3>
             {protocol.grants.map((grant, index) => (
@@ -168,7 +164,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({ protocol }) => 
               {protocol.revenue.amount} ({protocol.revenue.year})
             </p>
           </div>
-        </Collapsible>
+        </Section>
       </div>
     </div>
   );
