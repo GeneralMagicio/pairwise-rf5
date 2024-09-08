@@ -47,18 +47,15 @@ export interface Protocol {
     payToUse: string;
   };
   grants: {
-    name: string;
-    amount: number;
+    title: string;
+    money: {
+      currency: "op" | "usd",
+      amount: string;
+    };
+    link?: string;
+    time?: string;
     description: string;
   }[];
-  funding: {
-    amount: string;
-    year: number;
-  };
-  revenue: {
-    amount: string;
-    year: number;
-  };
 }
 
 export const acrossProtocol: Protocol = {
@@ -192,36 +189,58 @@ export const acrossProtocol: Protocol = {
   },
   grants: [
     {
-      name: "Grant: Foundation Mission",
-      amount: 500000,
-      description:
-        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      title: "Grant: Foundation Mission",
+      money: {
+        currency: "op",
+        amount: "500,000"
+      },
+      link: "link_placeholder/ipsum...",
+      description: "Description or details from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusa et verimos doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo unde omni."
     },
     {
-      name: "Grant: Foundation Grant",
-      amount: 799999,
-      description:
-        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Grant: Foundation Grant",
+      money: {
+        currency: "op",
+        amount: "799,999"
+      },
+      link: "link_placeholder/ipsum...",
+      description: "This grant aims to support foundational projects that align with the organization's core mission. It provides substantial funding to initiatives that have the potential to create significant impact and drive innovation in the field."
     },
     {
-      name: "Grant: Token House Mission",
-      amount: 10000,
-      description:
-        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Grant: Token House Mission",
+      money: {
+        currency: "op",
+        amount: "10,500"
+      },
+      link: "link_placeholder/ipsum...",
+      description: "The Token House Mission grant is designed to support projects that enhance the ecosystem's token-based governance model. It funds initiatives that improve community engagement, decision-making processes, and overall decentralization efforts."
     },
     {
-      name: "Grant: Other",
-      amount: 250000,
-      description:
-        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Grant: Other Entities",
+      money: {
+        currency: "usd",
+        amount: "250K - 500K"
+      },
+      link: "link_placeholder/ipsum...",
+      time: "2024",
+      description: "This grant program targets various entities working on diverse projects within the ecosystem. It offers flexible funding to support a wide range of initiatives that contribute to the growth and development of the platform."
     },
+    {
+      title: "Funding",
+      money: {
+        currency: "usd",
+        amount: "Less than $250k"
+      },
+      time: "2024",
+      description: "From a16z"
+    },
+    {
+      title: "Revenue",
+      money: {
+        currency: "usd",
+        amount: "$500K - $1M"
+      },
+      description: ""
+    }
   ],
-  funding: {
-    amount: "Less than $250k",
-    year: 2024,
-  },
-  revenue: {
-    amount: "$500k - $1M",
-    year: 2024,
-  },
 };

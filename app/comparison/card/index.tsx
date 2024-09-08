@@ -5,6 +5,7 @@ import { ExternalLink } from "./ExternalLink";
 import GithubBox from "./GithubBox";
 import SimpleInfoBox from "./SimpleInfoBox";
 import QABox from "./QABox";
+import GrantBox from "./GrantBox";
 
 interface CollapsibleProps {
   title: string;
@@ -110,7 +111,8 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           <div className="space-y-4">
             <div className="space-y-2">
               <p>
-                <strong className="text-gray-800">Category:</strong> {protocol.impactStatement.category}
+                <strong className="text-gray-800">Category:</strong>{" "}
+                {protocol.impactStatement.category}
               </p>
               <p>
                 <strong className="text-gray-800">Subcategory:</strong>{" "}
@@ -136,8 +138,16 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
 
         <Section title="Pricing model">
           <div className="space-y-2">
-            <SimpleInfoBox title="Freemium" description={protocol.pricingModel.freemium} type="pricing"/>
-            <SimpleInfoBox title="Pay-to-use" description={protocol.pricingModel.payToUse} type="pricing"/>
+            <SimpleInfoBox
+              title="Freemium"
+              description={protocol.pricingModel.freemium}
+              type="pricing"
+            />
+            <SimpleInfoBox
+              title="Pay-to-use"
+              description={protocol.pricingModel.payToUse}
+              type="pricing"
+            />
             {/* <h3 className="font-semibold">Freemium</h3>
             <p>{protocol.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
@@ -145,26 +155,11 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           </div>
         </Section>
 
-        <Section title="Grants, funding, and revenue">
-          <div>
-            <h3 className="font-semibold">Grants</h3>
+        <Section title="Grants and investment">
+          <div className="space-y-2">
             {protocol.grants.map((grant, index) => (
-              <div key={index} className="mb-2">
-                <p>
-                  <strong>{grant.name}:</strong> $
-                  {grant.amount.toLocaleString()}
-                </p>
-                <p>{grant.description}</p>
-              </div>
+              <GrantBox {...grant}/>
             ))}
-            <h3 className="font-semibold mt-4">Funding</h3>
-            <p>
-              {protocol.funding.amount} ({protocol.funding.year})
-            </p>
-            <h3 className="font-semibold mt-4">Revenue</h3>
-            <p>
-              {protocol.revenue.amount} ({protocol.revenue.year})
-            </p>
           </div>
         </Section>
       </div>
