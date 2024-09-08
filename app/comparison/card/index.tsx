@@ -6,6 +6,7 @@ import GithubBox from "./GithubBox";
 import SimpleInfoBox from "./SimpleInfoBox";
 import QABox from "./QABox";
 import GrantBox from "./GrantBox";
+import Switch from "react-switch";
 
 interface CollapsibleProps {
   title: string;
@@ -39,6 +40,12 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
 export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
   protocol,
 }) => {
+  const [aiMode, setAiMode] = useState(false);
+
+  const handleChange = () => {
+    setAiMode(!aiMode);
+  };
+
   return (
     <div className="container bg-yellow-50 mx-auto p-2 max-w-[40vw] rounded-xl border-4 border-yellow-200 rounded-t-4 mt-4 mb-16">
       <div className="relative h-40">
@@ -51,7 +58,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           className="rounded-lg"
         />
       </div>
-      <div className="relative bg-yellow-50 p-6 shadow-md">
+      <div className="relative bg-yellow-50 p-2 shadow-md">
         <Image
           src={protocol.profileImage}
           unoptimized
@@ -60,11 +67,34 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           height={80}
           className="absolute rounded-md -top-12 mr-4"
         />
-        <div className="flex items-center my-4">
-          <h1 className="text-3xl font-bold">{protocol.name}</h1>
+        <div className="flex items-center mb-2 mt-12">
+          <h1 className="text-3xl font-semibold">{protocol.name}</h1>
         </div>
-        <p className="mb-4">{protocol.description}</p>
-        <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+        <div className="flex items-center mb-6 gap-2 text-slate-600">
+          <p> By </p>
+          <Image
+            src={protocol.creatorImage}
+            alt="Creator Image"
+            width={20}
+            height={20}
+            className="rounded-full"
+            unoptimized
+          />
+          <p> {protocol.creator} </p>
+        </div>
+        <div className="flex items-center my-2 gap-3">
+          <Switch
+            onColor={"#FF0420"}
+            offColor="#E0E2EB"
+            checkedIcon={false}
+            uncheckedIcon={false}
+            onChange={handleChange}
+            checked={aiMode}
+          />
+          <p className="font-medium"> Toggle AI Mode </p>
+        </div>
+        <p className="mb-4 text-slate-600">{protocol.description}</p>
+        <div className="flex text-slate-600 flex-wrap gap-x-6 gap-y-2 mb-6">
           <ExternalLink address={protocol.socialLinks.website} type="website" />
           <ExternalLink
             address={protocol.socialLinks.warpcast}
@@ -158,7 +188,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
         <Section title="Grants and investment">
           <div className="space-y-2">
             {protocol.grants.map((grant, index) => (
-              <GrantBox {...grant}/>
+              <GrantBox {...grant} />
             ))}
           </div>
         </Section>

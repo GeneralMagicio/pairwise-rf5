@@ -3,6 +3,8 @@ export interface Protocol {
   name: string;
   profileImage: string;
   bannerImage: string;
+  creator: string;
+  creatorImage: string;
   description: string;
   socialLinks: {
     x: string;
@@ -60,6 +62,8 @@ export interface Protocol {
 
 export const acrossProtocol: Protocol = {
   name: "Across Protocol",
+  creator: "The Puky Cats",
+  creatorImage: "https://img.babymarkt.com/isa/163853/c3/detailpage_desktop_600/-/c010866e8dca4c54a327b396f9479bbb/puky-trehjuling-cat-s6-ceety-silver-bla-2412-a235433",
   profileImage:
     "https://storage.googleapis.com/op-atlas/88007b1e-888c-48b1-b384-68007c654b08.png", // Placeholder path
   bannerImage:
