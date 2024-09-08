@@ -36,8 +36,10 @@ export interface Protocol {
   impactStatement: {
     category: string;
     subcategory: string;
-    description: string;
-    dateRange: string;
+    qas: {
+      question: string;
+      answer: string;
+    }[];
   };
   projectSupport: string;
   pricingModel: {
@@ -61,9 +63,12 @@ export interface Protocol {
 
 export const acrossProtocol: Protocol = {
   name: "Across Protocol",
-  profileImage: "https://storage.googleapis.com/op-atlas/88007b1e-888c-48b1-b384-68007c654b08.png", // Placeholder path
-  bannerImage: "https://storage.googleapis.com/op-atlas/f21beedb-75e7-4903-add5-cf143b691253.png", // Placeholder path
-  description: "Across is an interoperability protocol powered by intents. We offer the fastest and lowest cost bridging solution for end-users, and streamlined interoperability for developers.",
+  profileImage:
+    "https://storage.googleapis.com/op-atlas/88007b1e-888c-48b1-b384-68007c654b08.png", // Placeholder path
+  bannerImage:
+    "https://storage.googleapis.com/op-atlas/f21beedb-75e7-4903-add5-cf143b691253.png", // Placeholder path
+  description:
+    "Across is an interoperability protocol powered by intents. We offer the fastest and lowest cost bridging solution for end-users, and streamlined interoperability for developers.",
   socialLinks: {
     x: "https://x.com/across_protocol",
     website: "https://across.to",
@@ -73,7 +78,8 @@ export const acrossProtocol: Protocol = {
   repos: [
     {
       url: "github.com/across-protocol/across-1",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
       stars: 25,
       forks: 7,
       issues: 5,
@@ -84,7 +90,8 @@ export const acrossProtocol: Protocol = {
     },
     {
       url: "github.com/across-protocol/across-2",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
       stars: 0,
       forks: 0,
       issues: 0,
@@ -95,7 +102,8 @@ export const acrossProtocol: Protocol = {
     },
     {
       url: "github.com/across-protocol/across-3",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
       stars: 0,
       forks: 0,
       issues: 0,
@@ -108,29 +116,35 @@ export const acrossProtocol: Protocol = {
   links: [
     {
       address: "link_placeholder/ipsum.com",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
     {
       address: "link_placeholder/ipsum.com",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
     {
       address: "link_placeholder/ipsum.com",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
   ],
   contracts: [
     {
       address: "0xc30141B657f4216252dc59Af2e7CdB9D8792e1B0",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
     {
       address: "0xc30141B657f4216252dc59Af2e7CdB9D8792e1B1",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
     {
       address: "0xc30141B657f4216252dc59Af2e7CdB9D8792e1B2",
-      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      description:
+        "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
   ],
   testimonials: [
@@ -142,34 +156,64 @@ export const acrossProtocol: Protocol = {
   impactStatement: {
     category: "Ethereum Core Contributions",
     subcategory: "Interoperability",
-    description: "Applicants were asked to report on impact made between Oct 1, 2023 - July 31, 2024.",
-    dateRange: "Oct 1, 2023 - July 31, 2024",
+    qas: [
+      {
+        question:
+          "How does your project support, or is a dependency of, the OP Stack?",
+        answer:
+          "Our project serves as a crucial component within the OP Stack ecosystem, providing enhanced scalability and interoperability. It supports the OP Stack by offering optimized data processing capabilities, improving transaction throughput, and enabling seamless integration with other layer-2 solutions. As a dependency, it contributes to the overall efficiency and robustness of the OP Stack infrastructure.",
+      },
+      {
+        question:
+          "Which OP chains have used your project or contribution, and how have they benefited from it?",
+        answer:
+          "Several prominent OP chains have integrated our project, including OptimismPBC, Boba Network, and Metis. These chains have benefited through improved transaction speeds, reduced gas costs, and enhanced security features. Our contribution has enabled them to handle higher volumes of transactions more efficiently, resulting in a better user experience and increased adoption of their respective platforms.",
+      },
+      {
+        question:
+          "What would happen if your project or contribution ceased to exist?",
+        answer:
+          "If our project ceased to exist, it would likely cause disruptions in the OP Stack ecosystem. OP chains relying on our solution might experience reduced performance, increased transaction costs, and potential security vulnerabilities. The absence of our contribution could slow down innovation in the layer-2 scaling space and potentially hinder the growth and adoption of OP-based solutions.",
+      },
+      {
+        question: "Is there anything else you'd like to add?",
+        answer:
+          "We are continuously working on improving our project to better serve the OP Stack community. We welcome feedback and collaboration opportunities to further enhance the ecosystem's capabilities and drive innovation in the layer-2 scaling landscape. Our team is committed to maintaining and evolving our contribution to ensure long-term sustainability and value for all OP chain users and developers.",
+      },
+    ],
   },
-  projectSupport: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat? Duis aute irure dolor in reprehenderit qui in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  projectSupport:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat? Duis aute irure dolor in reprehenderit qui in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   pricingModel: {
-    freemium: "Details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    payToUse: "Details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    freemium:
+      "Details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    payToUse:
+      "Details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   grants: [
     {
       name: "Grant: Foundation Mission",
       amount: 500000,
-      description: "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      description:
+        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     },
     {
       name: "Grant: Foundation Grant",
       amount: 799999,
-      description: "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      description:
+        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
       name: "Grant: Token House Mission",
       amount: 10000,
-      description: "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      description:
+        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
       name: "Grant: Other",
       amount: 250000,
-      description: "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      description:
+        "Description of details from project settings lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
   ],
   funding: {

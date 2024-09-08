@@ -4,6 +4,7 @@ import { Protocol } from "./mockData";
 import { ExternalLink } from "./ExternalLink";
 import GithubBox from "./GithubBox";
 import SimpleInfoBox from "./SimpleInfoBox";
+import QABox from "./QABox";
 
 interface CollapsibleProps {
   title: string;
@@ -22,7 +23,7 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
     <div className="border rounded-lg mb-4">
       <div className="flex flex-col p-4 gap-4 items-start">
         <button
-          className="font-semibold text-xl"
+          className="font-medium text-xl"
           // onClick={handleClick}
         >
           {title}
@@ -78,10 +79,18 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
               <GithubBox repo={repo} />
             ))}
             {protocol.links.map((contract, index) => (
-              <SimpleInfoBox description={contract.description} title={contract.address} type="link"/>
+              <SimpleInfoBox
+                description={contract.description}
+                title={contract.address}
+                type="link"
+              />
             ))}
             {protocol.contracts.map((contract, index) => (
-              <SimpleInfoBox description={contract.description} title={contract.address} type="contract"/>
+              <SimpleInfoBox
+                description={contract.description}
+                title={contract.address}
+                type="contract"
+              />
             ))}
           </div>
         </Section>
@@ -98,31 +107,41 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
         </Section>
 
         <Section title="Impact statement">
-          <div>
-            <p>
-              <strong>Category:</strong> {protocol.impactStatement.category}
-            </p>
-            <p>
-              <strong>Subcategory:</strong>{" "}
-              {protocol.impactStatement.subcategory}
-            </p>
-            <p>{protocol.impactStatement.description}</p>
-            <p>
-              <strong>Date Range:</strong> {protocol.impactStatement.dateRange}
-            </p>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <p>
+                <strong className="text-gray-800">Category:</strong> {protocol.impactStatement.category}
+              </p>
+              <p>
+                <strong className="text-gray-800">Subcategory:</strong>{" "}
+                {protocol.impactStatement.subcategory}
+              </p>
+              <p className="text-primary">
+                Applicants were asked to report on impact made between Oct 1,
+                2023 - July 31, 2024. Promises of future deliverables or impact
+                are not allowed.
+              </p>
+            </div>
+            <div className="space-y-2">
+              {protocol.impactStatement.qas.map(({ question, answer }) => (
+                <QABox question={question} answer={answer} />
+              ))}
+            </div>
           </div>
         </Section>
 
-        <Section title="Project Support">
+        {/* <Section title="Project Support">
           <p>{protocol.projectSupport}</p>
-        </Section>
+        </Section> */}
 
         <Section title="Pricing model">
-          <div>
-            <h3 className="font-semibold">Freemium</h3>
+          <div className="space-y-2">
+            <SimpleInfoBox title="Freemium" description={protocol.pricingModel.freemium} type="pricing"/>
+            <SimpleInfoBox title="Pay-to-use" description={protocol.pricingModel.payToUse} type="pricing"/>
+            {/* <h3 className="font-semibold">Freemium</h3>
             <p>{protocol.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
-            <p>{protocol.pricingModel.payToUse}</p>
+            <p>{protocol.pricingModel.payToUse}</p> */}
           </div>
         </Section>
 
