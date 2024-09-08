@@ -25,6 +25,10 @@ export interface Protocol {
     address: string;
     description: string;
   }[];
+  links: {
+    address: string;
+    description: string;
+  }[];
   testimonials: {
     text: string;
     author: string;
@@ -99,6 +103,20 @@ export const acrossProtocol: Protocol = {
       commits: 0,
       contributors: 0,
       license: "Open source",
+    },
+  ],
+  links: [
+    {
+      address: "link_placeholder/ipsum.com",
+      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+    },
+    {
+      address: "link_placeholder/ipsum.com",
+      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+    },
+    {
+      address: "link_placeholder/ipsum.com",
+      description: "Description if it exists from project settings lorem ipsum ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
     },
   ],
   contracts: [

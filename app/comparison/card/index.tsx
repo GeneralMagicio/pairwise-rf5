@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Protocol } from "./mockData";
 import { ExternalLink } from "./ExternalLink";
 import GithubBox from "./GithubBox";
+import SimpleInfoBox from "./SimpleInfoBox";
 
 interface CollapsibleProps {
   title: string;
@@ -28,7 +29,7 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
         </button>
         <span className="text-primary text-sm cursor-pointer"> View Less </span>
       </div>
-      {isOpen && <div className="p-4">{children}</div>}
+      {isOpen && <div className="p-2">{children}</div>}
     </div>
   );
 };
@@ -76,29 +77,11 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
             {protocol.repos.map((repo, index) => (
               <GithubBox repo={repo} />
             ))}
-          </div>
-        </Section>
-        <Section title="Repos, links, and contracts">
-          <div className="space-y-4">
-            {/* {protocol.repos.map((repo, index) => (
-              <div key={index} className="border p-4 rounded">
-                <h3 className="font-semibold">{repo.url}</h3>
-                <p>{repo.description}</p>
-                <div className="flex space-x-4 mt-2">
-                  <span>⭐ {repo.stars}</span>
-                  <span>🍴 {repo.forks}</span>
-                  <span>⚠️ {repo.issues}</span>
-                  <span>🔀 {repo.pullRequests}</span>
-                  <span>💻 {repo.commits}</span>
-                  <span>👥 {repo.contributors}</span>
-                </div>
-              </div>
-            ))} */}
+            {protocol.links.map((contract, index) => (
+              <SimpleInfoBox description={contract.description} title={contract.address} type="link"/>
+            ))}
             {protocol.contracts.map((contract, index) => (
-              <div key={index} className="border p-4 rounded">
-                <h3 className="font-semibold">{contract.address}</h3>
-                <p>{contract.description}</p>
-              </div>
+              <SimpleInfoBox description={contract.description} title={contract.address} type="contract"/>
             ))}
           </div>
         </Section>
