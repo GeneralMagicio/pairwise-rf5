@@ -19,7 +19,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
-    <div className="bg-gray-100 rounded-lg shadow-md p-2 py-[12px] max-w-2xl">
+    <div className="bg-gray-50 rounded-lg border border-gray-200 p-2 py-[12px] max-w-2xl">
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-2 items-center">
           <GithubIcon />

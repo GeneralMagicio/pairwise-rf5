@@ -22,7 +22,7 @@ const GrantBox: FC<Props> = ({ title, link, money, time, description }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
-    <div className="bg-gray-100 rounded-lg shadow-md p-2 max-w-2xl">
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 max-w-2xl">
       <div className="flex items-center justify-between py-1">
         <div className="flex gap-6 items-center">
           <span className="text-sm"> {title} </span>

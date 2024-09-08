@@ -22,7 +22,7 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
   // };
 
   return (
-    <div className="border rounded-lg mb-4">
+    <div className="border-t pt-4 rounded-lg mb-4">
       <div className="flex flex-col p-4 gap-4 items-start">
         <button
           className="font-medium text-xl"
@@ -86,6 +86,8 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           <Switch
             onColor={"#FF0420"}
             offColor="#E0E2EB"
+            height={25}
+            width={50}
             checkedIcon={false}
             uncheckedIcon={false}
             onChange={handleChange}
