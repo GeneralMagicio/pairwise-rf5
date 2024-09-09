@@ -47,7 +47,10 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
   }
 
   return (
-    <div className="container relative mx-auto mb-16 mt-4 h-[75vh] w-full max-w-[800px] overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 shadow-md">
+    <div
+      style={{ maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)' }}
+      className="container relative mx-auto mb-16 mt-4 h-[80vh] w-full max-w-[800px] overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 shadow-md"
+    >
       <div className="relative h-40">
         <Image
           src={project.bannerImage}
