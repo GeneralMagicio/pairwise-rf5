@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Protocol } from './mockData'
+import { Project } from './mockData'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
 import SimpleInfoBox from './SimpleInfoBox'
@@ -37,8 +37,8 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
   )
 }
 
-export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
-  protocol,
+export const ProjectCard: React.FC<{ project: Project }> = ({
+  project,
 }) => {
   const [aiMode, setAiMode] = useState(false)
 
@@ -47,10 +47,10 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
   }
 
   return (
-    <div className="container relative mx-auto mb-16 mt-4 h-[65vh] max-h-full max-w-[675px] overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 shadow-md">
+    <div className="container relative mx-auto mb-16 mt-4 h-[75vh] w-full max-w-[800px] overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 shadow-md">
       <div className="relative h-40">
         <Image
-          src={protocol.bannerImage}
+          src={project.bannerImage}
           unoptimized
           alt="Banner"
           layout="fill"
@@ -58,21 +58,21 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
           className="rounded-lg"
         />
         <Image
-          src={protocol.profileImage}
+          src={project.profileImage}
           unoptimized
-          alt={protocol.name}
+          alt={project.name}
           width={80}
           height={80}
           className="absolute -bottom-8 left-4 z-[4] rounded-md"
         />
       </div>
       <div className="mb-2 mt-12 flex items-center">
-        <h1 className="text-3xl font-semibold">{protocol.name}</h1>
+        <h1 className="text-3xl font-semibold">{project.name}</h1>
       </div>
       <div className="mb-6 flex items-center gap-1 text-slate-600">
         <p> By </p>
         <Image
-          src={protocol.creatorImage}
+          src={project.creatorImage}
           alt="Creator Image"
           width={20}
           height={20}
@@ -81,7 +81,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
         />
         <p>
           {' '}
-          {protocol.creator}
+          {project.creator}
           {' '}
         </p>
       </div>
@@ -98,20 +98,20 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
         />
         <p className="font-medium"> Toggle AI Mode </p>
       </div>
-      <p className="mb-4 text-slate-600">{protocol.description}</p>
+      <p className="mb-4 text-slate-600">{project.description}</p>
       <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
-        <ExternalLink address={protocol.socialLinks.website} type="website" />
-        <ExternalLink address={protocol.socialLinks.warpcast} type="warpcast" />
-        <ExternalLink address={protocol.socialLinks.x} type="x" />
-        <ExternalLink address={protocol.socialLinks.mirror} type="mirror" />
+        <ExternalLink address={project.socialLinks.website} type="website" />
+        <ExternalLink address={project.socialLinks.warpcast} type="warpcast" />
+        <ExternalLink address={project.socialLinks.x} type="x" />
+        <ExternalLink address={project.socialLinks.mirror} type="mirror" />
       </div>
 
       <Section title="Repos, links, and contracts">
         <div className="space-y-4">
-          {protocol.repos.map(repo => (
+          {project.repos.map(repo => (
             <GithubBox key={repo.url} repo={repo} />
           ))}
-          {protocol.links.map(contract => (
+          {project.links.map(contract => (
             <SimpleInfoBox
               key={contract.description}
               description={contract.description}
@@ -119,7 +119,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
               type="link"
             />
           ))}
-          {protocol.contracts.map(contract => (
+          {project.contracts.map(contract => (
             <SimpleInfoBox
               key={contract.description}
               description={contract.description}
@@ -132,7 +132,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
 
       <Section title="Testimonials">
         <div className="space-y-4">
-          {protocol.testimonials.map((testimonial, index) => (
+          {project.testimonials.map((testimonial, index) => (
             <div key={index} className="rounded border p-4">
               <p className="italic">{testimonial.text}</p>
               <p className="mt-2 text-right">
@@ -150,12 +150,12 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
             <p>
               <strong className="text-gray-800">Category:</strong>
               {' '}
-              {protocol.impactStatement.category}
+              {project.impactStatement.category}
             </p>
             <p>
               <strong className="text-gray-800">Subcategory:</strong>
               {' '}
-              {protocol.impactStatement.subcategory}
+              {project.impactStatement.subcategory}
             </p>
             <p className="text-primary">
               Applicants were asked to report on impact made between Oct 1, 2023
@@ -164,7 +164,7 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
             </p>
           </div>
           <div className="space-y-2">
-            {protocol.impactStatement.qas.map(({ question, answer }) => (
+            {project.impactStatement.qas.map(({ question, answer }) => (
               <QABox key={question} question={question} answer={answer} />
             ))}
           </div>
@@ -172,31 +172,31 @@ export const ProtocolPage: React.FC<{ protocol: Protocol }> = ({
       </Section>
 
       {/* <Section title="Project Support">
-          <p>{protocol.projectSupport}</p>
+          <p>{project.projectSupport}</p>
         </Section> */}
 
       <Section title="Pricing model">
         <div className="space-y-2">
           <SimpleInfoBox
             title="Freemium"
-            description={protocol.pricingModel.freemium}
+            description={project.pricingModel.freemium}
             type="pricing"
           />
           <SimpleInfoBox
             title="Pay-to-use"
-            description={protocol.pricingModel.payToUse}
+            description={project.pricingModel.payToUse}
             type="pricing"
           />
           {/* <h3 className="font-semibold">Freemium</h3>
-            <p>{protocol.pricingModel.freemium}</p>
+            <p>{project.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
-            <p>{protocol.pricingModel.payToUse}</p> */}
+            <p>{project.pricingModel.payToUse}</p> */}
         </div>
       </Section>
 
       <Section title="Grants and investment">
         <div className="space-y-2">
-          {protocol.grants.map(grant => (
+          {project.grants.map(grant => (
             <GrantBox key={grant.title} {...grant} />
           ))}
         </div>

@@ -1,34 +1,34 @@
-import React, { FC } from "react";
-import { useCollapse } from "react-collapsed";
-import { ArrowDownIcon } from "@/public/assets/icon-components/ArrowDown";
-import { ArrowUpIcon } from "@/public/assets/icon-components/ArrowUp";
+import React, { FC } from 'react'
+import { useCollapse } from 'react-collapsed'
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 
 interface Props {
-  question: string;
-  answer: string;
+  question: string
+  answer: string
 }
 
 const QABox: FC<Props> = ({ answer, question }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 max-w-2xl">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex gap-2 items-center font-semibold">
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-semibold">
           {question}
         </div>
         <button
           {...getToggleProps()}
-          className="text-gray-600 text-sm hover:underline"
+          className="text-sm text-gray-600 hover:underline"
         >
           {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </button>
       </div>
       <section {...getCollapseProps()}>
-        <p className="text-gray-600 mb-4">{answer}</p>
+        <p className="mb-4 text-gray-600">{answer}</p>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default QABox;
+export default QABox
