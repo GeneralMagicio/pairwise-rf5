@@ -1,6 +1,6 @@
-import { SVGProps } from 'react'
+import { FC, SVGProps } from 'react'
 
-export const PwLogo: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
+export const PwLogo: FC<SVGProps<SVGSVGElement>> = () => (
   <svg
     width="240"
     height="60"
