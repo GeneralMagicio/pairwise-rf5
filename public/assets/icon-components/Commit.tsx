@@ -12,5 +12,5 @@ export const CommitIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}

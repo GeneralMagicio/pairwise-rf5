@@ -12,5 +12,5 @@ export const XIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}

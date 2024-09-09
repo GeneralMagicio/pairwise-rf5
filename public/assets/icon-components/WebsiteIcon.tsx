@@ -12,5 +12,5 @@ export const WebsiteIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}

@@ -23,5 +23,5 @@ export const CoinbaseIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  );
-};
+  )
+}

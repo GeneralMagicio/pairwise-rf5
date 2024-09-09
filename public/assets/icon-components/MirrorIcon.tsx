@@ -12,5 +12,5 @@ export const MirrorIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}

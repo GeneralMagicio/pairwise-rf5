@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import { SVGProps } from 'react'
 
 export const PwLogo: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg
@@ -102,4 +102,4 @@ export const PwLogo: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       </clipPath>
     </defs>
   </svg>
-);
+)

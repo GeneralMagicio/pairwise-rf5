@@ -12,5 +12,5 @@ export const ForkIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}

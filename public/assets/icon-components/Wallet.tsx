@@ -15,5 +15,5 @@ export const WalletIcon = () => {
         stroke-linejoin="round"
       />
     </svg>
-  );
-};
+  )
+}

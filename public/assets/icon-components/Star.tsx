@@ -12,5 +12,5 @@ export const StarIcon = () => {
         fill="#404454"
       />
     </svg>
-  );
-};
+  )
+}
