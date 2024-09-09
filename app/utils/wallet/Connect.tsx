@@ -9,7 +9,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react'
 import React from 'react'
 
 export const ConnectButton = () => {
-  const { open, close } = useWeb3Modal()
+  const { open } = useWeb3Modal()
 
   function handleOpen() {
     try {
