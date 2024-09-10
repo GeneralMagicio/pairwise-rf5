@@ -20,6 +20,12 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      screens: {
+        // small laptops
+        sl: { max: '1400px' },
+        // laptops
+        l: { max: '1920px' },
+      },
     },
   },
   plugins: [],
