@@ -13,7 +13,7 @@ export const ConnectButton = () => {
 
   function handleOpen() {
     try {
-      open({ view: 'Networks' })
+      open()
     }
     catch (_e) {
       open()

@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export const LandingPart3 = () => {
   return (
-    <div className="h-[calc(0.65*100vh)] w-full">
+    <div className="h-[calc(0.65*100vh)] min-h-[calc(0.65*760px)] w-full">
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col gap-2 font-inter text-4xl font-bold">
           <div>After completion your results</div>
