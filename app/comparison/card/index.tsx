@@ -7,6 +7,9 @@ import SimpleInfoBox from './SimpleInfoBox'
 import QABox from './QABox'
 import GrantBox from './GrantBox'
 import Switch from 'react-switch'
+import Team, { mockTeam } from './Team'
+import Team2 from './Team'
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 
 interface CollapsibleProps {
   title: string
@@ -30,7 +33,10 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
         >
           {title}
         </button>
-        <span className="cursor-pointer text-sm text-primary"> View Less </span>
+        <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
+          Hide
+          <ArrowUpIcon color="red" />
+        </span>
       </div>
       {true && <div className="p-2">{children}</div>}
     </div>
@@ -83,9 +89,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
           unoptimized
         />
         <p>
-          {' '}
           {project.creator}
-          {' '}
         </p>
       </div>
       <div className="my-2 flex items-center gap-3">
@@ -107,6 +111,10 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
         <ExternalLink address={project.socialLinks.warpcast} type="warpcast" />
         <ExternalLink address={project.socialLinks.x} type="x" />
         <ExternalLink address={project.socialLinks.mirror} type="mirror" />
+      </div>
+
+      <div className="mb-6 w-full">
+        <Team2 team={mockTeam} />
       </div>
 
       <Section title="Repos, links, and contracts">
@@ -136,12 +144,8 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
       <Section title="Testimonials">
         <div className="space-y-4">
           {project.testimonials.map((testimonial, index) => (
-            <div key={index} className="rounded border p-4">
+            <div key={index} className="rounded border bg-gray-50 p-4">
               <p className="italic">{testimonial.text}</p>
-              <p className="mt-2 text-right">
-                -
-                {testimonial.author}
-              </p>
             </div>
           ))}
         </div>
