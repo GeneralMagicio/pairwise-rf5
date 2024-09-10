@@ -1,7 +1,5 @@
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
 import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft'
 import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRightIcon'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import React, { useState } from 'react'
 
 interface TeamMember {
@@ -26,51 +24,6 @@ export const mockTeam: TeamProps['team'] = [
 ]
 
 const Team: React.FC<TeamProps> = ({ team }) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const displayedTeam = expanded ? team : team.slice(0, 5)
-
-  return (
-    <div className="relative flex items-center">
-      {displayedTeam.map((member, index) => (
-        <a
-          key={index}
-          href={member.urlLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0"
-        >
-          <img
-            src={member.profileImg}
-            alt={`Team member ${index + 1}`}
-            style={{ left: index * 24 }}
-            className="absolute -top-0 size-9 rounded-full object-cover"
-          />
-        </a>
-      ))}
-      {!expanded && team.length > 5 && (
-        <button
-          onClick={() => setExpanded(true)}
-          style={{ left: displayedTeam.length * 24 }}
-          className="absolute -top-0 flex size-9 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition-colors hover:bg-gray-300"
-        >
-          <ArrowUpIcon />
-        </button>
-      )}
-      {expanded && team.length > 5 && (
-        <button
-          onClick={() => setExpanded(false)}
-          style={{ left: displayedTeam.length * 24 }}
-          className="absolute -top-0 flex size-9 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition-colors hover:bg-gray-300"
-        >
-          <ArrowDownIcon />
-        </button>
-      )}
-    </div>
-  )
-}
-
-const Team2: React.FC<TeamProps> = ({ team }) => {
   const [expanded, setExpanded] = useState(false)
 
   const displayedTeam = expanded ? team : team.slice(0, 5)
@@ -115,4 +68,4 @@ const Team2: React.FC<TeamProps> = ({ team }) => {
   )
 }
 
-export default Team2
+export default Team

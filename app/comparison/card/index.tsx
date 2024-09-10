@@ -8,7 +8,6 @@ import QABox from './QABox'
 import GrantBox from './GrantBox'
 import Switch from 'react-switch'
 import Team, { mockTeam } from './Team'
-import Team2 from './Team'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 
 interface CollapsibleProps {
@@ -114,7 +113,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
       </div>
 
       <div className="mb-6 w-full">
-        <Team2 team={mockTeam} />
+        <Team team={mockTeam} />
       </div>
 
       <Section title="Repos, links, and contracts">
