@@ -8,11 +8,10 @@ const Landing = () => {
   return (
     <div className="w-full bg-[#F2F3F8]">
       <div className="mx-auto w-[85%] pt-16">
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <PwLogo />
           <ConnectButton />
         </div>
-        {/* <ConnectWalletModal /> */}
         <LandingPart1 />
         <LandingPart2 />
         <LandingPart3 />

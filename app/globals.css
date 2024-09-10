@@ -26,9 +26,6 @@ body {
     rgb(var(--background-start-rgb));
 } */
 
-wui-flex > w3m-email-login-widget {
-  display: none;
-}
 
 @layer utilities {
   .text-balance {

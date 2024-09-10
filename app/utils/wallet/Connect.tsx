@@ -7,9 +7,13 @@ import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnect
 import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import React from 'react'
+import { ConnectedButton } from './ConnectedButton'
+import { useAccount, useDisconnect } from 'wagmi'
 
 export const ConnectButton = () => {
   const { open } = useWeb3Modal()
+  const { address, isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
 
   function handleOpen() {
     try {
@@ -19,6 +23,10 @@ export const ConnectButton = () => {
       open()
     }
   }
+
+  if (isConnected && address) return (
+    <ConnectedButton onLogout={disconnect} wallet={address} />
+  )
 
   return (
     <button onClick={handleOpen} className="flex h-max items-center rounded-full bg-primary px-8 py-3 font-semibold text-white shadow-md transition duration-300 hover:bg-red-600">

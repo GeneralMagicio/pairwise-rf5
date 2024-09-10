@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { ConnectButton } from '@/app/utils/wallet/Connect'
 
 interface HeaderProps {
   progress: number
@@ -29,14 +30,7 @@ const Header: React.FC<HeaderProps> = ({ progress, category, question }) => {
           <span className="mr-2 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">
             {category}
           </span>
-          <div className="flex items-center rounded-full bg-gray-100 px-3 py-1">
-            <span className="max-w-[150px] truncate text-sm text-gray-600">
-              0x34524...8g7tc5f
-            </span>
-            <svg className="ml-1 size-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
+          <ConnectButton />
         </div>
       </div>
 
