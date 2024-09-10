@@ -27,14 +27,12 @@ const GrantBox: FC<Props> = ({ title, link, money, time, description }) => {
       <div className="flex items-center justify-between py-1">
         <div className="flex items-center justify-between gap-6">
           <span className="text-sm">
-            {' '}
-            {title}
-            {' '}
+            {truncate(title, 20)}
           </span>
           {link && (
             <a href={link} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm">
               <WebsiteIcon />
-              {truncate(link, 30)}
+              {truncate(link, 25)}
             </a>
           )}
 
