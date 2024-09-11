@@ -6,14 +6,16 @@ import { WalletIcon } from '@/public/assets/icon-components/Wallet'
 import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnectIcon'
 import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ConnectedButton } from './ConnectedButton'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
+import { loginToAgora } from './agora-login'
 
 export const ConnectButton = () => {
   const { open } = useWeb3Modal()
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
   const { disconnect } = useDisconnect()
+  const { signMessageAsync } = useSignMessage()
 
   function handleOpen() {
     try {
@@ -23,6 +25,17 @@ export const ConnectButton = () => {
       open()
     }
   }
+
+  useEffect(() => {
+    if (!address || !chainId) return
+
+    const func = async () => {
+      const payload = await loginToAgora(address, chainId, signMessageAsync)
+      // console.log(loggedIn)
+    }
+
+    func()
+  }, [isConnected, address, chainId, signMessageAsync])
 
   if (isConnected && address) return (
     <ConnectedButton onLogout={disconnect} wallet={address} />

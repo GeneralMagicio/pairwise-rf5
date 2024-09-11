@@ -8,6 +8,8 @@ import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { State, WagmiProvider } from 'wagmi'
+import { AuthProvider } from './AuthProvider'
+// import { siweProviderConfig } from "./SiweProviderConfig";
 
 // Setup queryClient
 const queryClient = new QueryClient()
@@ -43,7 +45,11 @@ export default function AppKitProvider({
 }) {
   return (
     <WagmiProvider config={config} initialState={initialState}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   )
 }
