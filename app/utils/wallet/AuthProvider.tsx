@@ -7,10 +7,15 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { useAccount, useSignMessage } from 'wagmi'
-import { isLoggedIn, alreadyInProgress, loginToPwBackend } from './pw-login'
-import { isLoggedInToAgora, loginToAgora } from './agora-login'
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
+import { isLoggedIn, alreadyInProgress, loginToPwBackend, logoutFromPwBackend } from './pw-login'
+import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login'
 import { JWTPayload } from './types'
+import Modal from '../Modal'
+import SignInWithWallet from './modals/SignInModal'
+import ConnectLoading from './modals/ConnectLoading'
+import NotBadgeHolder from './modals/NotBhModal'
+import { useRouter } from 'next/navigation'
 
 export enum LogginToPwBackendState {
   Initial,
@@ -51,6 +56,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isNewUser, setIsNewUser] = useState(false)
 
+  const notBhOpen = typeof loggedToAgora === 'object' && loggedToAgora.isBadgeholder === false
+
+  const signInModalOpen = loggedToAgora === 'error' || loggedToPw === LogginToPwBackendState.Error
+
   return (
     <AuthContext.Provider
       value={{
@@ -64,6 +73,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsNewUser,
       }}
     >
+      <Modal isOpen={notBhOpen || signInModalOpen || loginInProgress || false} onClose={() => {}}>
+        {notBhOpen && <NotBadgeHolder />}
+        {loginInProgress && <ConnectLoading />}
+        {signInModalOpen && <SignInWithWallet onSignIn={() => {}} />}
+        {/* {notBhOpen && <SignInWithWallet onSignIn={() => {}} />} */}
+      </Modal>
       {children}
     </AuthContext.Provider>
   )
@@ -82,13 +97,33 @@ export const useAuth = () => {
   } = useContext(AuthContext)
   const { address, chainId } = useAccount()
   const { signMessageAsync } = useSignMessage()
+  const { disconnectAsync } = useDisconnect()
+  const router = useRouter()
+
+  const signOut = async () => {
+    await disconnectAsync()
+    signOutFromAgora()
+    logoutFromPwBackend()
+    setLoggedToAgora('initial')
+    setLoggedToPw(LogginToPwBackendState.Initial)
+    setIsNewUser(false)
+  }
+
+  const redirectToComparisonPage = useCallback(() => {
+    if (typeof loggedToAgora !== 'object') return
+    const category = loggedToAgora.category
+    router.push(`/comparison/${category}`)
+  }, [loggedToAgora, router])
 
   const checkLoginFlow = useCallback(async () => {
     if (address && chainId) {
+      setLoginInProgress(true)
       try {
+        console.log('Checking pw token if exists?')
         const validToken = await isLoggedIn()
         if (validToken) setLoggedToPw(LogginToPwBackendState.LoggedIn)
         else if (!alreadyInProgress) {
+          console.log('Logging to pw')
           const res = await loginToPwBackend(
             chainId,
             address,
@@ -101,23 +136,42 @@ export const useAuth = () => {
         }
       }
       catch (e) {
+        console.log('pw error')
         setLoggedToPw(LogginToPwBackendState.Error)
+        setLoginInProgress(false)
+        return
       }
       // By now you're logged-in to PW. Now do Agora...
 
       try {
+        console.log('chking agora exp')
+        setLoginInProgress(true)
         const loggedInToAgora = isLoggedInToAgora()
         if (loggedInToAgora) setLoggedToAgora(loggedInToAgora)
         else {
+          console.log('loggin to agora')
           const res = await loginToAgora(address, chainId, signMessageAsync)
           setLoggedToAgora(res)
         }
       }
       catch (e) {
+        console.log('agora err')
         setLoggedToAgora('error')
       }
+      finally {
+        setLoginInProgress(false)
+      }
     }
-  }, [address, chainId, setLoggedToAgora, setLoggedToPw, setIsNewUser, signMessageAsync])
+    setLoginInProgress(false)
+  }, [address, chainId, setLoggedToAgora, setLoggedToPw, setIsNewUser, signMessageAsync, setLoginInProgress])
+
+  useEffect(() => {
+    if (typeof loggedToAgora === 'object') {
+      if (loggedToAgora.isBadgeholder === true) {
+        redirectToComparisonPage()
+      }
+    }
+  }, [loggedToAgora, redirectToComparisonPage])
 
   useEffect(() => {
     checkLoginFlow()
@@ -125,12 +179,10 @@ export const useAuth = () => {
 
   return {
     loggedToPw,
-    setLoggedToPw,
-    setIsNewUser,
     isNewUser,
     loggedToAgora,
     loginInProgress,
-    setLoggedToAgora,
-    setLoginInProgress,
+    signOut,
+    redirectToComparisonPage,
   }
 }

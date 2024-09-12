@@ -91,8 +91,6 @@ export const isLoggedInToAgora = (): JWTPayload | false => {
   }
 }
 
-const signOut = () => {
-  // remove JWT from local storage
+export const signOutFromAgora = () => {
   localStorage.removeItem(LOCAL_STORAGE_JWT_KEY)
-  return Promise.resolve(true)
 }
