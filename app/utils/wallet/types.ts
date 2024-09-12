@@ -8,7 +8,7 @@ export interface JWTPayload {
   sub: string
   scope: string
   isBadgeholder: boolean
-  category: string
+  category: 'OP_STACK_RESEARCH_AND_DEVELOPMENT' | 'OP_STACK_TOOLING' | 'ETHEREUM_CORE_CONTRIBUTIONS'
   siwe: SiweData
   exp: number
   iat: number
