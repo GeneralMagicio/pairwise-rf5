@@ -169,8 +169,11 @@ export const useAuth = () => {
   }, [loggedToAgora, redirectToComparisonPage])
 
   useEffect(() => {
-    checkLoginFlow()
-  }, [checkLoginFlow])
+    if (address) {
+      console.log('running because address is', address)
+      checkLoginFlow()
+    }
+  }, [address])
 
   return {
     loggedToPw,
