@@ -6,10 +6,18 @@ import { LandingPart2 } from '../landing/part2'
 import { LandingPart3 } from '../landing/part3'
 import { ConnectButton } from '../utils/wallet/Connect'
 import dynamic from 'next/dynamic'
+import { useAuth } from '../utils/wallet/AuthProvider'
+import { useEffect } from 'react'
 
 const NoSSRModals = dynamic(() => import('../utils/wallet/Modals'), { ssr: false })
 
 const Landing = () => {
+  const { checkLoginFlow } = useAuth()
+
+  useEffect(() => {
+    checkLoginFlow()
+  }, [checkLoginFlow])
+
   return (
     <div className="w-full bg-[#F2F3F8]">
       <NoSSRModals />

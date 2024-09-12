@@ -10,6 +10,8 @@ import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
 import { useParams } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
+import { useAuth } from '@/app/utils/wallet/AuthProvider'
+import { useEffect } from 'react'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -27,6 +29,12 @@ const convertCategoryToLabel = (category: JWTPayload['category']) => {
 export default function Home() {
   const params = useParams()
   const { category } = params
+
+  const { checkLoginFlow } = useAuth()
+
+  useEffect(() => {
+    checkLoginFlow()
+  }, [checkLoginFlow])
   // const { setShowBhModal } = useAuth()
 
   // useEffect(() => {

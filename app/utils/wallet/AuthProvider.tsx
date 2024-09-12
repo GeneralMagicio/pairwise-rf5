@@ -158,7 +158,7 @@ export const useAuth = () => {
       }
     }
     setLoginInProgress(false)
-  }, [address])
+  }, [address, chainId, signMessageAsync, loginInProgress, setIsNewUser, setLoggedToAgora, setLoggedToPw, setLoginInProgress])
 
   useEffect(() => {
     if (typeof loggedToAgora === 'object') {
@@ -168,12 +168,12 @@ export const useAuth = () => {
     }
   }, [loggedToAgora, redirectToComparisonPage])
 
-  useEffect(() => {
-    if (address) {
-      console.log('running because address is', address)
-      checkLoginFlow()
-    }
-  }, [address])
+  // useEffect(() => {
+  //   if (address) {
+  //     console.log('running because address is', address)
+  //     checkLoginFlow()
+  //   }
+  // }, [address])
 
   return {
     loggedToPw,
