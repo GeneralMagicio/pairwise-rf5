@@ -53,7 +53,9 @@ export const loginToPwBackend = async (
   // const nonce = await fetchNonce()
   // const nonce = generateRandomString(16
 
-  const message = AGORA_SIGN_IN
+  const message = 'Signing in to Pairwise servers'
+
+  // const message = AGORA_SIGN_IN
 
   const signature = await signFunction({ message })
 

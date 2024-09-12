@@ -8,7 +8,7 @@ interface Props {
   onLogout: () => void
 }
 
-function shortenWalletAddress(address: string, startLength: number = 7, endLength: number = 7): string {
+export function shortenWalletAddress(address: string, startLength: number = 7, endLength: number = 7): string {
   // Check if the address is valid (starts with '0x' and has 42 characters)
   if (!address.startsWith('0x') || address.length !== 42) {
     throw new Error('Invalid wallet address format')
