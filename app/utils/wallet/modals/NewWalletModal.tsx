@@ -1,5 +1,4 @@
 import React from 'react'
-import { NotBhCharacter } from '@/public/assets/icon-components/NotBhCharacter'
 import { useAccount } from 'wagmi'
 import { shortenWalletAddress } from '../ConnectedButton'
 import Image from 'next/image'

@@ -9,8 +9,6 @@ import { Rating } from '../card/Rating'
 import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
-import { useAuth } from '@/app/utils/wallet/AuthProvider'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {

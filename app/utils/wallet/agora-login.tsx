@@ -4,7 +4,8 @@ import { decodeJwt } from 'jose'
 import { JWTPayload, VerifyResponse } from './types'
 
 // TODO: this should probably be an environment variable
-const BASE_URL = `https://cors-anywhere.herokuapp.com/https://vote.optimism.io`
+const BASE_URL = `https://vote.optimism.io`
+// const BASE_URL = `https://cors-anywhere.herokuapp.com/https://vote.optimism.io`
 const API_AUTH_PREFIX = '/api/v1/auth'
 const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt'
 export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum'

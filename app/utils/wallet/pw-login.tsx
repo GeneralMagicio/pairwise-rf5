@@ -1,5 +1,4 @@
 import { axiosInstance } from '../axiosInstance'
-import { AGORA_SIGN_IN } from './agora-login'
 
 axiosInstance.interceptors.response.use(
   function (response) {
