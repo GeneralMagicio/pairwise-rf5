@@ -9,6 +9,7 @@ import { Rating } from '../card/Rating'
 import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
 import { useParams } from 'next/navigation'
+import Modals from '@/app/utils/wallet/Modals'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -34,6 +35,7 @@ export default function Home() {
 
   return (
     <div className="">
+      <Modals />
       <Header
         progress={75}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}

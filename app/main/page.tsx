@@ -1,14 +1,18 @@
 'use client'
 
 import { PwLogo } from '@/public/assets/icon-components/PairwiseLogo'
+import { LandingPart1 } from '../landing/part1'
+import { LandingPart2 } from '../landing/part2'
+import { LandingPart3 } from '../landing/part3'
 import { ConnectButton } from '../utils/wallet/Connect'
-import { LandingPart1 } from './part1'
-import { LandingPart2 } from './part2'
-import { LandingPart3 } from './part3'
+import dynamic from 'next/dynamic'
+
+const NoSSRModals = dynamic(() => import('../utils/wallet/Modals'), { ssr: false })
 
 const Landing = () => {
   return (
     <div className="w-full bg-[#F2F3F8]">
+      <NoSSRModals />
       <div className="mx-auto w-[85%] space-y-8 pt-16">
         <div className="flex items-center justify-between">
           <PwLogo />

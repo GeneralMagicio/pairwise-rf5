@@ -11,11 +11,7 @@ import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login'
 import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login'
 import { JWTPayload } from './types'
-import Modal from '../Modal'
-import SignInWithWallet from './modals/SignInModal'
-import ConnectLoading from './modals/ConnectLoading'
-import NotBadgeHolder from './modals/NotBhModal'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export enum LogginToPwBackendState {
   Initial,
@@ -30,8 +26,6 @@ interface AuthContextType {
   setLoggedToPw: (bool: LogginToPwBackendState) => void
   isNewUser: boolean
   setIsNewUser: (bool: boolean) => void
-  // showBhModal: boolean
-  // setShowBhModal: (bool: boolean) => void
   loggedToAgora: 'initial' | 'error' | JWTPayload
   setLoggedToAgora: (value: AuthContextType['loggedToAgora']) => void
 }
@@ -42,8 +36,6 @@ const AuthContext = React.createContext<AuthContextType>({
   loggedToPw: LogginToPwBackendState.Initial,
   loggedToAgora: 'initial',
   isNewUser: false,
-  // showBhModal: false,
-  // setShowBhModal: () => {},
   setLoggedToPw: () => {},
   setLoggedToAgora: () => {},
   setIsNewUser: () => {},
@@ -60,15 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isNewUser, setIsNewUser] = useState(false)
 
-  // const [showBhModal, setShowBhModal] = useState(false)
-
-  const path = usePathname()
-
-  const notBhOpen = typeof loggedToAgora === 'object'
-    && loggedToAgora.isBadgeholder === false && path.includes('landing')
-
-  const signInModalOpen = loggedToAgora === 'error' || loggedToPw === LogginToPwBackendState.Error
-
   return (
     <AuthContext.Provider
       value={{
@@ -80,19 +63,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoggedToPw,
         isNewUser,
         setIsNewUser,
-        // showBhModal,
-        // setShowBhModal,
       }}
     >
-      <Modal isOpen={notBhOpen} onClose={() => {}}>
-        {notBhOpen && <NotBadgeHolder />}
-      </Modal>
-      <Modal isOpen={signInModalOpen} onClose={() => {}}>
-        {signInModalOpen && <SignInWithWallet />}
-      </Modal>
-      <Modal isOpen={loginInProgress || false} onClose={() => {}}>
-        {loginInProgress && <ConnectLoading />}
-      </Modal>
       {children}
     </AuthContext.Provider>
   )
@@ -130,7 +102,7 @@ export const useAuth = () => {
     if (typeof loggedToAgora !== 'object') return
     const category = loggedToAgora.category
     router.push(`/comparison/${category}`)
-  }, [loggedToAgora, router])
+  }, [loggedToAgora])
 
   const checkLoginFlow = useCallback(async () => {
     console.log('Running the check login flow')
