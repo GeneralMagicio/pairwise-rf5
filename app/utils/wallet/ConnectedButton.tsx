@@ -38,6 +38,7 @@ const LogoutButton: FC<Pick<Props, 'onLogout'>> = ({ onLogout }) => {
 
 export const ConnectedButton: FC<Props> = ({ wallet, onLogout }) => {
   const [open, setOpen] = useState(false)
+
   return (
     <button onClick={() => setOpen(!open)} className="relative flex h-fit w-44 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2">
       <span className="text-sm text-gray-800">

@@ -1,19 +1,44 @@
 'use client'
 
-import { ProjectCard } from './card'
-import ConflictButton from './card/CoIButton'
-import Header from './card/Header'
-import { acrossProtocol, zeroKnowledgeProtocol } from './card/mockData'
-import { Rating } from './card/Rating'
-import UndoButton from './card/UndoButton'
-import VoteButton from './card/VoteButton'
+import { JWTPayload } from '@/app/utils/wallet/types'
+import { ProjectCard } from '../card'
+import ConflictButton from '../card/CoIButton'
+import Header from '../card/Header'
+import { acrossProtocol, zeroKnowledgeProtocol } from '../card/mockData'
+import { Rating } from '../card/Rating'
+import UndoButton from '../card/UndoButton'
+import VoteButton from '../card/VoteButton'
+import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { useAuth } from '@/app/utils/wallet/AuthProvider'
+
+const convertCategoryToLabel = (category: JWTPayload['category']) => {
+  switch (category) {
+    case 'ETHEREUM_CORE_CONTRIBUTIONS':
+      return 'Ethereum Core Contributors'
+    case 'OP_STACK_RESEARCH_AND_DEVELOPMENT':
+      return 'OP Stack R&D'
+    case 'OP_STACK_TOOLING':
+      return 'OP Stack Tooling'
+    default:
+      return 'OP Stack'
+  }
+}
 
 export default function Home() {
+  const params = useParams()
+  const { category } = params
+  // const { setShowBhModal } = useAuth()
+
+  // useEffect(() => {
+  //   setShowBhModal(false)
+  // }, [setShowBhModal])
+
   return (
     <div className="">
       <Header
         progress={75}
-        category="Cross Chain"
+        category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
       />
       <div className="relative flex w-full items-center justify-between gap-12 px-8 py-2">
