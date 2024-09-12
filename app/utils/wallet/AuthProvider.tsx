@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isNewUser, setIsNewUser] = useState(false)
 
-  const [showBhModal, setShowBhModal] = useState(false)
+  // const [showBhModal, setShowBhModal] = useState(false)
 
   const path = usePathname()
 
@@ -111,7 +111,7 @@ export const useAuth = () => {
     // setShowBhModal,
   } = useContext(AuthContext)
 
-  const [loginFlowDangling, setLoginFlowDangling] = useState(false)
+  // const [loginFlowDangling, setLoginFlowDangling] = useState(false)
   const { address, chainId } = useAccount()
   const { signMessageAsync } = useSignMessage()
   const { disconnectAsync } = useDisconnect()
