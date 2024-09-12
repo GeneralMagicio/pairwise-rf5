@@ -25,6 +25,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable}`}>
       <body>
         <AppKitProvider>{children}</AppKitProvider>
+        <div id="modal-root"></div>
       </body>
     </html>
   )
