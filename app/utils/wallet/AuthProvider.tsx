@@ -158,7 +158,7 @@ export const useAuth = () => {
       }
     }
     setLoginInProgress(false)
-  }, [address, chainId, signMessageAsync, loginInProgress, setIsNewUser, setLoggedToAgora, setLoggedToPw, setLoginInProgress])
+  }, [address])
 
   useEffect(() => {
     if (typeof loggedToAgora === 'object') {
