@@ -1,3 +1,4 @@
+import { SignMessageMutateAsync } from 'wagmi/query'
 import { axiosInstance } from '../axiosInstance'
 
 axiosInstance.interceptors.response.use(
@@ -44,13 +45,13 @@ export const isLoggedIn = async () => {
 export const loginToPwBackend = async (
   chainId: number,
   address: string,
-  signFunction: ({ message }: { message: string }) => Promise<string>,
+  signFunction: SignMessageMutateAsync<unknown>,
 ) => {
   console.log('In the log to pw function')
   // const nonce = await fetchNonce()
   // const nonce = generateRandomString(16
 
-  const message = 'Signing in to Pairwise servers'
+  const message = 'Signing in to Pairwise servers? ' + Date.now()
 
   // const message = AGORA_SIGN_IN
 

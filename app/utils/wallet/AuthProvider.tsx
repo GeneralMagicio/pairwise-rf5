@@ -107,56 +107,56 @@ export const useAuth = () => {
   const checkLoginFlow = useCallback(async () => {
     console.log('Running the check login flow')
     if (loginInProgress) return
-    if (address && chainId) {
-      try {
-        console.log('Checking pw token if exists?')
-        const validToken = await isLoggedIn()
-        if (validToken) {
-          console.log('vt:', validToken)
-          setLoggedToPw(LogginToPwBackendState.LoggedIn)
+    if (!address || !chainId) return
+    try {
+      console.log('Checking pw token if exists?')
+      const validToken = await isLoggedIn()
+      if (validToken) {
+        console.log('vt:', validToken)
+        setLoggedToPw(LogginToPwBackendState.LoggedIn)
+      }
+      else {
+        setLoginInProgress(true)
+        console.log('Logging to pw')
+        const res = await loginToPwBackend(
+          chainId,
+          address,
+          signMessageAsync,
+        )
+        if (res.isNewUser) {
+          setIsNewUser(true)
         }
-        else {
-          setLoginInProgress(true)
-          console.log('Logging to pw')
-          const res = await loginToPwBackend(
-            chainId,
-            address,
-            signMessageAsync,
-          )
-          if (res.isNewUser) {
-            setIsNewUser(true)
-          }
-          setLoggedToPw(LogginToPwBackendState.LoggedIn)
-        }
-      }
-      catch (e) {
-        console.log('pw error', e)
-        setLoggedToPw(LogginToPwBackendState.Error)
-        setLoginInProgress(false)
-        return
-      }
-      // By now you're logged-in to PW. Now do Agora...
-
-      try {
-        if (!LogginToPwBackendState.LoggedIn) return
-        console.log('chking agora exp')
-        const loggedInToAgora = isLoggedInToAgora()
-        if (loggedInToAgora) setLoggedToAgora(loggedInToAgora)
-        else {
-          console.log('loggin to agora')
-          setLoginInProgress(true)
-          const res = await loginToAgora(address, chainId, signMessageAsync)
-          setLoggedToAgora(res)
-        }
-      }
-      catch (e) {
-        console.log('agora err')
-        setLoggedToAgora('error')
-      }
-      finally {
-        setLoginInProgress(false)
+        setLoggedToPw(LogginToPwBackendState.LoggedIn)
       }
     }
+    catch (e) {
+      console.log('pw error', e)
+      setLoggedToPw(LogginToPwBackendState.Error)
+      setLoginInProgress(false)
+      return
+    }
+    // By now you're logged-in to PW. Now do Agora...
+
+    try {
+      if (!LogginToPwBackendState.LoggedIn) return
+      console.log('chking agora exp')
+      const loggedInToAgora = isLoggedInToAgora()
+      if (loggedInToAgora) setLoggedToAgora(loggedInToAgora)
+      else {
+        console.log('loggin to agora')
+        setLoginInProgress(true)
+        const res = await loginToAgora(address, chainId, signMessageAsync)
+        setLoggedToAgora(res)
+      }
+    }
+    catch (e) {
+      console.log('agora err')
+      setLoggedToAgora('error')
+    }
+    finally {
+      setLoginInProgress(false)
+    }
+
     setLoginInProgress(false)
   }, [address])
 
