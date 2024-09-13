@@ -46,6 +46,7 @@ export const loginToPwBackend = async (
   address: string,
   signFunction: ({ message }: { message: string }) => Promise<string>,
 ) => {
+  console.log('In the log to pw function')
   // const nonce = await fetchNonce()
   // const nonce = generateRandomString(16
 
