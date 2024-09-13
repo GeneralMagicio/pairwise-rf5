@@ -13,7 +13,7 @@ export default function Modals() {
   const { loggedToAgora, loggedToPw, loginInProgress } = useAuth()
 
   const notBhOpen = typeof loggedToAgora === 'object'
-    && loggedToAgora.isBadgeholder === false && path.includes('main')
+    && loggedToAgora.isBadgeholder === false && !path.includes('comparison')
 
   const signInModalOpen = loggedToAgora === 'error' || loggedToPw === LogginToPwBackendState.Error
   return (
