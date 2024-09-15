@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const OPCharacter: React.FC = () => (
-  <Image src="assets/images/op-character3.svg" alt="op character" width={60} height={48} />
+  <Image src="/assets/images/op-character3.svg" alt="op character" width={60} height={48} unoptimized />
 )
 
 const Header: React.FC<HeaderProps> = ({ progress, category, question }) => {
