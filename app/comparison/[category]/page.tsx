@@ -13,7 +13,7 @@ import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { useEffect, useState } from 'react'
 import { useGetPairwisePairs } from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
-import { useUpdateProjectVote } from '../utils/data-fetching/vote'
+import { useUpdateProjectUndo, useUpdateProjectVote } from '../utils/data-fetching/vote'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -44,6 +44,7 @@ export default function Home() {
 
   const { data, isLoading } = useGetPairwisePairs(cid)
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
+  const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid })
   // const { setShowBhModal } = useAuth()
   useEffect(() => {
     setRating1(data?.pairs[0][0].rating || null)
@@ -64,16 +65,20 @@ export default function Home() {
       project1Stars: rating1, project2Stars: rating2, pickedId: chosenId } })
   }
 
+  const handleUndo = async () => {
+    await undo()
+  }
+
   return (
-    <div className="">
+    <div>
       <Modals />
       <Header
         progress={75}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
       />
-      <div className="relative flex w-full items-center justify-between gap-12 px-8 py-2">
-        <div className="relative w-full">
+      <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
+        <div className="relative w-[49%]">
           {/*  @ts-ignore */}
           <ProjectCard project={{ ...pair1.metadata, ...pair1 }} />
           <div className="absolute bottom-28 right-[40%]">
@@ -87,9 +92,9 @@ export default function Home() {
           </div>
         </div>
         <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
-          <UndoButton onClick={() => {}} />
+          <UndoButton onClick={handleUndo} />
         </div>
-        <div className="relative w-full">
+        <div className="relative w-[49%]">
           {/*  @ts-ignore */}
           <ProjectCard project={{ ...pair2.metadata, ...pair2 }} />
           <div className="absolute bottom-28 right-[40%]">

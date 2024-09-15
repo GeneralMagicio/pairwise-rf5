@@ -45,9 +45,9 @@ export const useUpdateProjectUndo = ({
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: updateProjectUndo,
-    onSuccess: ({ data }) => {
-      console.log('OnSuccess', data)
+    mutationFn: () => updateProjectUndo(categoryId),
+    onSuccess: () => {
+      // console.log('OnSuccess', data)
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', categoryId],
       })
