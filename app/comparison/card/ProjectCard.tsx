@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
   return (
     <div
       style={{ maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)' }}
-      className="container relative mx-auto mb-16 mt-4 h-[80vh] w-full max-w-full overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 pb-32 shadow-md"
+      className="container relative mx-auto mb-16 mt-4 h-[80vh] w-full overflow-y-auto rounded-xl border-4 border-yellow-200 bg-yellow-50 p-2 pb-32 shadow-md"
     >
       <div className="relative h-40">
         <Image

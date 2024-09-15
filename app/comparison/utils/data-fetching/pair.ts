@@ -1,6 +1,5 @@
 import { axiosInstance } from '@/app/utils/axiosInstance'
 import { useQuery } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
 import { IProject } from '../types'
 
 export interface IPairwisePairsResponse {
@@ -8,6 +7,7 @@ export interface IPairwisePairsResponse {
   totalPairs: number
   votedPairs: number
   name: string
+  progress: number
   threshold: number
 }
 

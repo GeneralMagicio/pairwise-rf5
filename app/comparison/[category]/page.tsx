@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react'
 import { useGetPairwisePairs } from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
 import { useUpdateProjectUndo, useUpdateProjectVote } from '../utils/data-fetching/vote'
+import { truncate } from '@/app/utils/methods'
+import { useMarkCoi } from '../utils/data-fetching/coi'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -43,8 +45,11 @@ export default function Home() {
   const cid = convertCategoryNameToId(category as JWTPayload['category'])
 
   const { data, isLoading } = useGetPairwisePairs(cid)
+
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
   const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid })
+  const { mutateAsync: markProjectCoI } = useMarkCoi({ categoryId: cid })
+  // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: pair2 ? pair2.id : 0 })
   // const { setShowBhModal } = useAuth()
   useEffect(() => {
     setRating1(data?.pairs[0][0].rating || null)
@@ -73,7 +78,7 @@ export default function Home() {
     <div>
       <Modals />
       <Header
-        progress={75}
+        progress={data.progress * 100}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
       />
@@ -85,10 +90,10 @@ export default function Home() {
             <Rating value={rating1 || 3} onChange={(val: number) => { setRating1(val) }} />
           </div>
           <div className="absolute bottom-28 left-2/3">
-            <ConflictButton />
+            <ConflictButton onClick={() => markProjectCoI({ data: { pid: pair1.id } })} />
           </div>
-          <div className="absolute bottom-4 left-[37%]">
-            <VoteButton onClick={handleVote(pair1.id)} title={pair1.name} imageUrl={pair1.image || ''} />
+          <div className="absolute bottom-4 left-[37%] w-96">
+            <VoteButton onClick={handleVote(pair1.id)} title={truncate(pair1.name, 35)} imageUrl={pair1.image || ''} />
           </div>
         </div>
         <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
@@ -101,10 +106,10 @@ export default function Home() {
             <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
           </div>
           <div className="absolute bottom-28 left-2/3">
-            <ConflictButton />
+            <ConflictButton onClick={() => markProjectCoI({ data: { pid: pair2.id } })} />
           </div>
-          <div className="absolute bottom-4 left-[37%]">
-            <VoteButton onClick={handleVote(pair2.id)} title={pair2.name} imageUrl={pair2.image || ''} />
+          <div className="absolute bottom-4 left-[37%] w-96">
+            <VoteButton onClick={handleVote(pair2.id)} title={truncate(pair2.name, 35)} imageUrl={pair2.image || ''} />
           </div>
         </div>
       </div>
