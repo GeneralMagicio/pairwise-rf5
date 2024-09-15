@@ -77,22 +77,24 @@ export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
       <div className="mb-2 mt-12 flex items-center">
         <h1 className="text-3xl font-semibold">{project.name}</h1>
       </div>
-      <div className="mb-6 flex items-center gap-1 text-slate-600">
-        <p> By </p>
-        <Image
-          // src={project.creatorImage}
-          src=""
-          alt="Creator Image"
-          width={20}
-          height={20}
-          className="rounded-full"
-          unoptimized
-        />
-        <p>
-          {/* {project.creator} */}
-          creator
-        </p>
-      </div>
+      { project.organization && (
+        <div className="mb-6 flex items-center gap-1 text-slate-600">
+          <p>
+            By
+          </p>
+          <Image
+            src={project.organization.organizationAvatarUrl}
+            alt={project.organization.name}
+            width={24}
+            height={24}
+            className="mx-1 rounded-full"
+            unoptimized
+          />
+          <p>
+            {project.organization.name}
+          </p>
+        </div>
+      )}
       <div className="my-2 flex items-center gap-3">
         <Switch
           onColor="#FF0420"
@@ -123,7 +125,9 @@ export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
       </div>
 
       <div className="mb-6 w-full">
-        <Team team={mockTeam} />
+        <Team team={(project.team || []).map(item => ({ profileImg: item.pfp_url,
+          urlLink: `https://warpcast.com/${item.username}` }))}
+        />
       </div>
 
       <Section title="Repos, links, and contracts">
@@ -141,9 +145,9 @@ export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
           ))}
           {project.contracts.map(contract => (
             <SimpleInfoBox
-              key={contract.description}
-              description={contract.description}
-              title={contract.url}
+              key={contract.address}
+              description={contract.description || ''}
+              title={contract.address}
               type="contract"
             />
           ))}

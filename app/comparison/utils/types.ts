@@ -16,7 +16,7 @@ export interface ProjectMetadata {
       mirror: string | null
     }
     team: string[]
-  }
+  } | null
   name: string
   description: string
   profileAvatarUrl: string
@@ -27,7 +27,7 @@ export interface ProjectMetadata {
     twitter: string | null
     mirror: string | null
   }
-  team: string[]
+  team: Team[] | null
   github: Array<{
     url: string
     name: string | null
@@ -39,7 +39,7 @@ export interface ProjectMetadata {
     name: string
     description: string
   }>
-  contracts: any[]
+  contracts: Contract[]
   grantsAndFunding: {
     ventureFunding: any[]
     grants: Array<{
@@ -90,6 +90,38 @@ export interface IProject {
   metadata: ProjectMetadata
   created_at: string
   type: 'collection' | 'project'
+}
+
+type Contract = {
+  address: string
+  deploymentTxHash: string
+  deployerAddress: string
+  verificationProof: string
+  chainId: number
+  description?: string
+}
+
+type Team = {
+  fid: number
+  object: string
+  pfp_url: string
+  profile: {
+    bio: {
+      text: string
+    }
+  }
+  username: string
+  power_badge: boolean
+  display_name: string
+  active_status: string
+  verifications: string[]
+  follower_count: number
+  custody_address: string
+  following_count: number
+  verified_addresses: {
+    eth_addresses: string[]
+    sol_addresses: string[]
+  }
 }
 
 export type CollectionProgressStatus =
