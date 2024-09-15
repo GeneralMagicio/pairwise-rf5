@@ -55,12 +55,14 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
             </span>
           )}
         </div>
-        <button
-          {...getToggleProps()}
-          className="text-sm text-gray-600 hover:underline"
-        >
-          {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
-        </button>
+        {description && (
+          <button
+            {...getToggleProps()}
+            className="text-sm text-gray-600 hover:underline"
+          >
+            {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+          </button>
+        )}
       </div>
       <section {...getCollapseProps()}>
         <p className="my-3 text-gray-600">{description}</p>

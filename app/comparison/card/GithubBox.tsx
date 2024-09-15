@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { Project } from './mockData'
 import { TimeIcon } from '@/public/assets/icon-components/Time'
 import { DevIcon } from '@/public/assets/icon-components/Dev'
 import { CommitIcon } from '@/public/assets/icon-components/Commit'
@@ -10,9 +9,10 @@ import { useCollapse } from 'react-collapsed'
 import { GithubIcon } from '@/public/assets/icon-components/Github'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
+import { ProjectMetadata } from '../utils/types'
 
 interface Props {
-  repo: Project['repos'][0]
+  repo: ProjectMetadata['github'][0]
 }
 
 const GithubBox: FC<Props> = ({ repo }) => {
@@ -24,7 +24,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
         <div className="flex items-center gap-2">
           <GithubIcon />
           <a href={repo.url} className="text-gray-600 hover:underline">
-            github.com/placeholder/ipsum_1
+            {repo.name || repo.url}
           </a>
         </div>
         <button
@@ -48,7 +48,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
       </div>
       <section {...getCollapseProps()}>
         <p className="mb-4 text-gray-600">{repo.description}</p>
-        <div className="mb-4 grid grid-cols-3 gap-2">
+        {/* <div className="mb-4 grid grid-cols-3 gap-2">
           <div className="flex items-center gap-2 rounded-md bg-gray-200 p-2">
             <TimeIcon />
             <span className="text-sm">12 months old</span>
@@ -89,7 +89,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
             <OpenSourceIcon />
             <span className="text-sm">Open source</span>
           </div>
-        </div>
+        </div> */}
         <div className="text-sm text-gray-500">
           <a href="#" className="hover:underline">
             About GitHub metrics

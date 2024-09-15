@@ -42,12 +42,14 @@ const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
                 </a>
               )}
         </div>
-        <button
-          {...getToggleProps()}
-          className="text-sm text-gray-600 hover:underline"
-        >
-          {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
-        </button>
+        { description.length > 0 && (
+          <button
+            {...getToggleProps()}
+            className="text-sm text-gray-600 hover:underline"
+          >
+            {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+          </button>
+        )}
       </div>
       <section {...getCollapseProps()}>
         <p className="mb-4 text-gray-600">{description}</p>

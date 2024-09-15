@@ -6,8 +6,7 @@ import SimpleInfoBox from './SimpleInfoBox'
 import QABox from './QABox'
 import GrantBox from './GrantBox'
 import Switch from 'react-switch'
-import Team, { mockTeam } from './Team'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
+import Team from './Team'
 import { ProjectMetadata } from '../utils/types'
 
 interface CollapsibleProps {
@@ -32,10 +31,10 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
         >
           {title}
         </button>
-        <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
+        {/* <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
           Hide
           <ArrowUpIcon color="red" />
-        </span>
+        </span> */}
       </div>
       {true && <div className="p-2">{children}</div>}
     </div>
@@ -197,11 +196,9 @@ export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
 
       <Section title="Pricing model">
         <div className="space-y-2">
-          <SimpleInfoBox
-            title="Freemium"
-            description={project.pricingModel}
-            type="pricing"
-          />
+          <div className="rounded border bg-gray-50 p-4">
+            <p className="font-medium">{project.pricingModel}</p>
+          </div>
           {/* <SimpleInfoBox
             title="Pay-to-use"
             description={project.pricingModel.payToUse}
