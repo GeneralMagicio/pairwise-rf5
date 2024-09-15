@@ -80,6 +80,7 @@ export interface ICategory {
 
 export interface IProject {
   id: number
+  rating: number | null
   name: string
   poll_id: number
   url: string

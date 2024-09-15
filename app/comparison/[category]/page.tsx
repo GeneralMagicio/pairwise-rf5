@@ -1,7 +1,7 @@
 'use client'
 
 import { JWTPayload } from '@/app/utils/wallet/types'
-import { ProjectCard } from '../card'
+import { ProjectCard } from '../card/ProjectCard'
 import ConflictButton from '../card/CoIButton'
 import Header from '../card/Header'
 import { Rating } from '../card/Rating'
@@ -10,9 +10,10 @@ import VoteButton from '../card/VoteButton'
 import { useParams } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
 import { useAuth } from '@/app/utils/wallet/AuthProvider'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useGetPairwisePairs } from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
+import { useUpdateProjectVote } from '../utils/data-fetching/vote'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -30,6 +31,8 @@ const convertCategoryToLabel = (category: JWTPayload['category']) => {
 export default function Home() {
   const params = useParams()
   const { category } = params
+  const [rating1, setRating1] = useState<number | null>(null)
+  const [rating2, setRating2] = useState<number | null>(null)
 
   const { checkLoginFlow } = useAuth()
 
@@ -40,7 +43,12 @@ export default function Home() {
   const cid = convertCategoryNameToId(category as JWTPayload['category'])
 
   const { data, isLoading } = useGetPairwisePairs(cid)
+  const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
   // const { setShowBhModal } = useAuth()
+  useEffect(() => {
+    setRating1(data?.pairs[0][0].rating || null)
+    setRating2(data?.pairs[0][1].rating || null)
+  }, [data])
 
   // useEffect(() => {
   //   setShowBhModal(false)
@@ -50,6 +58,11 @@ export default function Home() {
 
   const pair1 = data.pairs[0][0]
   const pair2 = data.pairs[0][1]
+
+  const handleVote = (chosenId: number) => async () => {
+    await vote({ data: { project1Id: pair1.id, project2Id: pair2.id,
+      project1Stars: rating1, project2Stars: rating2, pickedId: chosenId } })
+  }
 
   return (
     <div className="">
@@ -64,13 +77,13 @@ export default function Home() {
           {/*  @ts-ignore */}
           <ProjectCard project={{ ...pair1.metadata, ...pair1 }} />
           <div className="absolute bottom-28 right-[40%]">
-            <Rating value={4} onChange={() => {}} />
+            <Rating value={rating1 || 3} onChange={(val: number) => { setRating1(val) }} />
           </div>
           <div className="absolute bottom-28 left-2/3">
             <ConflictButton />
           </div>
           <div className="absolute bottom-4 left-[37%]">
-            <VoteButton title={pair1.name} imageUrl={pair1.image || ''} />
+            <VoteButton onClick={handleVote(pair1.id)} title={pair1.name} imageUrl={pair1.image || ''} />
           </div>
         </div>
         <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
@@ -80,13 +93,13 @@ export default function Home() {
           {/*  @ts-ignore */}
           <ProjectCard project={{ ...pair2.metadata, ...pair2 }} />
           <div className="absolute bottom-28 right-[40%]">
-            <Rating value={4} onChange={() => {}} />
+            <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
           </div>
           <div className="absolute bottom-28 left-2/3">
             <ConflictButton />
           </div>
           <div className="absolute bottom-4 left-[37%]">
-            <VoteButton title={pair2.name} imageUrl={pair2.image || ''} />
+            <VoteButton onClick={handleVote(pair2.id)} title={pair2.name} imageUrl={pair2.image || ''} />
           </div>
         </div>
       </div>
