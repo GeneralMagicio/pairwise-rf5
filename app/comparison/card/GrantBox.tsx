@@ -10,16 +10,13 @@ import { truncate } from '@/app/utils/methods'
 
 interface Props {
   title: string
-  money: {
-    amount: string
-    currency: 'op' | 'usd'
-  }
-  link?: string
-  time?: string
-  description: string
+  amount: string
+  link: string | null
+  date: string | null
+  description: string | null
 }
 
-const GrantBox: FC<Props> = ({ title, link, money, time, description }) => {
+const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
 
   return (
@@ -36,26 +33,25 @@ const GrantBox: FC<Props> = ({ title, link, money, time, description }) => {
             </a>
           )}
 
-          {money.currency === 'op'
+          {amount.includes('op')
             ? (
                 <span className="flex items-center gap-2 text-sm">
                   <OPIcon />
-                  {' '}
-                  {money.amount}
+                  {amount}
                 </span>
               )
             : (
                 <span className="flex items-center gap-2 text-sm">
                   <USDIcon />
                   {' '}
-                  {money.amount}
+                  {amount}
                 </span>
               )}
-          {time && (
+          {date && (
             <span className="flex items-center gap-2 text-sm">
               <TimeIcon />
               {' '}
-              {time}
+              {date}
             </span>
           )}
         </div>

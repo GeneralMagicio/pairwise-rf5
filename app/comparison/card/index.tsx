@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Project } from './mockData'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
 import SimpleInfoBox from './SimpleInfoBox'
@@ -9,6 +8,7 @@ import GrantBox from './GrantBox'
 import Switch from 'react-switch'
 import Team, { mockTeam } from './Team'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
+import { ProjectMetadata } from '../utils/types'
 
 interface CollapsibleProps {
   title: string
@@ -42,7 +42,7 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
   )
 }
 
-export const ProjectCard: React.FC<{ project: Project }> = ({
+export const ProjectCard: React.FC<{ project: ProjectMetadata }> = ({
   project,
 }) => {
   const [aiMode, setAiMode] = useState(false)
@@ -58,7 +58,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
     >
       <div className="relative h-40">
         <Image
-          src={project.bannerImage}
+          src={project.projectCoverImageUrl}
           unoptimized
           alt="Banner"
           layout="fill"
@@ -66,7 +66,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
           className="rounded-lg"
         />
         <Image
-          src={project.profileImage}
+          src={project.profileAvatarUrl}
           unoptimized
           alt={project.name}
           width={80}
@@ -80,7 +80,8 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
       <div className="mb-6 flex items-center gap-1 text-slate-600">
         <p> By </p>
         <Image
-          src={project.creatorImage}
+          // src={project.creatorImage}
+          src=""
           alt="Creator Image"
           width={20}
           height={20}
@@ -88,7 +89,8 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
           unoptimized
         />
         <p>
-          {project.creator}
+          {/* {project.creator} */}
+          creator
         </p>
       </div>
       <div className="my-2 flex items-center gap-3">
@@ -106,10 +108,18 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
       </div>
       <p className="mb-4 text-slate-600">{project.description}</p>
       <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
-        <ExternalLink address={project.socialLinks.website} type="website" />
-        <ExternalLink address={project.socialLinks.warpcast} type="warpcast" />
-        <ExternalLink address={project.socialLinks.x} type="x" />
-        <ExternalLink address={project.socialLinks.mirror} type="mirror" />
+        <>
+          {project.socialLinks.website.map(item => (
+            <ExternalLink key={item} address={item} type="website" />
+          ))}
+        </>
+        <>
+          {project.socialLinks.farcaster.map(item => (
+            <ExternalLink key={item} address={item} type="warpcast" />
+          ))}
+        </>
+        {project.socialLinks.twitter && <ExternalLink address={project.socialLinks.twitter} type="x" />}
+        {project.socialLinks.mirror && <ExternalLink address={project.socialLinks.mirror} type="mirror" />}
       </div>
 
       <div className="mb-6 w-full">
@@ -118,14 +128,14 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
 
       <Section title="Repos, links, and contracts">
         <div className="space-y-4">
-          {project.repos.map(repo => (
+          {project.github.map(repo => (
             <GithubBox key={repo.url} repo={repo} />
           ))}
           {project.links.map(contract => (
             <SimpleInfoBox
               key={contract.description}
               description={contract.description}
-              title={contract.address}
+              title={contract.url}
               type="link"
             />
           ))}
@@ -133,14 +143,14 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
             <SimpleInfoBox
               key={contract.description}
               description={contract.description}
-              title={contract.address}
+              title={contract.url}
               type="contract"
             />
           ))}
         </div>
       </Section>
 
-      <Section title="Testimonials">
+      {/* <Section title="Testimonials">
         <div className="space-y-4">
           {project.testimonials.map((testimonial, index) => (
             <div key={index} className="rounded border bg-gray-50 p-4">
@@ -148,7 +158,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
             </div>
           ))}
         </div>
-      </Section>
+      </Section> */}
 
       <Section title="Impact statement">
         <div className="space-y-4">
@@ -170,7 +180,7 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
             </p>
           </div>
           <div className="space-y-2">
-            {project.impactStatement.qas.map(({ question, answer }) => (
+            {project.impactStatement.statement.map(({ question, answer }) => (
               <QABox key={question} question={question} answer={answer} />
             ))}
           </div>
@@ -185,14 +195,14 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
         <div className="space-y-2">
           <SimpleInfoBox
             title="Freemium"
-            description={project.pricingModel.freemium}
+            description={project.pricingModel}
             type="pricing"
           />
-          <SimpleInfoBox
+          {/* <SimpleInfoBox
             title="Pay-to-use"
             description={project.pricingModel.payToUse}
             type="pricing"
-          />
+          /> */}
           {/* <h3 className="font-semibold">Freemium</h3>
             <p>{project.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
@@ -202,8 +212,15 @@ export const ProjectCard: React.FC<{ project: Project }> = ({
 
       <Section title="Grants and investment">
         <div className="space-y-2">
-          {project.grants.map(grant => (
-            <GrantBox key={grant.title} {...grant} />
+          {project.grantsAndFunding.grants.map(grant => (
+            <GrantBox
+              key={grant.grant}
+              description={grant.details}
+              link={grant.link}
+              amount={grant.amount}
+              date={grant.date}
+              title={grant.grant || ''}
+            />
           ))}
         </div>
       </Section>

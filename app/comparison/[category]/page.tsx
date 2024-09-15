@@ -4,7 +4,6 @@ import { JWTPayload } from '@/app/utils/wallet/types'
 import { ProjectCard } from '../card'
 import ConflictButton from '../card/CoIButton'
 import Header from '../card/Header'
-import { acrossProtocol, zeroKnowledgeProtocol } from '../card/mockData'
 import { Rating } from '../card/Rating'
 import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
@@ -12,6 +11,8 @@ import { useParams } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
 import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { useEffect } from 'react'
+import { useGetPairwisePairs } from '../utils/data-fetching/pair'
+import { convertCategoryNameToId } from '../utils/helpers'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -35,11 +36,20 @@ export default function Home() {
   useEffect(() => {
     checkLoginFlow()
   }, [checkLoginFlow])
+
+  const cid = convertCategoryNameToId(category as JWTPayload['category'])
+
+  const { data, isLoading } = useGetPairwisePairs(cid)
   // const { setShowBhModal } = useAuth()
 
   // useEffect(() => {
   //   setShowBhModal(false)
   // }, [setShowBhModal])
+
+  if (!data || isLoading) return
+
+  const pair1 = data.pairs[0][0]
+  const pair2 = data.pairs[0][1]
 
   return (
     <div className="">
@@ -51,7 +61,8 @@ export default function Home() {
       />
       <div className="relative flex w-full items-center justify-between gap-12 px-8 py-2">
         <div className="relative w-full">
-          <ProjectCard project={zeroKnowledgeProtocol} />
+          {/*  @ts-ignore */}
+          <ProjectCard project={{ ...pair1.metadata, ...pair1 }} />
           <div className="absolute bottom-28 right-[40%]">
             <Rating value={4} onChange={() => {}} />
           </div>
@@ -59,14 +70,15 @@ export default function Home() {
             <ConflictButton />
           </div>
           <div className="absolute bottom-4 left-[37%]">
-            <VoteButton title={zeroKnowledgeProtocol.name} imageUrl={zeroKnowledgeProtocol.profileImage} />
+            <VoteButton title={pair1.name} imageUrl={pair1.image || ''} />
           </div>
         </div>
         <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
           <UndoButton onClick={() => {}} />
         </div>
         <div className="relative w-full">
-          <ProjectCard project={acrossProtocol} />
+          {/*  @ts-ignore */}
+          <ProjectCard project={{ ...pair2.metadata, ...pair2 }} />
           <div className="absolute bottom-28 right-[40%]">
             <Rating value={4} onChange={() => {}} />
           </div>
@@ -74,7 +86,7 @@ export default function Home() {
             <ConflictButton />
           </div>
           <div className="absolute bottom-4 left-[37%]">
-            <VoteButton title={acrossProtocol.name} imageUrl={acrossProtocol.profileImage} />
+            <VoteButton title={pair2.name} imageUrl={pair2.image || ''} />
           </div>
         </div>
       </div>
