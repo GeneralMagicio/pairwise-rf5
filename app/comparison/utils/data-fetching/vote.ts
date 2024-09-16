@@ -39,8 +39,10 @@ export const useUpdateProjectVote = ({
 
 export const useUpdateProjectUndo = ({
   categoryId,
+  onSuccess,
 }: {
   categoryId: number
+  onSuccess: () => void
 }) => {
   const queryClient = useQueryClient()
 
@@ -51,6 +53,7 @@ export const useUpdateProjectUndo = ({
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', categoryId],
       })
+      onSuccess()
     },
   })
 }

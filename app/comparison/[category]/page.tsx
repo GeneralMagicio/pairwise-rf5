@@ -40,12 +40,18 @@ export default function Home() {
   const [rating2, setRating2] = useState<number | null>(null)
   const [project1, setProject1] = useState<IProject>()
   const [project2, setProject2] = useState<IProject>()
+  const [coiLoading1, setCoiLoading1] = useState(false)
+  const [coiLoading2, setCoiLoading2] = useState(false)
+  const [temp, setTemp] = useState(0)
   const cid = convertCategoryNameToId(category as JWTPayload['category'])
 
   const [coi1, setCoi1] = useState(false)
+  const [coi2, setCoi2] = useState(false)
 
   const confirmCoI1 = async (id1: number, id2: number) => {
     await markProjectCoI({ data: { pid: id1 } })
+    setCoi1(false)
+    setCoiLoading1(true)
     try {
       const pair = await getPairwisePairsForProject(cid, id2)
       setProject1(pair.pairs[0].find(project => project.id !== id2)!)
@@ -55,7 +61,7 @@ export default function Home() {
         queryKey: ['pairwise-pairs', cid],
       })
     }
-    setCoi1(false)
+    setCoiLoading1(false)
   }
 
   const cancelCoI1 = () => {
@@ -66,10 +72,10 @@ export default function Home() {
     setCoi1(true)
   }
 
-  const [coi2, setCoi2] = useState(false)
-
   const confirmCoI2 = async (id1: number, id2: number) => {
     await markProjectCoI({ data: { pid: id2 } })
+    setCoi2(false)
+    setCoiLoading2(true)
     try {
       const pair = await getPairwisePairsForProject(cid, id1)
       setProject2(pair.pairs[0].find(project => project.id !== id1)!)
@@ -80,6 +86,7 @@ export default function Home() {
         queryKey: ['pairwise-pairs', cid],
       })
     }
+    setCoiLoading2(false)
   }
 
   const cancelCoI2 = () => {
@@ -100,7 +107,13 @@ export default function Home() {
   // const {} = useGetPairwisePairsForProject(cid)
 
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
-  const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid })
+  const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid, onSuccess: () => {
+    // if this temp state is omitted
+    // then when you CoI one project and
+    // then you call "undo", the app breaks
+    // we probably need to combine "/pairs" and "/pairs-for-project"
+    setTemp(temp + 1)
+  } })
   const { mutateAsync: markProjectCoI } = useMarkCoi()
   // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
   // const { setShowBhModal } = useAuth()
@@ -113,7 +126,7 @@ export default function Home() {
     if (!data) return
     setProject1(data.pairs[0][0])
     setProject2(data.pairs[0][1])
-  }, [data])
+  }, [data, temp])
 
   if (!project1 || !project2 || !data || isLoading) return
 
@@ -142,12 +155,13 @@ export default function Home() {
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
           <ProjectCard
+            coiLoading={coiLoading1}
             coi={coi1}
             project={{ ...project1.metadata, ...project1 } as any}
             onCoICancel={cancelCoI1}
             onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
           />
-          {!coi1
+          {!coi1 && !coiLoading1
           && (
             <>
               <div className="absolute bottom-28 right-[40%]">
@@ -167,12 +181,13 @@ export default function Home() {
         </div>
         <div className="relative w-[49%]">
           <ProjectCard
+            coiLoading={coiLoading2}
             coi={coi2}
             onCoICancel={cancelCoI2}
             onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
             project={{ ...project2.metadata, ...project2 } as any}
           />
-          {!coi2 && (
+          {!coi2 && !coiLoading2 && (
             <>
               <div className="absolute bottom-28 right-[40%]">
                 <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
