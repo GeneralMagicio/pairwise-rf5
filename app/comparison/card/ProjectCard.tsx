@@ -8,6 +8,7 @@ import GrantBox from './GrantBox'
 import Switch from 'react-switch'
 import Team from './Team'
 import { ProjectMetadata } from '../utils/types'
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 
 interface CollapsibleProps {
   title: string
@@ -24,17 +25,16 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
 
   return (
     <div className="mb-4 rounded-lg border-t pt-4">
-      <div className="flex flex-col items-start gap-4 p-4">
+      <div className="flex justify-between gap-4 p-4">
         <button
           className="text-xl font-medium"
           // onClick={handleClick}
         >
           {title}
         </button>
-        {/* <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
-          Hide
-          <ArrowUpIcon color="red" />
-        </span> */}
+        <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
+          <ArrowUpIcon color="black" width={20} height={20} />
+        </span>
       </div>
       {true && <div className="p-2">{children}</div>}
     </div>
