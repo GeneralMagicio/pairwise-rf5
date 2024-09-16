@@ -10,6 +10,8 @@ import Team from './Team'
 import { ProjectMetadata } from '../utils/types'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import ConflictOfInterestModal from './modals/CoIModal'
+import { useCollapse } from 'react-collapsed'
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
 
 interface CollapsibleProps {
   title: string
@@ -17,27 +19,21 @@ interface CollapsibleProps {
 }
 
 const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
-  // const [isOpen, _setIsOpen] = useState(true);
-
-  // const handleClick = () => {
-  //   console.log("click!!");
-  //   setIsOpen(!isOpen);
-  // };
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({ defaultExpanded: true })
 
   return (
     <div className="mb-4 rounded-lg border-t pt-4">
       <div className="flex justify-between gap-4 p-4">
         <button
           className="text-xl font-medium"
-          // onClick={handleClick}
         >
           {title}
         </button>
-        <span className="flex cursor-pointer items-center gap-1 text-sm text-primary">
-          <ArrowUpIcon color="black" width={20} height={20} />
-        </span>
+        <button {...getToggleProps()} className="flex cursor-pointer items-center gap-1 text-sm text-primary">
+          {isExpanded ? <ArrowUpIcon color="black" width={20} height={20} /> : <ArrowDownIcon width={20} height={20} />}
+        </button>
       </div>
-      {true && <div className="p-2">{children}</div>}
+      <section {...getCollapseProps()} className="p-2">{children}</section>
     </div>
   )
 }
