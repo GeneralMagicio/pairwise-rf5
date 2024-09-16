@@ -12,6 +12,7 @@ import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import ConflictOfInterestModal from './modals/CoIModal'
 import { useCollapse } from 'react-collapsed'
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
+import CoILoadingModal from './modals/CoILoading'
 
 interface CollapsibleProps {
   title: string
@@ -43,6 +44,7 @@ interface Props {
   coi: boolean
   onCoICancel: () => void
   onCoIConfirm: () => void
+  coiLoading: boolean
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -50,6 +52,7 @@ export const ProjectCard: React.FC<Props> = ({
   coi,
   onCoICancel,
   onCoIConfirm,
+  coiLoading,
 }) => {
   const [aiMode, setAiMode] = useState(false)
 
@@ -65,11 +68,16 @@ export const ProjectCard: React.FC<Props> = ({
           <ConflictOfInterestModal onCancel={onCoICancel} onDeclareConflict={onCoIConfirm} />
         </div>
       )}
+      {coiLoading && (
+        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+          <CoILoadingModal />
+        </div>
+      )}
       <div
         style={{ maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)' }}
         className={`container relative mx-auto mb-16
       mt-4 h-[80vh] w-full overflow-y-auto rounded-xl 
-      border-4 border-yellow-200 bg-yellow-50 p-2 pb-32 shadow-md ${coi ? `brightness-50` : ``}`}
+      border-4 border-yellow-200 bg-yellow-50 p-2 pb-32 shadow-md ${(coi || coiLoading) ? `brightness-50` : ``}`}
       >
         <div className="relative h-40">
           <Image
