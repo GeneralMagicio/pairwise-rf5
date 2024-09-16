@@ -36,6 +36,36 @@ export default function Home() {
   const [rating1, setRating1] = useState<number | null>(null)
   const [rating2, setRating2] = useState<number | null>(null)
 
+  const [coi1, setCoi1] = useState(false)
+
+  const confirmCoI1 = async () => {
+    await markProjectCoI({ data: { pid: pair1.id } })
+    setCoi1(false)
+  }
+
+  const cancelCoI1 = () => {
+    setCoi1(false)
+  }
+
+  const showCoI1 = () => {
+    setCoi1(true)
+  }
+
+  const [coi2, setCoi2] = useState(false)
+
+  const confirmCoI2 = async () => {
+    await markProjectCoI({ data: { pid: pair2.id } })
+    setCoi2(false)
+  }
+
+  const cancelCoI2 = () => {
+    setCoi2(false)
+  }
+
+  const showCoI2 = () => {
+    setCoi2(true)
+  }
+
   const { checkLoginFlow } = useAuth()
 
   useEffect(() => {
@@ -85,32 +115,42 @@ export default function Home() {
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
           {/*  @ts-ignore */}
-          <ProjectCard project={{ ...pair1.metadata, ...pair1 }} />
-          <div className="absolute bottom-28 right-[40%]">
-            <Rating value={rating1 || 3} onChange={(val: number) => { setRating1(val) }} />
-          </div>
-          <div className="absolute bottom-28 left-2/3">
-            <ConflictButton onClick={() => markProjectCoI({ data: { pid: pair1.id } })} />
-          </div>
-          <div className="absolute bottom-4 left-[37%] w-96">
-            <VoteButton onClick={handleVote(pair1.id)} title={truncate(pair1.name, 35)} imageUrl={pair1.image || ''} />
-          </div>
+          <ProjectCard project={{ ...pair1.metadata, ...pair1 }} coi={coi1} onCoICancel={cancelCoI1} onCoIConfirm={confirmCoI1} />
+          {!coi1
+          && (
+            <>
+              <div className="absolute bottom-28 right-[40%]">
+                <Rating value={rating1 || 3} onChange={(val: number) => { setRating1(val) }} />
+              </div>
+              <div className="absolute bottom-28 left-2/3">
+                <ConflictButton onClick={showCoI1} />
+              </div>
+              <div className="absolute bottom-4 left-[37%] w-96">
+                <VoteButton onClick={handleVote(pair1.id)} title={truncate(pair1.name, 35)} imageUrl={pair1.image || ''} />
+              </div>
+            </>
+          )}
         </div>
         <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
           <UndoButton onClick={handleUndo} />
         </div>
         <div className="relative w-[49%]">
           {/*  @ts-ignore */}
-          <ProjectCard project={{ ...pair2.metadata, ...pair2 }} />
-          <div className="absolute bottom-28 right-[40%]">
-            <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
-          </div>
-          <div className="absolute bottom-28 left-2/3">
-            <ConflictButton onClick={() => markProjectCoI({ data: { pid: pair2.id } })} />
-          </div>
-          <div className="absolute bottom-4 left-[37%] w-96">
-            <VoteButton onClick={handleVote(pair2.id)} title={truncate(pair2.name, 35)} imageUrl={pair2.image || ''} />
-          </div>
+          <ProjectCard coi={coi2} onCoICancel={cancelCoI2} onCoIConfirm={confirmCoI2} project={{ ...pair2.metadata, ...pair2 }} />
+          {!coi2 && (
+            <>
+              <div className="absolute bottom-28 right-[40%]">
+                <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
+              </div>
+              <div className="absolute bottom-28 left-2/3">
+                <ConflictButton onClick={showCoI2} />
+              </div>
+              <div className="absolute bottom-4 left-[37%] w-96">
+                <VoteButton onClick={handleVote(pair2.id)} title={truncate(pair2.name, 35)} imageUrl={pair2.image || ''} />
+              </div>
+            </>
+
+          )}
         </div>
       </div>
     </div>
