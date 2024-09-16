@@ -62,10 +62,10 @@ export const ProjectCard: React.FC<Props> = ({
   }
 
   return (
-    <div>
+    <div className="relative">
 
       {coi && (
-        <div className="fixed left-[20%] top-1/2 z-50 -translate-x-[20%] -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
           <ConflictOfInterestModal onCancel={onCoICancel} onDeclareConflict={onCoIConfirm} />
         </div>
       )}

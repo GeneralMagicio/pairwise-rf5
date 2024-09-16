@@ -101,6 +101,8 @@ export default function Home() {
   }
 
   const handleUndo = async () => {
+    setCoi1(false)
+    setCoi2(false)
     await undo()
   }
 
