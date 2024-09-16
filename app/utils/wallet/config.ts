@@ -1,5 +1,5 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
-import { optimism } from 'wagmi/chains'
+import { arbitrum, base, mainnet, optimism, polygon } from 'wagmi/chains'
 
 // Get projectId from https://cloud.walletconnect.com
 // export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
@@ -16,7 +16,7 @@ export const metadata = {
 }
 
 // Create wagmiConfig
-const chains = [optimism] as const
+const chains = [optimism, mainnet, arbitrum, polygon, base] as const
 export const config = defaultWagmiConfig({
   chains,
   projectId,
