@@ -23,3 +23,34 @@ export const useGetPairwisePairs = (cid: number) => {
     queryFn: () => getPairwisePairs(cid),
   })
 }
+
+// type Arg = {
+//   data: { cid: number
+//     pid: number }
+// }
+
+// export const getPairwisePairsForProject = async (data: Arg): Promise<IPairwisePairsResponse> => {
+//   const { cid, pid } = data
+//   return (await axiosInstance.get(`pairs-for-project?cid=${cid}&pid=${pid}`)).data
+// }
+
+// export const useGetPairwisePairsForProject = (cid: number, pid: number) => {
+//   return useQuery({
+//     queryFn: getPairwisePairsForProject,
+//     queryKey: ['pairwise-pairs-project', { cid, pid }],
+//   })
+// }
+
+export const getPairwisePairsForProject = async (
+  cid: number,
+  pid: number
+): Promise<IPairwisePairsResponse> => {
+  return (await axiosInstance.get(`flow/pairs-for-project?cid=${cid}&pid=${pid}`)).data
+}
+
+// export const useGetPairwisePairsForProject = (cid: number) => {
+//   return useLazyQuery({
+//     queryFn: getPairwisePairsForProject(cid),
+//     queryKey: ['pairwise-pairs-project', cid],
+//   })
+// }

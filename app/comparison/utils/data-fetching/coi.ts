@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/app/utils/axiosInstance'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 type Data = {
   data: {
@@ -7,25 +7,16 @@ type Data = {
   }
 }
 
-export const markCoi = ({
+export const markCoi = async ({
   data,
 }: Data) => {
-  return axiosInstance.post('/flow/mark-coi', data)
+  console.log(data)
+  const res = await axiosInstance.post('/flow/mark-coi', data)
+  return res.data
 }
 
-export const useMarkCoi = ({
-  categoryId,
-}: {
-  categoryId: number
-}) => {
-  const queryClient = useQueryClient()
-
+export const useMarkCoi = () => {
   return useMutation({
     mutationFn: markCoi,
-    onSuccess: () => {
-      queryClient.refetchQueries({
-        queryKey: ['pairwise-pairs', categoryId],
-      })
-    },
   })
 }

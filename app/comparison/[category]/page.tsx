@@ -11,11 +11,13 @@ import { useParams } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
 import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { useEffect, useState } from 'react'
-import { useGetPairwisePairs } from '../utils/data-fetching/pair'
+import { getPairwisePairsForProject, useGetPairwisePairs } from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
 import { useUpdateProjectUndo, useUpdateProjectVote } from '../utils/data-fetching/vote'
 import { truncate } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
+import { IProject } from '../utils/types'
+import { useQueryClient } from '@tanstack/react-query'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -33,13 +35,26 @@ const convertCategoryToLabel = (category: JWTPayload['category']) => {
 export default function Home() {
   const params = useParams()
   const { category } = params
+  const queryClient = useQueryClient()
   const [rating1, setRating1] = useState<number | null>(null)
   const [rating2, setRating2] = useState<number | null>(null)
+  const [project1, setProject1] = useState<IProject>()
+  const [project2, setProject2] = useState<IProject>()
+  const cid = convertCategoryNameToId(category as JWTPayload['category'])
 
   const [coi1, setCoi1] = useState(false)
 
-  const confirmCoI1 = async () => {
-    await markProjectCoI({ data: { pid: pair1.id } })
+  const confirmCoI1 = async (id1: number, id2: number) => {
+    await markProjectCoI({ data: { pid: id1 } })
+    try {
+      const pair = await getPairwisePairsForProject(cid, id2)
+      setProject1(pair.pairs[0].find(project => project.id !== id2)!)
+    }
+    catch (e) {
+      queryClient.refetchQueries({
+        queryKey: ['pairwise-pairs', cid],
+      })
+    }
     setCoi1(false)
   }
 
@@ -53,9 +68,18 @@ export default function Home() {
 
   const [coi2, setCoi2] = useState(false)
 
-  const confirmCoI2 = async () => {
-    await markProjectCoI({ data: { pid: pair2.id } })
-    setCoi2(false)
+  const confirmCoI2 = async (id1: number, id2: number) => {
+    await markProjectCoI({ data: { pid: id2 } })
+    try {
+      const pair = await getPairwisePairsForProject(cid, id1)
+      setProject2(pair.pairs[0].find(project => project.id !== id1)!)
+      setCoi2(false)
+    }
+    catch (e) {
+      queryClient.refetchQueries({
+        queryKey: ['pairwise-pairs', cid],
+      })
+    }
   }
 
   const cancelCoI2 = () => {
@@ -72,31 +96,32 @@ export default function Home() {
     checkLoginFlow()
   }, [checkLoginFlow])
 
-  const cid = convertCategoryNameToId(category as JWTPayload['category'])
-
   const { data, isLoading } = useGetPairwisePairs(cid)
+  // const {} = useGetPairwisePairsForProject(cid)
 
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
   const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid })
-  const { mutateAsync: markProjectCoI } = useMarkCoi({ categoryId: cid })
-  // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: pair2 ? pair2.id : 0 })
+  const { mutateAsync: markProjectCoI } = useMarkCoi()
+  // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
   // const { setShowBhModal } = useAuth()
   useEffect(() => {
     setRating1(data?.pairs[0][0].rating || null)
     setRating2(data?.pairs[0][1].rating || null)
   }, [data])
 
-  // useEffect(() => {
-  //   setShowBhModal(false)
-  // }, [setShowBhModal])
+  useEffect(() => {
+    if (!data) return
+    setProject1(data.pairs[0][0])
+    setProject2(data.pairs[0][1])
+  }, [data])
 
-  if (!data || isLoading) return
+  if (!project1 || !project2 || !data || isLoading) return
 
-  const pair1 = data.pairs[0][0]
-  const pair2 = data.pairs[0][1]
+  // const project1 = data.pairs[0][0]
+  // const project2 = data.pairs[0][1]
 
   const handleVote = (chosenId: number) => async () => {
-    await vote({ data: { project1Id: pair1.id, project2Id: pair2.id,
+    await vote({ data: { project1Id: project1.id, project2Id: project2.id,
       project1Stars: rating1, project2Stars: rating2, pickedId: chosenId } })
   }
 
@@ -116,8 +141,12 @@ export default function Home() {
       />
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
-          {/*  @ts-ignore */}
-          <ProjectCard project={{ ...pair1.metadata, ...pair1 }} coi={coi1} onCoICancel={cancelCoI1} onCoIConfirm={confirmCoI1} />
+          <ProjectCard
+            coi={coi1}
+            project={{ ...project1.metadata, ...project1 } as any}
+            onCoICancel={cancelCoI1}
+            onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+          />
           {!coi1
           && (
             <>
@@ -128,7 +157,7 @@ export default function Home() {
                 <ConflictButton onClick={showCoI1} />
               </div>
               <div className="absolute bottom-4 left-[37%] w-96">
-                <VoteButton onClick={handleVote(pair1.id)} title={truncate(pair1.name, 35)} imageUrl={pair1.image || ''} />
+                <VoteButton onClick={handleVote(project1.id)} title={truncate(project1.name, 35)} imageUrl={project1.image || ''} />
               </div>
             </>
           )}
@@ -137,8 +166,12 @@ export default function Home() {
           <UndoButton onClick={handleUndo} />
         </div>
         <div className="relative w-[49%]">
-          {/*  @ts-ignore */}
-          <ProjectCard coi={coi2} onCoICancel={cancelCoI2} onCoIConfirm={confirmCoI2} project={{ ...pair2.metadata, ...pair2 }} />
+          <ProjectCard
+            coi={coi2}
+            onCoICancel={cancelCoI2}
+            onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+            project={{ ...project2.metadata, ...project2 } as any}
+          />
           {!coi2 && (
             <>
               <div className="absolute bottom-28 right-[40%]">
@@ -148,7 +181,7 @@ export default function Home() {
                 <ConflictButton onClick={showCoI2} />
               </div>
               <div className="absolute bottom-4 left-[37%] w-96">
-                <VoteButton onClick={handleVote(pair2.id)} title={truncate(pair2.name, 35)} imageUrl={pair2.image || ''} />
+                <VoteButton onClick={handleVote(project2.id)} title={truncate(project2.name, 35)} imageUrl={project2.image || ''} />
               </div>
             </>
 
