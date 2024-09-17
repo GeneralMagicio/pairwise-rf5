@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 import { getPairwisePairsForProject, useGetPairwisePairs } from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
 import { useUpdateProjectUndo, useUpdateProjectVote } from '../utils/data-fetching/vote'
-import { truncate } from '@/app/utils/methods'
+import { getBiggerNumber, truncate, usePrevious } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
 import { IProject } from '../utils/types'
 import { useQueryClient } from '@tanstack/react-query'
@@ -52,6 +52,8 @@ export default function Home() {
   const [project2, setProject2] = useState<IProject>()
   const [coiLoading1, setCoiLoading1] = useState(false)
   const [coiLoading2, setCoiLoading2] = useState(false)
+  const [bypassPrevProgress, setBypassPrevProgress] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   const [showFinishBallot, setShowFinishBallot] = useState(false)
   const [showSuccessBallot, setShowSuccessBallot] = useState(false)
@@ -122,6 +124,18 @@ export default function Home() {
   }, [checkLoginFlow])
 
   const { data, isLoading } = useGetPairwisePairs(cid)
+  const prevProgress = usePrevious(progress)
+
+  useEffect(() => {
+    if (bypassPrevProgress && data) {
+      setProgress(data.progress)
+      setBypassPrevProgress(false)
+    }
+    else {
+      setProgress(getBiggerNumber(prevProgress, data?.progress))
+    }
+  }, [data])
+
   // const {} = useGetPairwisePairsForProject(cid)
 
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
@@ -131,6 +145,7 @@ export default function Home() {
     // then you call "undo", the app breaks
     // we probably need to combine "/pairs" and "/pairs-for-project"
     setTemp(temp + 1)
+    setBypassPrevProgress(true)
   } })
   const { mutateAsync: markProjectCoI } = useMarkCoi()
   // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
@@ -196,13 +211,14 @@ export default function Home() {
 
       </Modal>
       <Header
-        progress={data.progress * 100}
+        progress={progress * 100}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
       />
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
           <ProjectCard
+            key={project1.RPGF5Id}
             coiLoading={coiLoading1}
             coi={coi1}
             project={{ ...project1.metadata, ...project1 } as any}
@@ -229,6 +245,7 @@ export default function Home() {
         </div>
         <div className="relative w-[49%]">
           <ProjectCard
+            key={project1.RPGF5Id}
             coiLoading={coiLoading2}
             coi={coi2}
             onCoICancel={cancelCoI2}
