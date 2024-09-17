@@ -7,7 +7,7 @@ import Header from '../card/Header'
 import { Rating } from '../card/Rating'
 import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
 import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { useEffect, useState } from 'react'
@@ -18,6 +18,14 @@ import { truncate } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
 import { IProject } from '../utils/types'
 import { useQueryClient } from '@tanstack/react-query'
+import Modal from '@/app/utils/Modal'
+import FinishBallot from '../ballot/modals/FinishBallotModal'
+import BallotSuccessModal from '../ballot/modals/BallotSuccessModal'
+import BallotLoading from '../ballot/modals/BallotLoading'
+import { getBallot } from '../ballot/useGetBallot'
+import { useAccount } from 'wagmi'
+import { uploadBallot } from '@/app/utils/wallet/agora-login'
+import BallotError from '../ballot/modals/BallotError'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -36,17 +44,27 @@ export default function Home() {
   const params = useParams()
   const { category } = params
   const queryClient = useQueryClient()
+  const router = useRouter()
+
   const [rating1, setRating1] = useState<number | null>(null)
   const [rating2, setRating2] = useState<number | null>(null)
   const [project1, setProject1] = useState<IProject>()
   const [project2, setProject2] = useState<IProject>()
   const [coiLoading1, setCoiLoading1] = useState(false)
   const [coiLoading2, setCoiLoading2] = useState(false)
+
+  const [showFinishBallot, setShowFinishBallot] = useState(false)
+  const [showSuccessBallot, setShowSuccessBallot] = useState(false)
+  const [ballotLoading, setBallotLoading] = useState(false)
+  const [ballotError, setBallotError] = useState(false)
+
   const [temp, setTemp] = useState(0)
   const cid = convertCategoryNameToId(category as JWTPayload['category'])
 
   const [coi1, setCoi1] = useState(false)
   const [coi2, setCoi2] = useState(false)
+
+  const { address } = useAccount()
 
   const confirmCoI1 = async (id1: number, id2: number) => {
     await markProjectCoI({ data: { pid: id1 } })
@@ -118,15 +136,38 @@ export default function Home() {
   // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
   // const { setShowBhModal } = useAuth()
   useEffect(() => {
+    if (!data || data.pairs.length === 0) return
     setRating1(data?.pairs[0][0].rating || null)
     setRating2(data?.pairs[0][1].rating || null)
   }, [data])
 
   useEffect(() => {
     if (!data) return
+    if (data.pairs.length === 0) {
+      setShowFinishBallot(true)
+      return
+    }
     setProject1(data.pairs[0][0])
     setProject2(data.pairs[0][1])
   }, [data, temp])
+
+  const handleUnlockBallot = async () => {
+    if (!address) return
+    setShowFinishBallot(false)
+    setBallotLoading(true)
+    setBallotError(false)
+    try {
+      const ballot = await getBallot(cid)
+      await uploadBallot(ballot, address)
+      setShowSuccessBallot(true)
+    }
+    catch (e) {
+      setBallotError(true)
+    }
+    finally {
+      setBallotLoading(false)
+    }
+  }
 
   if (!project1 || !project2 || !data || isLoading) return
 
@@ -147,6 +188,13 @@ export default function Home() {
   return (
     <div>
       <Modals />
+      <Modal isOpen={showFinishBallot || showSuccessBallot || ballotLoading || ballotError} onClose={() => {}}>
+        {showFinishBallot && <FinishBallot category={convertCategoryToLabel(category as JWTPayload['category'])} projectCount={35} onUnlock={handleUnlockBallot} />}
+        {showSuccessBallot && <BallotSuccessModal onClick={() => { router.push(`https://develop-op-voting.up.railway.app/ballot`) }} />}
+        {ballotLoading && <BallotLoading />}
+        {ballotError && <BallotError onClick={handleUnlockBallot} />}
+
+      </Modal>
       <Header
         progress={data.progress * 100}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}

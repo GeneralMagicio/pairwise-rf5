@@ -2,11 +2,13 @@ import { SIWEConfig } from 'connectkit'
 import { SiweMessage } from 'siwe'
 import { decodeJwt } from 'jose'
 import { JWTPayload, VerifyResponse } from './types'
+import { AgoraBallotPost } from '@/app/comparison/ballot/useGetBallot'
+import axios from 'axios'
 
 // TODO: this should probably be an environment variable
 // const BASE_URL = `https://vote.optimism.io`
 const BASE_URL = `https://pairwise-cors.liara.run/https://vote.optimism.io`
-const API_AUTH_PREFIX = '/api/v1/auth'
+const API_PREFIX = '/api/v1'
 const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt'
 export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum'
 
@@ -42,7 +44,7 @@ export const loginToAgora = async (address: `0x${string}`, chainId: number, sign
 }
 
 const getNonce = async () =>
-  fetch(`${BASE_URL}${API_AUTH_PREFIX}/nonce`).then(res => res.text())
+  fetch(`${BASE_URL}${API_PREFIX}/auth/nonce`).then(res => res.text())
 
 const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId }) =>
   new SiweMessage({
@@ -56,7 +58,7 @@ const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId })
   }).prepareMessage()
 
 const verifyMessage = async ({ message, signature }: { message: string, signature: string }) =>
-  fetch(`${BASE_URL}${API_AUTH_PREFIX}/verify`, {
+  fetch(`${BASE_URL}${API_PREFIX}/auth/verify`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -90,6 +92,23 @@ export const isLoggedInToAgora = (): JWTPayload | false => {
   catch (e) {
     return false
   }
+}
+
+export const uploadBallot = async (
+  ballot: AgoraBallotPost,
+  address: string,
+) => {
+  const agoraJwt = localStorage.getItem(LOCAL_STORAGE_JWT_KEY)
+  const parsed: VerifyResponse = JSON.parse(agoraJwt || '')
+
+  const { data } = await axios.post(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}/projects`,
+    ballot, {
+      headers: {
+        'Authorization': `Bearer ${parsed.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+  return data
 }
 
 export const signOutFromAgora = () => {
