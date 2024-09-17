@@ -7,12 +7,13 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
+import { useAccount, useSignMessage } from 'wagmi'
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login'
 import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login'
 import { JWTPayload } from './types'
 import { useRouter } from 'next/navigation'
 import { axiosInstance } from '../axiosInstance'
+import { usePrevious } from '../methods'
 
 export enum LogginToPwBackendState {
   Initial,
@@ -86,19 +87,23 @@ export const useAuth = () => {
 
   // const [loginFlowDangling, setLoginFlowDangling] = useState(false)
   const { address, chainId } = useAccount()
+  const prevAddress = usePrevious(address)
   const { signMessageAsync } = useSignMessage()
-  const { disconnectAsync } = useDisconnect()
   const [temp, setTemp] = useState(0)
   const router = useRouter()
 
   const signOut = async () => {
-    await disconnectAsync()
     signOutFromAgora()
     logoutFromPwBackend()
     setLoggedToAgora('initial')
     setLoggedToPw(LogginToPwBackendState.Initial)
     setIsNewUser(false)
+    router.push('/landing')
   }
+
+  useEffect(() => {
+    if (prevAddress && address !== prevAddress) signOut()
+  }, [address, prevAddress])
 
   const redirectToComparisonPage = useCallback(() => {
     if (typeof loggedToAgora !== 'object') return
@@ -178,11 +183,7 @@ export const useAuth = () => {
       },
       function (error) {
         if (error.response && error.response.status === 401) {
-          signOutFromAgora()
-          logoutFromPwBackend()
-          setLoggedToAgora('initial')
-          setLoggedToPw(LogginToPwBackendState.Initial)
-          setIsNewUser(false)
+          signOut()
           setTemp(temp + 1)
         }
         return Promise.reject(error)

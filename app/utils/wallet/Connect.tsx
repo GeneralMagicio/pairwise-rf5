@@ -8,14 +8,20 @@ import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import React from 'react'
 import { ConnectedButton } from './ConnectedButton'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { useAuth } from './AuthProvider'
 // import { loginToAgora } from './agora-login'
 
 export const ConnectButton = () => {
   const { open } = useWeb3Modal()
   const { address, isConnected } = useAccount()
+  const { disconnectAsync } = useDisconnect()
   const { signOut } = useAuth()
+
+  const logout = async () => {
+    await disconnectAsync()
+    signOut()
+  }
   // const { signMessageAsync } = useSignMessage()
 
   function handleOpen() {
@@ -39,7 +45,7 @@ export const ConnectButton = () => {
   // }, [isConnected, address, chainId, signMessageAsync])
 
   if (isConnected && address) return (
-    <ConnectedButton onLogout={signOut} wallet={address} />
+    <ConnectedButton onLogout={logout} wallet={address} />
   )
 
   return (
