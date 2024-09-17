@@ -1,18 +1,6 @@
 import { SignMessageMutateAsync } from 'wagmi/query'
 import { axiosInstance } from '../axiosInstance'
 
-axiosInstance.interceptors.response.use(
-  function (response) {
-    return response
-  },
-  function (error) {
-    if (error.response && error.response.status === 401) {
-      logoutFromPwBackend()
-    }
-    return Promise.reject(error)
-  },
-)
-
 export const isLoggedIn = async () => {
   if (!localStorage.getItem('auth')) return false
   try {
@@ -23,24 +11,6 @@ export const isLoggedIn = async () => {
     return false
   }
 }
-
-// const fetchNonce = async () => {
-//   try {
-//     const { data } = await axios.get<string>('/auth/nonce')
-//     return data
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
-// function generateRandomString(length: number): string {
-//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   let result = '';
-//   for (let i = 0; i < length; i++) {
-//       result += characters.charAt(Math.floor(Math.random() * characters.length));
-//   }
-//   return result;
-// }
 
 export const loginToPwBackend = async (
   chainId: number,

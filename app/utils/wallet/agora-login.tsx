@@ -3,7 +3,7 @@ import { SiweMessage } from 'siwe'
 import { decodeJwt } from 'jose'
 import { JWTPayload, VerifyResponse } from './types'
 import { AgoraBallotPost } from '@/app/comparison/ballot/useGetBallot'
-import axios from 'axios'
+import { axiosInstance } from '../axiosInstance'
 
 // TODO: this should probably be an environment variable
 // const BASE_URL = `https://vote.optimism.io`
@@ -43,8 +43,11 @@ export const loginToAgora = async (address: `0x${string}`, chainId: number, sign
   return isVerified
 }
 
-const getNonce = async () =>
-  fetch(`${BASE_URL}${API_PREFIX}/auth/nonce`).then(res => res.text())
+const getNonce = async () => {
+  const res = await axiosInstance.get(`${BASE_URL}${API_PREFIX}/auth/nonce`)
+
+  return res.data
+}
 
 const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId }) =>
   new SiweMessage({
@@ -57,23 +60,22 @@ const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId })
     nonce,
   }).prepareMessage()
 
-const verifyMessage = async ({ message, signature }: { message: string, signature: string }) =>
-  fetch(`${BASE_URL}${API_PREFIX}/auth/verify`, {
-    method: 'POST',
+const verifyMessage = async ({ message, signature }: { message: string, signature: string }) => {
+  const res = await axiosInstance.post<VerifyResponse>(`${BASE_URL}${API_PREFIX}/auth/verify`, JSON.stringify({
+    message,
+    signature,
+  }), {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      message,
-      signature,
-    }),
-  }).then(async (res) => {
-    // save JWT from verify to local storage
-    const token: VerifyResponse = await res.json()
-    localStorage.setItem(LOCAL_STORAGE_JWT_KEY, JSON.stringify(token))
-    const payload: JWTPayload = decodeJwt(token.access_token)
-    return payload
   })
+
+  // save JWT from verify to local storage
+  const token = res.data
+  localStorage.setItem(LOCAL_STORAGE_JWT_KEY, JSON.stringify(token))
+  const payload: JWTPayload = decodeJwt(token.access_token)
+  return payload
+}
 
 export const isLoggedInToAgora = (): JWTPayload | false => {
   try {
@@ -101,7 +103,7 @@ export const uploadBallot = async (
   const agoraJwt = localStorage.getItem(LOCAL_STORAGE_JWT_KEY)
   const parsed: VerifyResponse = JSON.parse(agoraJwt || '')
 
-  const { data } = await axios.post(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}/projects`,
+  const { data } = await axiosInstance.post(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}/projects`,
     ballot, {
       headers: {
         'Authorization': `Bearer ${parsed.access_token}`,

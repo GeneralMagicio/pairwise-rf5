@@ -12,6 +12,7 @@ import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login'
 import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login'
 import { JWTPayload } from './types'
 import { useRouter } from 'next/navigation'
+import { axiosInstance } from '../axiosInstance'
 
 export enum LogginToPwBackendState {
   Initial,
@@ -87,6 +88,7 @@ export const useAuth = () => {
   const { address, chainId } = useAccount()
   const { signMessageAsync } = useSignMessage()
   const { disconnectAsync } = useDisconnect()
+  const [temp, setTemp] = useState(0)
   const router = useRouter()
 
   const signOut = async () => {
@@ -158,7 +160,7 @@ export const useAuth = () => {
     }
 
     setLoginInProgress(false)
-  }, [address])
+  }, [address, temp])
 
   useEffect(() => {
     if (typeof loggedToAgora === 'object') {
@@ -167,6 +169,31 @@ export const useAuth = () => {
       }
     }
   }, [loggedToAgora, redirectToComparisonPage])
+
+  // Set up axios interceptors
+  useEffect(() => {
+    const interceptor = axiosInstance.interceptors.response.use(
+      function (response) {
+        return response
+      },
+      function (error) {
+        if (error.response && error.response.status === 401) {
+          signOutFromAgora()
+          logoutFromPwBackend()
+          setLoggedToAgora('initial')
+          setLoggedToPw(LogginToPwBackendState.Initial)
+          setIsNewUser(false)
+          setTemp(temp + 1)
+        }
+        return Promise.reject(error)
+      },
+    )
+
+    return () => {
+      // Remove the interceptor when the component unmounts
+      axiosInstance.interceptors.response.eject(interceptor)
+    }
+  }, [temp])
 
   // useEffect(() => {
   //   if (address) {
