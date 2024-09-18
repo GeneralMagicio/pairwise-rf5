@@ -105,14 +105,16 @@ export const ProjectCard: React.FC<Props> = ({
             <p>
               By
             </p>
-            <Image
-              src={project.organization.organizationAvatarUrl}
-              alt={project.organization.name}
-              width={24}
-              height={24}
-              className="mx-1 rounded-full"
-              unoptimized
-            />
+            {project.organization.organizationAvatarUrl && (
+              <Image
+                src={project.organization.organizationAvatarUrl}
+                alt={project.organization.name}
+                width={24}
+                height={24}
+                className="mx-1 rounded-full"
+                unoptimized
+              />
+            )}
             <p>
               {project.organization.name}
             </p>
