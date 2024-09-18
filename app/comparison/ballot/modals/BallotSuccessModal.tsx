@@ -27,7 +27,7 @@ const BallotSuccessModal: React.FC<UnlockBallotProps> = ({ onClick }) => {
           onClick={onClick}
           className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-white transition duration-300 ease-in-out hover:bg-red-600"
         >
-          Go to back to the voting app
+          Go back to the voting app
         </button>
       </div>
     </div>
