@@ -266,7 +266,7 @@ export default function Home() {
           />
         </div>
       </div>
-      <footer className="absolute bottom-0 flex items-center justify-around w-full py-8 bg-white">
+      <footer className="sticky bottom-0 flex items-center justify-around w-full py-8 bg-white">
         <div className="flex justify-center items-center gap-8">
           {!coi1 && !coiLoading1 && (
             <>
