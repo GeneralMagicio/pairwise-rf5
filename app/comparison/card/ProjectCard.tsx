@@ -19,15 +19,23 @@ interface CollapsibleProps {
   children: React.ReactNode
   onClick: () => void
   id: string
+  expanded: boolean
+  setExpanded: (value: boolean) => void
 }
 
 export interface AutoScrollAction {
-  section: string // id of the section
+  section: 'repos' | 'pricing' | 'grants' | 'impact' // id of the section
   initiator: 'card1' | 'card2'
+  action: true | false // mapping to expanded/collapsed
 }
 
-const Section: React.FC<CollapsibleProps> = ({ title, children, onClick, id }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({ defaultExpanded: true })
+const Section: React.FC<CollapsibleProps> = ({ title, children, onClick, id, expanded, setExpanded }) => {
+  const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded: expanded })
+
+  const handleClick = () => {
+    onClick()
+    setExpanded(!expanded)
+  }
 
   return (
     <div id={id} className="mb-4 rounded-lg border-t pt-4">
@@ -37,8 +45,13 @@ const Section: React.FC<CollapsibleProps> = ({ title, children, onClick, id }) =
         >
           {title}
         </button>
-        <button {...getToggleProps()} onClick={onClick} className="flex cursor-pointer items-center gap-1 text-sm text-primary">
-          {isExpanded ? <ArrowUpIcon color="black" width={20} height={20} /> : <ArrowDownIcon width={20} height={20} />}
+        <button
+          {...getToggleProps({
+            onClick: handleClick,
+          })}
+          className="flex cursor-pointer items-center gap-1 text-sm text-primary"
+        >
+          {expanded ? <ArrowUpIcon color="black" width={20} height={20} /> : <ArrowDownIcon width={20} height={20} />}
         </button>
       </div>
       <section {...getCollapseProps()} className="p-2">{children}</section>
@@ -63,7 +76,7 @@ interface Props {
   onCoICancel: () => void
   onCoIConfirm: () => void
   coiLoading: boolean
-  dispatchAction: (section: AutoScrollAction['section']) => void
+  dispatchAction: (section: AutoScrollAction['section'], action: AutoScrollAction['action']) => void
   action: AutoScrollAction | undefined
   name: string
 }
@@ -79,20 +92,36 @@ export const ProjectCard: React.FC<Props> = ({
   name,
 }) => {
   const [aiMode, setAiMode] = useState(false)
+  const [sectionExpanded, setSectionExpanded] = useState({
+    repos: true,
+    pricing: true,
+    grants: true,
+    impact: true,
+  })
 
   const handleChange = () => {
     setAiMode(!aiMode)
   }
 
-  const handleSectionClick = (id: string) => () => {
-    dispatchAction(id)
+  const handleSectionClick = (id: AutoScrollAction['section'], expanded: AutoScrollAction['action']) => () => {
+    dispatchAction(id, expanded)
+  }
+
+  const hnadleExpanded = (section: AutoScrollAction['section']) => (value: boolean) => {
+    setSectionExpanded({ ...sectionExpanded, [section]: value })
   }
 
   useEffect(() => {
     if (action && action.initiator !== name) {
+      console.log('in', name, 'with action', action)
+      console.log('section states', sectionExpanded)
       smoothScrollToElement(`${action.section}-${name}`)
+      if (action.action !== sectionExpanded[action.section]) {
+        console.log('launched in', name, { ...sectionExpanded, [action.section]: action.action })
+        setSectionExpanded({ ...sectionExpanded, [action.section]: action.action })
+      }
     }
-  }, [action, name])
+  }, [action, name, sectionExpanded])
 
   return (
     <div className="relative">
@@ -189,7 +218,13 @@ export const ProjectCard: React.FC<Props> = ({
           />
         </div>
 
-        <Section id={`repos-${name}`} onClick={handleSectionClick(`repos`)} title="Repos, links, and contracts">
+        <Section
+          id={`repos-${name}`}
+          setExpanded={hnadleExpanded('repos')}
+          expanded={sectionExpanded['repos']}
+          onClick={handleSectionClick(`repos`, !sectionExpanded['repos'])}
+          title="Repos, links, and contracts"
+        >
           <div className="space-y-4">
             {project.github.map(repo => (
               <GithubBox key={repo.url} repo={repo} />
@@ -223,7 +258,14 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       </Section> */}
 
-        <Section id={`impact-${name}`} onClick={handleSectionClick(`impact`)} title="Impact statement">
+        <Section
+          id={`impact-${name}`}
+          setExpanded={hnadleExpanded('impact')}
+
+          expanded={sectionExpanded['impact']}
+          onClick={handleSectionClick(`impact`, !sectionExpanded['impact'])}
+          title="Impact statement"
+        >
           <div className="space-y-4">
             <div className="space-y-2">
               <p>
@@ -254,7 +296,14 @@ export const ProjectCard: React.FC<Props> = ({
           <p>{project.projectSupport}</p>
         </Section> */}
 
-        <Section id={`pricing-${name}`} onClick={handleSectionClick(`pricing`)} title="Pricing model">
+        <Section
+          id={`pricing-${name}`}
+          setExpanded={hnadleExpanded('pricing')}
+
+          onClick={handleSectionClick(`pricing`, !sectionExpanded['pricing'])}
+          expanded={sectionExpanded['pricing']}
+          title="Pricing model"
+        >
           <div className="space-y-2">
             <div className="rounded border bg-gray-50 p-4">
               <p className="font-medium">{project.pricingModel}</p>
@@ -271,7 +320,13 @@ export const ProjectCard: React.FC<Props> = ({
           </div>
         </Section>
 
-        <Section id={`grants-${name}`} onClick={handleSectionClick(`grants`)} title="Grants and investment">
+        <Section
+          id={`grants-${name}`}
+          setExpanded={hnadleExpanded('grants')}
+          onClick={handleSectionClick(`grants`, !sectionExpanded['grants'])}
+          expanded={sectionExpanded['grants']}
+          title="Grants and investment"
+        >
           <div className="space-y-2">
             {project.grantsAndFunding.grants.map(grant => (
               <GrantBox

@@ -56,9 +56,10 @@ export default function Home() {
   const [progress, setProgress] = useState(0)
   const [lastAction, setLastAction] = useState<AutoScrollAction>()
 
-  const dispatchAction = (initiator: AutoScrollAction['initiator']) => (section: AutoScrollAction['section']) => {
-    setLastAction({ section, initiator })
-  }
+  const dispatchAction = (initiator: AutoScrollAction['initiator']) =>
+    (section: AutoScrollAction['section'], action: AutoScrollAction['action']) => {
+      setLastAction({ section, initiator, action })
+    }
 
   const [showFinishBallot, setShowFinishBallot] = useState(false)
   const [showSuccessBallot, setShowSuccessBallot] = useState(false)
