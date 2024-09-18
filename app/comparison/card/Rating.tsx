@@ -1,27 +1,63 @@
-import { FC } from 'react'
-import { Rating as RatingComponent, Star } from '@smastrom/react-rating'
+import { FC, useEffect, useState } from "react";
+import { Rating as RatingComponent, Star } from "@smastrom/react-rating";
 
 interface Props {
-  value: number
-  onChange: (val: number) => void
+  value: number;
+  onChange: (value: number) => void;
 }
 
 export const Rating: FC<Props> = ({ value, onChange }) => {
-  return (
+  const [hoverValue, setHoverValue] = useState<number | null>(null);
+  const [currentValue, setCurrentValue] = useState(value ?? 3);
+  const [seletedValue, setSelectedValue] = useState(value ?? 3);
+  const [starsColoring, setStarsColoring] = useState(
+    getStarsColoring(value).activeFillColor
+  );
 
-    <div className="flex w-[350px] items-center justify-between rounded-lg bg-gray-950 px-4 py-6">
-      <span className="text-sm text-white"> Rate this project </span>
+  function getStarsColoring(num?: number) {
+    switch (num) {
+      case 1:
+        return { hoverFillColor: "#FF9999", activeFillColor: "#FF1D1D" };
+      case 2:
+        return { hoverFillColor: "#FFB570", activeFillColor: "#FF8C22" };
+      case 3:
+        return { hoverFillColor: "#FFE870", activeFillColor: "#ffcc00" };
+      case 4:
+        return { hoverFillColor: "#B2E6B4", activeFillColor: "#46C34C" };
+      case 5:
+        return { hoverFillColor: "#479F7899", activeFillColor: "#479F78" };
+      default:
+        return { hoverFillColor: "#D0D5DD", activeFillColor: "#D0D5DD" };
+    }
+  }
+
+  useEffect(() => {
+    if (hoverValue) {
+      setStarsColoring(getStarsColoring(hoverValue).hoverFillColor);
+      setCurrentValue(hoverValue);
+    } else {
+      setStarsColoring(getStarsColoring(value).activeFillColor);
+      setCurrentValue(seletedValue);
+    }
+  }, [hoverValue]);
+
+  return (
+    <div className="flex items-center justify-between">
       <RatingComponent
-        style={{ maxWidth: 165, maxHeight: 25 }}
-        value={value || 3}
-        onChange={onChange}
+        style={{ maxWidth: 220, gap: 10 }}
+        value={currentValue}
+        onChange={(value: number) => {
+          setSelectedValue(value);
+          onChange(value);
+        }}
+        onHoverChange={setHoverValue}
         isRequired={true}
         itemStyles={{
           itemShapes: Star,
-          activeFillColor: value === null ? '#454545' : '#ffe100',
-          inactiveFillColor: '#aaa',
+          activeFillColor: starsColoring,
+          inactiveFillColor: "#aaa",
         }}
       />
     </div>
-  )
-}
+  );
+};

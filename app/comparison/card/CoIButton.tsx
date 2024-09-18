@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { WarningIcon } from '@/public/assets/icon-components/Warning'
 
 interface Props {
   onClick: () => void
@@ -6,8 +7,8 @@ interface Props {
 
 const ConflictButton: FC<Props> = ({ onClick }) => {
   return (
-    <button onClick={onClick} className="rounded-lg border border-red-500 bg-white px-4 py-6 font-semibold text-red-500 transition-colors duration-300 hover:bg-red-100">
-      Conflict of interest
+    <button onClick={onClick} className="rounded-full border border-red-500 p-2">
+      <WarningIcon color="#FF0420" size={20} />
     </button>
   )
 }

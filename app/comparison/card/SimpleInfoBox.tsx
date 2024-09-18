@@ -1,48 +1,46 @@
-import React, { FC } from 'react'
-import { useCollapse } from 'react-collapsed'
-import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon'
-import { OPIcon } from '@/public/assets/icon-components/OP'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
+import React, { FC } from "react";
+import { useCollapse } from "react-collapsed";
+import { WebsiteIcon } from "@/public/assets/icon-components/WebsiteIcon";
+import { OPIcon } from "@/public/assets/icon-components/OP";
+import { ArrowDownIcon } from "@/public/assets/icon-components/ArrowDown";
+import { ArrowUpIcon } from "@/public/assets/icon-components/ArrowUp";
 
 interface Props {
-  title: string
-  description: string
-  type: 'contract' | 'link' | 'pricing'
+  title: string;
+  description: string;
+  type: "contract" | "link" | "pricing";
 }
 
-const getIcon = (type: Props['type']) => {
+const getIcon = (type: Props["type"]) => {
   switch (type) {
-    case 'contract':
-      return <OPIcon />
-    case 'link':
-      return <WebsiteIcon />
-    case 'pricing':
-      return null
+    case "contract":
+      return <OPIcon />;
+    case "link":
+      return <WebsiteIcon height={20} width={20} />;
+    case "pricing":
+      return null;
     default:
-      return null
+      return null;
   }
-}
+};
 
 const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {getIcon(type)}
-          {type === 'pricing'
-            ? (
-                title
-              )
-            : (
-                <a href={title} className="text-gray-600 hover:underline">
-                  {title}
-                </a>
-              )}
+          <span className="w-5 h-5">{getIcon(type)}</span>
+          {type === "pricing" ? (
+            title
+          ) : (
+            <a href={title} className="text-gray-700 hover:underline break-all">
+              {type === "link" ? title.split("https://")[1] : title}
+            </a>
+          )}
         </div>
-        { description.length > 0 && (
+        {description.length > 0 && (
           <button
             {...getToggleProps()}
             className="text-sm text-gray-600 hover:underline"
@@ -55,7 +53,7 @@ const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
         <p className="mb-4 text-gray-600">{description}</p>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default SimpleInfoBox
+export default SimpleInfoBox;

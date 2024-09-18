@@ -43,14 +43,12 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
             : (
                 <span className="flex items-center gap-2 text-sm">
                   <USDIcon />
-                  {' '}
                   {amount}
                 </span>
               )}
           {date && (
             <span className="flex items-center gap-2 text-sm">
               <TimeIcon />
-              {' '}
               {date}
             </span>
           )}
