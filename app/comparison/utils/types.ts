@@ -82,14 +82,14 @@ export interface IProject {
   id: number
   rating: number | null
   name: string
-  poll_id: number
-  url: string
+  pollId: number
+  url: string | null
   description: string
   RPGF5Id: string
   parentId: number | null
   image: string | null
   metadata: ProjectMetadata
-  created_at: string
+  createdAt: string
   type: 'collection' | 'project'
 }
 

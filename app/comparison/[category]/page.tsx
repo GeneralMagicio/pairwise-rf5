@@ -26,6 +26,7 @@ import { getBallot } from '../ballot/useGetBallot'
 import { useAccount } from 'wagmi'
 import { uploadBallot } from '@/app/utils/wallet/agora-login'
 import BallotError from '../ballot/modals/BallotError'
+import { mockProject1, mockProject2 } from '../card/mockData'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -180,6 +181,10 @@ export default function Home() {
     if (!data) return
     if (data.pairs.length === 0) {
       setShowFinishBallot(true)
+      if (!project1 || !project2) {
+        setProject1(mockProject1)
+        setProject2(mockProject2)
+      }
       return
     }
     setProject1(data.pairs[0][0])
@@ -204,6 +209,10 @@ export default function Home() {
     }
   }
 
+  console.log(project1)
+  console.log(project2)
+  console.log(data)
+  console.log(isLoading)
   if (!project1 || !project2 || !data || isLoading) return
 
   // const project1 = data.pairs[0][0]
