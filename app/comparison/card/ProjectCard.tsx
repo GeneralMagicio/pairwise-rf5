@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
@@ -79,6 +79,10 @@ interface Props {
   dispatchAction: (section: AutoScrollAction['section'], action: AutoScrollAction['action']) => void
   action: AutoScrollAction | undefined
   name: string
+  sectionExpanded: Record<AutoScrollAction['section'], boolean>
+  setSectionExpanded: (value: Props['sectionExpanded']) => void
+  key2: string
+  key: string
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -90,14 +94,22 @@ export const ProjectCard: React.FC<Props> = ({
   dispatchAction,
   action,
   name,
+  sectionExpanded,
+  setSectionExpanded,
+  key,
+  key2,
 }) => {
   const [aiMode, setAiMode] = useState(false)
-  const [sectionExpanded, setSectionExpanded] = useState({
-    repos: true,
-    pricing: true,
-    grants: true,
-    impact: true,
-  })
+  const [render, setRender] = useState(0)
+
+  const divRef = useRef(null)
+
+  const scrollToTop = () => {
+    if (divRef.current) {
+      // @ts-ignore
+      divRef.current.scrollTop = 0
+    }
+  }
 
   const handleChange = () => {
     setAiMode(!aiMode)
@@ -112,7 +124,15 @@ export const ProjectCard: React.FC<Props> = ({
   }
 
   useEffect(() => {
-    if (action && action.initiator !== name) {
+    setRender(1)
+  }, [])
+
+  useEffect(() => {
+    scrollToTop()
+  }, [key2, key])
+
+  useEffect(() => {
+    if (render !== 0 && action && action.initiator !== name) {
       console.log('in', name, 'with action', action)
       console.log('section states', sectionExpanded)
       smoothScrollToElement(`${action.section}-${name}`)
@@ -124,7 +144,7 @@ export const ProjectCard: React.FC<Props> = ({
   }, [action, name, sectionExpanded])
 
   return (
-    <div className="relative">
+    <div ref={divRef} className="relative">
 
       {coi && (
         <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
