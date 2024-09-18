@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
@@ -17,20 +17,27 @@ import CoILoadingModal from './modals/CoILoading'
 interface CollapsibleProps {
   title: string
   children: React.ReactNode
+  onClick: () => void
+  id: string
 }
 
-const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
+export interface AutoScrollAction {
+  section: string // id of the section
+  initiator: 'card1' | 'card2'
+}
+
+const Section: React.FC<CollapsibleProps> = ({ title, children, onClick, id }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({ defaultExpanded: true })
 
   return (
-    <div className="mb-4 rounded-lg border-t pt-4">
+    <div id={id} className="mb-4 rounded-lg border-t pt-4">
       <div className="flex justify-between gap-4 p-4">
         <button
           className="text-xl font-medium"
         >
           {title}
         </button>
-        <button {...getToggleProps()} className="flex cursor-pointer items-center gap-1 text-sm text-primary">
+        <button {...getToggleProps()} onClick={onClick} className="flex cursor-pointer items-center gap-1 text-sm text-primary">
           {isExpanded ? <ArrowUpIcon color="black" width={20} height={20} /> : <ArrowDownIcon width={20} height={20} />}
         </button>
       </div>
@@ -39,12 +46,26 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
   )
 }
 
+function smoothScrollToElement(elementId: string) {
+  const element = document.getElementById(elementId)
+
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
+}
+
 interface Props {
   project: ProjectMetadata
   coi: boolean
   onCoICancel: () => void
   onCoIConfirm: () => void
   coiLoading: boolean
+  dispatchAction: (section: AutoScrollAction['section']) => void
+  action: AutoScrollAction | undefined
+  name: string
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -53,12 +74,25 @@ export const ProjectCard: React.FC<Props> = ({
   onCoICancel,
   onCoIConfirm,
   coiLoading,
+  dispatchAction,
+  action,
+  name,
 }) => {
   const [aiMode, setAiMode] = useState(false)
 
   const handleChange = () => {
     setAiMode(!aiMode)
   }
+
+  const handleSectionClick = (id: string) => () => {
+    dispatchAction(id)
+  }
+
+  useEffect(() => {
+    if (action && action.initiator !== name) {
+      smoothScrollToElement(`${action.section}-${name}`)
+    }
+  }, [action, name])
 
   return (
     <div className="relative">
@@ -155,7 +189,7 @@ export const ProjectCard: React.FC<Props> = ({
           />
         </div>
 
-        <Section title="Repos, links, and contracts">
+        <Section id={`repos-${name}`} onClick={handleSectionClick(`repos`)} title="Repos, links, and contracts">
           <div className="space-y-4">
             {project.github.map(repo => (
               <GithubBox key={repo.url} repo={repo} />
@@ -189,7 +223,7 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       </Section> */}
 
-        <Section title="Impact statement">
+        <Section id={`impact-${name}`} onClick={handleSectionClick(`impact`)} title="Impact statement">
           <div className="space-y-4">
             <div className="space-y-2">
               <p>
@@ -220,7 +254,7 @@ export const ProjectCard: React.FC<Props> = ({
           <p>{project.projectSupport}</p>
         </Section> */}
 
-        <Section title="Pricing model">
+        <Section id={`pricing-${name}`} onClick={handleSectionClick(`pricing`)} title="Pricing model">
           <div className="space-y-2">
             <div className="rounded border bg-gray-50 p-4">
               <p className="font-medium">{project.pricingModel}</p>
@@ -237,7 +271,7 @@ export const ProjectCard: React.FC<Props> = ({
           </div>
         </Section>
 
-        <Section title="Grants and investment">
+        <Section id={`grants-${name}`} onClick={handleSectionClick(`grants`)} title="Grants and investment">
           <div className="space-y-2">
             {project.grantsAndFunding.grants.map(grant => (
               <GrantBox

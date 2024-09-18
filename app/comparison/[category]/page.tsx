@@ -1,7 +1,7 @@
 'use client'
 
 import { JWTPayload } from '@/app/utils/wallet/types'
-import { ProjectCard } from '../card/ProjectCard'
+import { AutoScrollAction, ProjectCard } from '../card/ProjectCard'
 import ConflictButton from '../card/CoIButton'
 import Header from '../card/Header'
 import { Rating } from '../card/Rating'
@@ -54,6 +54,11 @@ export default function Home() {
   const [coiLoading2, setCoiLoading2] = useState(false)
   const [bypassPrevProgress, setBypassPrevProgress] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [lastAction, setLastAction] = useState<AutoScrollAction>()
+
+  const dispatchAction = (initiator: AutoScrollAction['initiator']) => (section: AutoScrollAction['section']) => {
+    setLastAction({ section, initiator })
+  }
 
   const [showFinishBallot, setShowFinishBallot] = useState(false)
   const [showSuccessBallot, setShowSuccessBallot] = useState(false)
@@ -218,6 +223,9 @@ export default function Home() {
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
           <ProjectCard
+            name="card1"
+            action={lastAction}
+            dispatchAction={dispatchAction('card1')}
             key={project1.RPGF5Id}
             coiLoading={coiLoading1}
             coi={coi1}
@@ -245,6 +253,9 @@ export default function Home() {
         </div>
         <div className="relative w-[49%]">
           <ProjectCard
+            name="card2"
+            action={lastAction}
+            dispatchAction={dispatchAction('card2')}
             key={project1.RPGF5Id}
             coiLoading={coiLoading2}
             coi={coi2}
