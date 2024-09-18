@@ -1,12 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC, use, useEffect, useState } from "react";
 import { Rating as RatingComponent, Star } from "@smastrom/react-rating";
 
 interface Props {
   value: number;
+  disabled?: boolean;
   onChange: (value: number) => void;
 }
 
-export const Rating: FC<Props> = ({ value, onChange }) => {
+export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const [currentValue, setCurrentValue] = useState(value ?? 3);
   const [seletedValue, setSelectedValue] = useState(value ?? 3);
@@ -41,6 +42,13 @@ export const Rating: FC<Props> = ({ value, onChange }) => {
     }
   }, [hoverValue]);
 
+  useEffect(() => {
+    if (disabled) {
+      setStarsColoring(getStarsColoring(0).activeFillColor);
+      setCurrentValue(0);
+    }
+  }, []);
+
   return (
     <div className="flex items-center justify-between">
       <RatingComponent
@@ -57,6 +65,7 @@ export const Rating: FC<Props> = ({ value, onChange }) => {
           activeFillColor: starsColoring,
           inactiveFillColor: "#aaa",
         }}
+        isDisabled={disabled}
       />
     </div>
   );

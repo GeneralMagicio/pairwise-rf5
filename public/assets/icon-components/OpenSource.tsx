@@ -12,5 +12,5 @@ export const OpenSourceIcon = ({ color }: { color?: string }) => {
         fill={color || "#404454"}
       />
     </svg>
-  )
-}
+  );
+};

@@ -67,8 +67,6 @@ export const ProjectCard: React.FC<Props> = ({
 }) => {
   const [aiMode, setAiMode] = useState(false);
 
-  console.log(project);
-
   const handleChange = () => {
     setAiMode(!aiMode);
   };
