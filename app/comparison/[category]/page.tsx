@@ -247,7 +247,7 @@ export default function Home() {
       <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
         <div className="relative w-[49%]">
           <ProjectCard
-            key={`${project1.RPGF5Id}_1`}
+            key={project1.RPGF5Id}
             coiLoading={coiLoading1}
             coi={coi1}
             project={{ ...project1.metadata, ...project1 } as any}
@@ -257,7 +257,7 @@ export default function Home() {
         </div>
         <div className="relative w-[49%]">
           <ProjectCard
-            key={`${project2.RPGF5Id}_2`}
+            key={project2.RPGF5Id}
             coiLoading={coiLoading2}
             coi={coi2}
             onCoICancel={cancelCoI2}
@@ -266,7 +266,7 @@ export default function Home() {
           />
         </div>
       </div>
-      <footer className="flex items-center justify-around w-full py-4 h-12">
+      <footer className="absolute bottom-0 flex items-center justify-around w-full py-8 bg-white">
         <div className="flex justify-center items-center gap-8">
           {!coi1 && !coiLoading1 && (
             <>
