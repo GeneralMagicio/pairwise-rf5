@@ -12,10 +12,12 @@ const IntroView: FC<{ setIsFirstTime: Dispatch<SetStateAction<boolean>> }> = ({
             Use the
             {' '}
             <span className="relative">
-              <img
+              <Image
                 src="/assets/images/star-vector.png"
                 alt="Star"
-                className="absolute -top-12 left-[16px]"
+                className="absolute -top-12 left-[16px] -z-10"
+                width={70}
+                height={70}
               />
               <span className="text-primary">Stars</span>
             </span>
