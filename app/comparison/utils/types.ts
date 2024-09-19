@@ -60,6 +60,9 @@ export interface ProjectMetadata {
       question: string
     }>
   }
+  testimonials: Array<{
+    text: string
+  }>
 }
 
 export interface ICategory {

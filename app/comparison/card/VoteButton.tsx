@@ -1,16 +1,20 @@
 import React, { FC } from 'react'
 
 interface Props {
-  imageUrl: string
-  title: string
+  disabled?: boolean
   onClick: () => void
 }
 
-const VoteButton: FC<Props> = ({ imageUrl, title, onClick }) => {
+const VoteButton: FC<Props> = ({ disabled, onClick }) => {
   return (
-    <button onClick={onClick} className="flex items-center rounded-lg border border-gray-300 bg-white px-4 py-6 transition-colors duration-200 hover:bg-gray-100">
-      <img src={imageUrl} alt="" className="mr-2 size-10 rounded-lg" />
-      <span className="font-medium text-gray-800">{title}</span>
+    <button
+      onClick={onClick}
+      className={`flex items-center rounded-lg border px-6 py-2 transition duration-150 ease-out hover:ease-in sm:px-12 sm:py-3 ${
+        disabled ? 'bg-gray-300' : 'bg-primary'
+      }`}
+      disabled={disabled}
+    >
+      <span className={disabled ? 'text-gray-500' : 'text-white'}>Select</span>
     </button>
   )
 }

@@ -16,7 +16,7 @@ const getIcon = (type: Props['type']) => {
     case 'contract':
       return <OPIcon />
     case 'link':
-      return <WebsiteIcon />
+      return <WebsiteIcon height={20} width={20} />
     case 'pricing':
       return null
     default:
@@ -31,18 +31,18 @@ const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {getIcon(type)}
+          <span className="size-5">{getIcon(type)}</span>
           {type === 'pricing'
             ? (
                 title
               )
             : (
-                <a href={title} className="text-gray-600 hover:underline">
-                  {title}
+                <a href={title} className="break-all text-gray-700 hover:underline">
+                  {type === 'link' ? title.split('https://')[1] : title}
                 </a>
               )}
         </div>
-        { description.length > 0 && (
+        {description.length > 0 && (
           <button
             {...getToggleProps()}
             className="text-sm text-gray-600 hover:underline"

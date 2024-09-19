@@ -10,6 +10,23 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#FF0420',
+        gray: {
+          50: '#FBFCFE',
+          100: '#F2F3F8',
+          200: '#E0E2EB',
+          300: '#F2F4F7',
+          400: '#636779',
+          500: '#98A2B3',
+          600: '#404454',
+          700: '#0F111A',
+        },
+        blue: {
+          foreground: '#3374DB',
+          background: '#D6E4FF',
+        },
+        dark: {
+          500: '#05060B',
+        },
       },
       fontFamily: {
         inter: ['var(--font-inter)'],

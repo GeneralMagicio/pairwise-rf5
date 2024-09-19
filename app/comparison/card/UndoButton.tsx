@@ -2,18 +2,19 @@ import { UndoIcon } from '@/public/assets/icon-components/Undo'
 import React from 'react'
 
 interface UndoButtonProps {
+  disabled?: boolean
   onClick: () => void
 }
 
-const UndoButton: React.FC<UndoButtonProps> = ({ onClick }) => {
+const UndoButton: React.FC<UndoButtonProps> = ({ disabled, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="flex size-20 flex-col items-center justify-center rounded-full border-yellow-200 bg-yellow-100 shadow-md
-      shadow-yellow-50 transition-colors duration-200 hover:bg-yellow-200"
+      className="flex size-16 flex-col items-center justify-center rounded-full border border-gray-200 md:size-20"
+      disabled={disabled}
     >
-      <UndoIcon />
-      <span className="mt-1 text-xs text-yellow-600">Undo</span>
+      <UndoIcon color="#636779" />
+      <span className="mt-1 text-xs text-gray-400">Undo</span>
     </button>
   )
 }

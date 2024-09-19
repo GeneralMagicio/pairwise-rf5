@@ -11,10 +11,16 @@ import { useParams, useRouter } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
 import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { useEffect, useState } from 'react'
-import { getPairwisePairsForProject, useGetPairwisePairs } from '../utils/data-fetching/pair'
+import {
+  getPairwisePairsForProject,
+  useGetPairwisePairs,
+} from '../utils/data-fetching/pair'
 import { convertCategoryNameToId } from '../utils/helpers'
-import { useUpdateProjectUndo, useUpdateProjectVote } from '../utils/data-fetching/vote'
-import { getBiggerNumber, truncate, usePrevious } from '@/app/utils/methods'
+import {
+  useUpdateProjectUndo,
+  useUpdateProjectVote,
+} from '../utils/data-fetching/vote'
+import { getBiggerNumber, usePrevious } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
 import { IProject } from '../utils/types'
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,6 +33,7 @@ import { useAccount } from 'wagmi'
 import { uploadBallot } from '@/app/utils/wallet/agora-login'
 import BallotError from '../ballot/modals/BallotError'
 import { mockProject1, mockProject2 } from '../card/mockData'
+import IntroView from './IntroView'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   switch (category) {
@@ -62,6 +69,7 @@ export default function Home() {
     pricing: true,
     grants: true,
     impact: true,
+    testimonials: true,
   })
 
   const [sectionExpanded2, setSectionExpanded2] = useState({
@@ -69,12 +77,17 @@ export default function Home() {
     pricing: true,
     grants: true,
     impact: true,
+    testimonials: true,
   })
 
-  const dispatchAction = (initiator: AutoScrollAction['initiator']) =>
-    (section: AutoScrollAction['section'], action: AutoScrollAction['action']) => {
-      setLastAction({ section, initiator, action })
-    }
+  const dispatchAction
+    = (initiator: AutoScrollAction['initiator']) =>
+      (
+        section: AutoScrollAction['section'],
+        action: AutoScrollAction['action']
+      ) => {
+        setLastAction({ section, initiator, action })
+      }
 
   const [showFinishBallot, setShowFinishBallot] = useState(false)
   const [showSuccessBallot, setShowSuccessBallot] = useState(false)
@@ -147,6 +160,10 @@ export default function Home() {
   const { data, isLoading } = useGetPairwisePairs(cid)
   const prevProgress = usePrevious(progress)
 
+  const [isFirstTime, setIsFirstTime] = useState(
+    !data || data.pairs.length === 0
+  )
+
   useEffect(() => {
     if (bypassPrevProgress && data) {
       setProgress(data.progress)
@@ -160,14 +177,17 @@ export default function Home() {
   // const {} = useGetPairwisePairsForProject(cid)
 
   const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
-  const { mutateAsync: undo } = useUpdateProjectUndo({ categoryId: cid, onSuccess: () => {
-    // if this temp state is omitted
-    // then when you CoI one project and
-    // then you call "undo", the app breaks
-    // we probably need to combine "/pairs" and "/pairs-for-project"
-    setTemp(temp + 1)
-    setBypassPrevProgress(true)
-  } })
+  const { mutateAsync: undo } = useUpdateProjectUndo({
+    categoryId: cid,
+    onSuccess: () => {
+      // if this temp state is omitted
+      // then when you CoI one project and
+      // then you call "undo", the app breaks
+      // we probably need to combine "/pairs" and "/pairs-for-project"
+      setTemp(temp + 1)
+      setBypassPrevProgress(true)
+    },
+  })
   const { mutateAsync: markProjectCoI } = useMarkCoi()
   // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
   // const { setShowBhModal } = useAuth()
@@ -219,8 +239,15 @@ export default function Home() {
   // const project2 = data.pairs[0][1]
 
   const handleVote = (chosenId: number) => async () => {
-    await vote({ data: { project1Id: project1.id, project2Id: project2.id,
-      project1Stars: rating1, project2Stars: rating2, pickedId: chosenId } })
+    await vote({
+      data: {
+        project1Id: project1.id,
+        project2Id: project2.id,
+        project1Stars: rating1,
+        project2Stars: rating2,
+        pickedId: chosenId,
+      },
+    })
   }
 
   const handleUndo = async () => {
@@ -232,83 +259,116 @@ export default function Home() {
   return (
     <div>
       <Modals />
-      <Modal isOpen={showFinishBallot || showSuccessBallot || ballotLoading || ballotError} onClose={() => {}}>
-        {showFinishBallot && <FinishBallot category={convertCategoryToLabel(category as JWTPayload['category'])} projectCount={35} onUnlock={handleUnlockBallot} />}
-        {showSuccessBallot && <BallotSuccessModal onClick={() => { router.push(`https://develop-op-voting.up.railway.app/ballot`) }} />}
+      <Modal
+        isOpen={
+          showFinishBallot || showSuccessBallot || ballotLoading || ballotError
+        }
+        onClose={() => {}}
+      >
+        {showFinishBallot && (
+          <FinishBallot
+            category={convertCategoryToLabel(
+              category as JWTPayload['category']
+            )}
+            projectCount={35}
+            onUnlock={handleUnlockBallot}
+          />
+        )}
+        {showSuccessBallot && (
+          <BallotSuccessModal
+            onClick={() => {
+              router.push(`https://develop-op-voting.up.railway.app/ballot`)
+            }}
+          />
+        )}
         {ballotLoading && <BallotLoading />}
         {ballotError && <BallotError onClick={handleUnlockBallot} />}
-
       </Modal>
       <Header
         progress={progress * 100}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
+        isFirstSelection={isFirstTime}
       />
-      <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
-        <div className="relative w-[49%]">
-          <ProjectCard
-            sectionExpanded={sectionExpanded1}
-            setSectionExpanded={setSectionExpanded1}
-            name="card1"
-            action={lastAction}
-            dispatchAction={dispatchAction('card1')}
-            key={project1.RPGF5Id}
-            key2={project2.RPGF5Id}
-            coiLoading={coiLoading1}
-            coi={coi1}
-            project={{ ...project1.metadata, ...project1 } as any}
-            onCoICancel={cancelCoI1}
-            onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
-          />
-          {!coi1 && !coiLoading1
-          && (
-            <>
-              <div className="absolute bottom-28 right-[40%]">
-                <Rating value={rating1 || 3} onChange={(val: number) => { setRating1(val) }} />
-              </div>
-              <div className="absolute bottom-28 left-2/3">
-                <ConflictButton onClick={showCoI1} />
-              </div>
-              <div className="absolute bottom-4 left-[37%] w-96">
-                <VoteButton onClick={handleVote(project1.id)} title={truncate(project1.name, 35)} imageUrl={project1.image || ''} />
-              </div>
-            </>
-          )}
-        </div>
-        <div className="absolute bottom-12 left-[calc(50%-40px)] z-[1]">
-          <UndoButton onClick={handleUndo} />
-        </div>
-        <div className="relative w-[49%]">
-          <ProjectCard
-            sectionExpanded={sectionExpanded2}
-            setSectionExpanded={setSectionExpanded2}
-            name="card2"
-            action={lastAction}
-            dispatchAction={dispatchAction('card2')}
-            key={project2.RPGF5Id}
-            key2={project1.RPGF5Id}
-            coiLoading={coiLoading2}
-            coi={coi2}
-            onCoICancel={cancelCoI2}
-            onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
-            project={{ ...project2.metadata, ...project2 } as any}
-          />
-          {!coi2 && !coiLoading2 && (
-            <>
-              <div className="absolute bottom-28 right-[40%]">
-                <Rating value={rating2 || 3} onChange={(val: number) => { setRating2(val) }} />
-              </div>
-              <div className="absolute bottom-28 left-2/3">
-                <ConflictButton onClick={showCoI2} />
-              </div>
-              <div className="absolute bottom-4 left-[37%] w-96">
-                <VoteButton onClick={handleVote(project2.id)} title={truncate(project2.name, 35)} imageUrl={project2.image || ''} />
-              </div>
-            </>
 
+      {isFirstTime
+        ? (
+            <IntroView setIsFirstTime={setIsFirstTime} />
+          )
+        : (
+            <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
+              <div className="relative w-[49%]">
+                <ProjectCard
+                  sectionExpanded={sectionExpanded1}
+                  setSectionExpanded={setSectionExpanded1}
+                  name="card1"
+                  action={lastAction}
+                  dispatchAction={dispatchAction('card1')}
+                  key={project1.RPGF5Id}
+                  key2={project2.RPGF5Id}
+                  coiLoading={coiLoading1}
+                  coi={coi1}
+                  project={{ ...project1.metadata, ...project1 } as any}
+                  onCoICancel={cancelCoI1}
+                  onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+                />
+              </div>
+              <div className="relative w-[49%]">
+                <ProjectCard
+                  sectionExpanded={sectionExpanded2}
+                  setSectionExpanded={setSectionExpanded2}
+                  name="card2"
+                  action={lastAction}
+                  dispatchAction={dispatchAction('card2')}
+                  key={project2.RPGF5Id}
+                  key2={project1.RPGF5Id}
+                  coiLoading={coiLoading2}
+                  coi={coi2}
+                  onCoICancel={cancelCoI2}
+                  onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+                  project={{ ...project2.metadata, ...project2 } as any}
+                />
+              </div>
+            </div>
           )}
+
+      <footer className="fixed bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
+        {!coi1 && !coiLoading1 && (
+          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+            <Rating
+              value={rating1 || 3}
+              onChange={(val: number) => {
+                setRating1(val)
+              }}
+              disabled={isFirstTime}
+            />
+            <VoteButton
+              onClick={handleVote(project1.id)}
+              disabled={isFirstTime}
+            />
+            <ConflictButton onClick={showCoI1} disabled={isFirstTime} />
+          </div>
+        )}
+        <div className="absolute z-[1]">
+          <UndoButton disabled={isFirstTime} onClick={handleUndo} />
         </div>
-      </div>
+        {!coi2 && !coiLoading2 && (
+          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+            <Rating
+              value={rating2 || 3}
+              onChange={(val: number) => {
+                setRating2(val)
+              }}
+              disabled={isFirstTime}
+            />
+            <VoteButton
+              onClick={handleVote(project2.id)}
+              disabled={isFirstTime}
+            />
+            <ConflictButton onClick={showCoI2} disabled={isFirstTime} />
+          </div>
+        )}
+      </footer>
     </div>
   )
 }
