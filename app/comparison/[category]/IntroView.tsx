@@ -44,7 +44,7 @@ const IntroView: FC<{ setIsFirstTime: Dispatch<SetStateAction<boolean>> }> = ({
             onClick={() => setIsFirstTime(false)}
             className="mt-10 w-full rounded-lg bg-primary px-8 py-3 text-xl font-bold text-white sm:w-[42%]"
           >
-            Let's do it!
+            {`Let's do it!`}
           </button>
         </div>
       </div>
