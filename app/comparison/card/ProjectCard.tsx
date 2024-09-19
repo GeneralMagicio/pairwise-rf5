@@ -330,7 +330,7 @@ export const ProjectCard: React.FC<Props> = ({
               >
                 <div className="space-y-4">
                   {project.testimonials.map((testimonial, index) => (
-                    <div key={index} className="rounded border bg-gray-50 p-4">
+                    <div key={`testimonial_${index}`} className="rounded border bg-gray-50 p-4">
                       <p className="italic">{testimonial.text}</p>
                     </div>
                   ))}
