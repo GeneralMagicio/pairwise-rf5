@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ExternalLink } from "./ExternalLink";
 import GithubBox from "./GithubBox";
@@ -17,25 +17,48 @@ import CoILoadingModal from "./modals/CoILoading";
 interface CollapsibleProps {
   title: string;
   children: React.ReactNode;
+  onClick: () => void;
+  id: string;
+  expanded: boolean;
+  setExpanded: (value: boolean) => void;
 }
 
-const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({
-    defaultExpanded: true,
+export interface AutoScrollAction {
+  section: "repos" | "pricing" | "grants" | "impact" | "testimonials"; // id of the section
+  initiator: "card1" | "card2";
+  action: true | false; // mapping to expanded/collapsed
+}
+
+const Section: FC<CollapsibleProps> = ({
+  title,
+  children,
+  onClick,
+  id,
+  expanded,
+  setExpanded,
+}) => {
+  const { getCollapseProps, getToggleProps } = useCollapse({
+    isExpanded: expanded,
   });
+
+  const handleClick = () => {
+    onClick();
+    setExpanded(!expanded);
+  };
 
   return (
     <>
       <hr className="border-t border-gray-200" />
-
-      <div className="mb-4 pt-4">
+      <div id={id} className="mb-4 pt-4">
         <div className="flex justify-between gap-4 p-4 items-center">
           <button className="text-xl font-medium font-inter">{title}</button>
           <button
-            {...getToggleProps()}
+            {...getToggleProps({
+              onClick: handleClick,
+            })}
             className="flex cursor-pointer items-center gap-1 text-sm text-primary"
           >
-            {isExpanded ? (
+            {expanded ? (
               <ArrowUpIcon color="black" width={20} height={20} />
             ) : (
               <ArrowDownIcon width={20} height={20} />
@@ -50,12 +73,33 @@ const Section: React.FC<CollapsibleProps> = ({ title, children }) => {
   );
 };
 
+function smoothScrollToElement(elementId: string) {
+  const element = document.getElementById(elementId);
+
+  if (element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+}
+
 interface Props {
   project: ProjectMetadata;
   coi: boolean;
   onCoICancel: () => void;
   onCoIConfirm: () => void;
   coiLoading: boolean;
+  dispatchAction: (
+    section: AutoScrollAction["section"],
+    action: AutoScrollAction["action"]
+  ) => void;
+  action: AutoScrollAction | undefined;
+  name: string;
+  sectionExpanded: Record<AutoScrollAction["section"], boolean>;
+  setSectionExpanded: (value: Props["sectionExpanded"]) => void;
+  key2: string;
+  key: string;
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -64,15 +108,69 @@ export const ProjectCard: React.FC<Props> = ({
   onCoICancel,
   onCoIConfirm,
   coiLoading,
+  dispatchAction,
+  action,
+  name,
+  sectionExpanded,
+  setSectionExpanded,
+  key,
+  key2,
 }) => {
   const [aiMode, setAiMode] = useState(false);
+  const [render, setRender] = useState(0);
+
+  const divRef = useRef(null);
+
+  const scrollToTop = () => {
+    if (divRef.current) {
+      // @ts-ignore
+      divRef.current.scrollTop = 0;
+    }
+  };
 
   const handleChange = () => {
     setAiMode(!aiMode);
   };
 
+  const handleSectionClick =
+    (id: AutoScrollAction["section"], expanded: AutoScrollAction["action"]) =>
+    () => {
+      dispatchAction(id, expanded);
+    };
+
+  const hnadleExpanded =
+    (section: AutoScrollAction["section"]) => (value: boolean) => {
+      setSectionExpanded({ ...sectionExpanded, [section]: value });
+    };
+
+  useEffect(() => {
+    setRender(1);
+  }, []);
+
+  useEffect(() => {
+    scrollToTop();
+  }, [key2, key]);
+
+  useEffect(() => {
+    if (render !== 0 && action && action.initiator !== name) {
+      console.log("in", name, "with action", action);
+      console.log("section states", sectionExpanded);
+      smoothScrollToElement(`${action.section}-${name}`);
+      if (action.action !== sectionExpanded[action.section]) {
+        console.log("launched in", name, {
+          ...sectionExpanded,
+          [action.section]: action.action,
+        });
+        setSectionExpanded({
+          ...sectionExpanded,
+          [action.section]: action.action,
+        });
+      }
+    }
+  }, [action, name, sectionExpanded]);
+
   return (
-    <div className="relative">
+    <div ref={divRef} className="relative">
       {coi && (
         <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
           <ConflictOfInterestModal
@@ -124,14 +222,16 @@ export const ProjectCard: React.FC<Props> = ({
             {project.organization && (
               <div className="mb-6 flex items-center gap-1 text-slate-600 font-inter font-medium leading-6">
                 <p>By</p>
-                <Image
-                  src={project.organization.organizationAvatarUrl}
-                  alt={project.organization.name}
-                  width={24}
-                  height={24}
-                  className="mx-1 rounded-full"
-                  unoptimized
-                />
+                {project.organization.organizationAvatarUrl && (
+                  <Image
+                    src={project.organization.organizationAvatarUrl}
+                    alt={project.organization.name}
+                    width={24}
+                    height={24}
+                    className="mx-1 rounded-full"
+                    unoptimized
+                  />
+                )}
                 <p>{project.organization.name}</p>
               </div>
             )}
@@ -185,7 +285,13 @@ export const ProjectCard: React.FC<Props> = ({
               </div>
             )}
 
-            <Section title="Repos, links, and contracts">
+            <Section
+              id={`repos-${name}`}
+              setExpanded={hnadleExpanded("repos")}
+              expanded={sectionExpanded["repos"]}
+              onClick={handleSectionClick(`repos`, !sectionExpanded["repos"])}
+              title="Repos, links, and contracts"
+            >
               <div className="space-y-4">
                 {project.github.map((repo) => (
                   <GithubBox key={repo.url} repo={repo} />
@@ -210,7 +316,16 @@ export const ProjectCard: React.FC<Props> = ({
             </Section>
 
             {project.testimonials?.length && (
-              <Section title="Testimonials">
+              <Section
+                id={`testimonials-${name}`}
+                setExpanded={hnadleExpanded("testimonials")}
+                expanded={sectionExpanded["testimonials"]}
+                onClick={handleSectionClick(
+                  `testimonials`,
+                  !sectionExpanded["testimonials"]
+                )}
+                title="Testimonials"
+              >
                 <div className="space-y-4">
                   {project.testimonials.map((testimonial, index) => (
                     <div key={index} className="rounded border bg-gray-50 p-4">
@@ -222,8 +337,17 @@ export const ProjectCard: React.FC<Props> = ({
             )}
 
             {project.impactStatement && (
-              <Section title="Impact statement">
-                <div className="space-y-4 px-2 font-inter">
+              <Section
+                id={`impact-${name}`}
+                setExpanded={hnadleExpanded("impact")}
+                expanded={sectionExpanded["impact"]}
+                onClick={handleSectionClick(
+                  `impact`,
+                  !sectionExpanded["impact"]
+                )}
+                title="Impact statement"
+              >
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <p>
                       <strong className="text-gray-800">Category:</strong>{" "}
@@ -258,7 +382,16 @@ export const ProjectCard: React.FC<Props> = ({
               <p>{project.projectSupport}</p>
             </Section> */}
 
-            <Section title="Pricing model">
+            <Section
+              id={`pricing-${name}`}
+              setExpanded={hnadleExpanded("pricing")}
+              onClick={handleSectionClick(
+                `pricing`,
+                !sectionExpanded["pricing"]
+              )}
+              expanded={sectionExpanded["pricing"]}
+              title="Pricing model"
+            >
               <div className="space-y-2">
                 <div className="rounded border bg-gray-50 p-4">
                   <p className="font-medium">{project.pricingModel}</p>
@@ -275,7 +408,13 @@ export const ProjectCard: React.FC<Props> = ({
               </div>
             </Section>
 
-            <Section title="Grants and investment">
+            <Section
+              id={`grants-${name}`}
+              setExpanded={hnadleExpanded("grants")}
+              onClick={handleSectionClick(`grants`, !sectionExpanded["grants"])}
+              expanded={sectionExpanded["grants"]}
+              title="Grants and investment"
+            >
               <div className="space-y-2">
                 {project.grantsAndFunding.grants.map((grant) => (
                   <GrantBox

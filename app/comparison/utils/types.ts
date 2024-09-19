@@ -82,18 +82,18 @@ export interface ICategory {
 }
 
 export interface IProject {
-  id: number;
-  rating: number | null;
-  name: string;
-  poll_id: number;
-  url: string;
-  description: string;
-  RPGF5Id: string;
-  parentId: number | null;
-  image: string | null;
-  metadata: ProjectMetadata;
-  created_at: string;
-  type: "collection" | "project";
+  id: number
+  rating: number | null
+  name: string
+  pollId: number
+  url: string | null
+  description: string
+  RPGF5Id: string
+  parentId: number | null
+  image: string | null
+  metadata: ProjectMetadata
+  createdAt: string
+  type: 'collection' | 'project'
 }
 
 type Contract = {

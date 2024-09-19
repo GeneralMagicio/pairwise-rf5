@@ -1,7 +1,7 @@
 "use client";
 
 import { JWTPayload } from "@/app/utils/wallet/types";
-import { ProjectCard } from "../card/ProjectCard";
+import { AutoScrollAction, ProjectCard } from "../card/ProjectCard";
 import ConflictButton from "../card/CoIButton";
 import Header from "../card/Header";
 import { Rating } from "../card/Rating";
@@ -20,7 +20,7 @@ import {
   useUpdateProjectUndo,
   useUpdateProjectVote,
 } from "../utils/data-fetching/vote";
-import { getBiggerNumber, usePrevious } from "@/app/utils/methods";
+import { getBiggerNumber, truncate, usePrevious } from "@/app/utils/methods";
 import { useMarkCoi } from "../utils/data-fetching/coi";
 import { IProject } from "../utils/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,6 +32,7 @@ import { getBallot } from "../ballot/useGetBallot";
 import { useAccount } from "wagmi";
 import { uploadBallot } from "@/app/utils/wallet/agora-login";
 import BallotError from "../ballot/modals/BallotError";
+import { mockProject1, mockProject2 } from "../card/mockData";
 import IntroView from "./IntroView";
 
 const convertCategoryToLabel = (category: JWTPayload["category"]) => {
@@ -61,6 +62,32 @@ export default function Home() {
   const [coiLoading2, setCoiLoading2] = useState(false);
   const [bypassPrevProgress, setBypassPrevProgress] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [lastAction, setLastAction] = useState<AutoScrollAction>();
+
+  const [sectionExpanded1, setSectionExpanded1] = useState({
+    repos: true,
+    pricing: true,
+    grants: true,
+    impact: true,
+    testimonials: true,
+  });
+
+  const [sectionExpanded2, setSectionExpanded2] = useState({
+    repos: true,
+    pricing: true,
+    grants: true,
+    impact: true,
+    testimonials: true,
+  });
+
+  const dispatchAction =
+    (initiator: AutoScrollAction["initiator"]) =>
+    (
+      section: AutoScrollAction["section"],
+      action: AutoScrollAction["action"]
+    ) => {
+      setLastAction({ section, initiator, action });
+    };
 
   const [showFinishBallot, setShowFinishBallot] = useState(false);
   const [showSuccessBallot, setShowSuccessBallot] = useState(false);
@@ -171,6 +198,10 @@ export default function Home() {
     if (!data) return;
     if (data.pairs.length === 0) {
       setShowFinishBallot(true);
+      if (!project1 || !project2) {
+        setProject1(mockProject1);
+        setProject2(mockProject2);
+      }
       return;
     }
     setProject1(data.pairs[0][0]);
@@ -193,6 +224,10 @@ export default function Home() {
     }
   };
 
+  console.log(project1);
+  console.log(project2);
+  console.log(data);
+  console.log(isLoading);
   if (!project1 || !project2 || !data || isLoading) return;
 
   // const project1 = data.pairs[0][0]
@@ -257,7 +292,13 @@ export default function Home() {
         <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
           <div className="relative w-[49%]">
             <ProjectCard
+              sectionExpanded={sectionExpanded1}
+              setSectionExpanded={setSectionExpanded1}
+              name="card1"
+              action={lastAction}
+              dispatchAction={dispatchAction("card1")}
               key={project1.RPGF5Id}
+              key2={project2.RPGF5Id}
               coiLoading={coiLoading1}
               coi={coi1}
               project={{ ...project1.metadata, ...project1 } as any}
@@ -267,7 +308,13 @@ export default function Home() {
           </div>
           <div className="relative w-[49%]">
             <ProjectCard
+              sectionExpanded={sectionExpanded2}
+              setSectionExpanded={setSectionExpanded2}
+              name="card2"
+              action={lastAction}
+              dispatchAction={dispatchAction("card2")}
               key={project2.RPGF5Id}
+              key2={project1.RPGF5Id}
               coiLoading={coiLoading2}
               coi={coi2}
               onCoICancel={cancelCoI2}

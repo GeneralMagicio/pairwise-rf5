@@ -2,9 +2,17 @@ import React from 'react'
 import { NotBhCharacter } from '@/public/assets/icon-components/NotBhCharacter'
 import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft'
 import { useAuth } from '../AuthProvider'
+import { useDisconnect } from 'wagmi'
 
 const NotBadgeHolder: React.FC = () => {
   const { signOut, redirectToComparisonPage } = useAuth()
+  const { disconnectAsync } = useDisconnect()
+
+  const handleLogout = async () => {
+    await disconnectAsync()
+    signOut()
+  }
+
   return (
     <div className="relative flex flex-col items-center justify-center rounded-lg bg-white p-8 text-center shadow-md">
       {/* <Image
@@ -20,7 +28,7 @@ const NotBadgeHolder: React.FC = () => {
         The wallet you are connecting is not included as a badgeholder. You can participate as a guest, knowing that your vote will not be used to distribute funding this time.
       </p>
       <div className="flex justify-between gap-4">
-        <button onClick={signOut} className="flex items-center gap-4 rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100">
+        <button onClick={handleLogout} className="flex items-center gap-4 rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100">
           <ArrowLeftIcon />
           <span> Back </span>
         </button>
