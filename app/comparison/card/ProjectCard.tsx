@@ -1,32 +1,32 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { ExternalLink } from "./ExternalLink";
-import GithubBox from "./GithubBox";
-import SimpleInfoBox from "./SimpleInfoBox";
-import QABox from "./QABox";
-import GrantBox from "./GrantBox";
-import Switch from "react-switch";
-import Team from "./Team";
-import { ProjectMetadata } from "../utils/types";
-import { ArrowUpIcon } from "@/public/assets/icon-components/ArrowUp";
-import ConflictOfInterestModal from "./modals/CoIModal";
-import { useCollapse } from "react-collapsed";
-import { ArrowDownIcon } from "@/public/assets/icon-components/ArrowDown";
-import CoILoadingModal from "./modals/CoILoading";
+import React, { FC, useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { ExternalLink } from './ExternalLink'
+import GithubBox from './GithubBox'
+import SimpleInfoBox from './SimpleInfoBox'
+import QABox from './QABox'
+import GrantBox from './GrantBox'
+import Switch from 'react-switch'
+import Team from './Team'
+import { ProjectMetadata } from '../utils/types'
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
+import ConflictOfInterestModal from './modals/CoIModal'
+import { useCollapse } from 'react-collapsed'
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
+import CoILoadingModal from './modals/CoILoading'
 
 interface CollapsibleProps {
-  title: string;
-  children: React.ReactNode;
-  onClick: () => void;
-  id: string;
-  expanded: boolean;
-  setExpanded: (value: boolean) => void;
+  title: string
+  children: React.ReactNode
+  onClick: () => void
+  id: string
+  expanded: boolean
+  setExpanded: (value: boolean) => void
 }
 
 export interface AutoScrollAction {
-  section: "repos" | "pricing" | "grants" | "impact" | "testimonials"; // id of the section
-  initiator: "card1" | "card2";
-  action: true | false; // mapping to expanded/collapsed
+  section: 'repos' | 'pricing' | 'grants' | 'impact' | 'testimonials' // id of the section
+  initiator: 'card1' | 'card2'
+  action: true | false // mapping to expanded/collapsed
 }
 
 const Section: FC<CollapsibleProps> = ({
@@ -39,30 +39,32 @@ const Section: FC<CollapsibleProps> = ({
 }) => {
   const { getCollapseProps, getToggleProps } = useCollapse({
     isExpanded: expanded,
-  });
+  })
 
   const handleClick = () => {
-    onClick();
-    setExpanded(!expanded);
-  };
+    onClick()
+    setExpanded(!expanded)
+  }
 
   return (
     <>
       <hr className="border-t border-gray-200" />
       <div id={id} className="mb-4 pt-4">
-        <div className="flex justify-between gap-4 p-4 items-center">
-          <button className="text-xl font-medium font-inter">{title}</button>
+        <div className="flex items-center justify-between gap-4 p-4">
+          <button className="font-inter text-xl font-medium">{title}</button>
           <button
             {...getToggleProps({
               onClick: handleClick,
             })}
             className="flex cursor-pointer items-center gap-1 text-sm text-primary"
           >
-            {expanded ? (
-              <ArrowUpIcon color="black" width={20} height={20} />
-            ) : (
-              <ArrowDownIcon width={20} height={20} />
-            )}
+            {expanded
+              ? (
+                  <ArrowUpIcon color="black" width={20} height={20} />
+                )
+              : (
+                  <ArrowDownIcon width={20} height={20} />
+                )}
           </button>
         </div>
         <section {...getCollapseProps()} className="p-2">
@@ -70,36 +72,36 @@ const Section: FC<CollapsibleProps> = ({
         </section>
       </div>
     </>
-  );
-};
+  )
+}
 
 function smoothScrollToElement(elementId: string) {
-  const element = document.getElementById(elementId);
+  const element = document.getElementById(elementId)
 
   if (element) {
     element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+      behavior: 'smooth',
+      block: 'start',
+    })
   }
 }
 
 interface Props {
-  project: ProjectMetadata;
-  coi: boolean;
-  onCoICancel: () => void;
-  onCoIConfirm: () => void;
-  coiLoading: boolean;
+  project: ProjectMetadata
+  coi: boolean
+  onCoICancel: () => void
+  onCoIConfirm: () => void
+  coiLoading: boolean
   dispatchAction: (
-    section: AutoScrollAction["section"],
-    action: AutoScrollAction["action"]
-  ) => void;
-  action: AutoScrollAction | undefined;
-  name: string;
-  sectionExpanded: Record<AutoScrollAction["section"], boolean>;
-  setSectionExpanded: (value: Props["sectionExpanded"]) => void;
-  key2: string;
-  key: string;
+    section: AutoScrollAction['section'],
+    action: AutoScrollAction['action']
+  ) => void
+  action: AutoScrollAction | undefined
+  name: string
+  sectionExpanded: Record<AutoScrollAction['section'], boolean>
+  setSectionExpanded: (value: Props['sectionExpanded']) => void
+  key2: string
+  key: string
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -116,58 +118,58 @@ export const ProjectCard: React.FC<Props> = ({
   key,
   key2,
 }) => {
-  const [aiMode, setAiMode] = useState(false);
-  const [render, setRender] = useState(0);
+  const [aiMode, setAiMode] = useState(false)
+  const [render, setRender] = useState(0)
 
-  const divRef = useRef(null);
+  const divRef = useRef(null)
 
   const scrollToTop = () => {
     if (divRef.current) {
       // @ts-ignore
-      divRef.current.scrollTop = 0;
+      divRef.current.scrollTop = 0
     }
-  };
+  }
 
   const handleChange = () => {
-    setAiMode(!aiMode);
-  };
+    setAiMode(!aiMode)
+  }
 
-  const handleSectionClick =
-    (id: AutoScrollAction["section"], expanded: AutoScrollAction["action"]) =>
-    () => {
-      dispatchAction(id, expanded);
-    };
+  const handleSectionClick
+    = (id: AutoScrollAction['section'], expanded: AutoScrollAction['action']) =>
+      () => {
+        dispatchAction(id, expanded)
+      }
 
-  const hnadleExpanded =
-    (section: AutoScrollAction["section"]) => (value: boolean) => {
-      setSectionExpanded({ ...sectionExpanded, [section]: value });
-    };
-
-  useEffect(() => {
-    setRender(1);
-  }, []);
+  const hnadleExpanded
+    = (section: AutoScrollAction['section']) => (value: boolean) => {
+      setSectionExpanded({ ...sectionExpanded, [section]: value })
+    }
 
   useEffect(() => {
-    scrollToTop();
-  }, [key2, key]);
+    setRender(1)
+  }, [])
+
+  useEffect(() => {
+    scrollToTop()
+  }, [key2, key])
 
   useEffect(() => {
     if (render !== 0 && action && action.initiator !== name) {
-      console.log("in", name, "with action", action);
-      console.log("section states", sectionExpanded);
-      smoothScrollToElement(`${action.section}-${name}`);
+      console.log('in', name, 'with action', action)
+      console.log('section states', sectionExpanded)
+      smoothScrollToElement(`${action.section}-${name}`)
       if (action.action !== sectionExpanded[action.section]) {
-        console.log("launched in", name, {
+        console.log('launched in', name, {
           ...sectionExpanded,
           [action.section]: action.action,
-        });
+        })
         setSectionExpanded({
           ...sectionExpanded,
           [action.section]: action.action,
-        });
+        })
       }
     }
-  }, [action, name, sectionExpanded]);
+  }, [action, name, sectionExpanded])
 
   return (
     <div ref={divRef} className="relative">
@@ -186,15 +188,15 @@ export const ProjectCard: React.FC<Props> = ({
       )}
       <div
         style={{
-          maskImage: "linear-gradient(to bottom, white 85%, transparent 120%)",
+          maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)',
         }}
         className={`container relative mx-auto mb-16
       mt-4 h-[80vh] w-full rounded-xl 
       border border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
-        coi || coiLoading ? `brightness-50` : ``
-      }`}
+    coi || coiLoading ? `brightness-50` : ``
+    }`}
       >
-        <div className="h-[78vh] overflow-y-auto gap-10">
+        <div className="h-[78vh] gap-10 overflow-y-auto">
           <div className="mr-4">
             <div className="relative h-40">
               <Image
@@ -215,12 +217,12 @@ export const ProjectCard: React.FC<Props> = ({
               />
             </div>
             <div className="mb-4 mt-16">
-              <h1 className="text-3xl font-semibold font-inter">
+              <h1 className="font-inter text-3xl font-semibold">
                 {project.name}
               </h1>
             </div>
             {project.organization && (
-              <div className="mb-6 flex items-center gap-1 text-slate-600 font-inter font-medium leading-6">
+              <div className="mb-6 flex items-center gap-1 font-inter font-medium leading-6 text-slate-600">
                 <p>By</p>
                 {project.organization.organizationAvatarUrl && (
                   <Image
@@ -235,7 +237,7 @@ export const ProjectCard: React.FC<Props> = ({
                 <p>{project.organization.name}</p>
               </div>
             )}
-            <div className="mt-8 mb-2 flex items-center gap-3">
+            <div className="mb-2 mt-8 flex items-center gap-3">
               <Switch
                 onColor="#FF0420"
                 offColor="#E0E2EB"
@@ -248,15 +250,15 @@ export const ProjectCard: React.FC<Props> = ({
               />
               <p className="font-medium"> Toggle AI Mode </p>
             </div>
-            <p className="mb-8 text-slate-600 font-inter font-normal text-base leading-6">
+            <p className="mb-8 font-inter text-base font-normal leading-6 text-slate-600">
               {project.description}
             </p>
             {project.socialLinks && (
               <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
-                {project.socialLinks.website.map((item) => (
+                {project.socialLinks.website.map(item => (
                   <ExternalLink key={item} address={item} type="website" />
                 ))}
-                {project.socialLinks.farcaster.map((item) => (
+                {project.socialLinks.farcaster.map(item => (
                   <ExternalLink key={item} address={item} type="warpcast" />
                 ))}
                 {project.socialLinks.twitter && (
@@ -277,7 +279,7 @@ export const ProjectCard: React.FC<Props> = ({
             {project.team?.length && (
               <div className="mb-6 w-full">
                 <Team
-                  team={(project.team || []).map((item) => ({
+                  team={(project.team || []).map(item => ({
                     profileImg: item.pfp_url,
                     urlLink: `https://warpcast.com/${item.username}`,
                   }))}
@@ -287,16 +289,16 @@ export const ProjectCard: React.FC<Props> = ({
 
             <Section
               id={`repos-${name}`}
-              setExpanded={hnadleExpanded("repos")}
-              expanded={sectionExpanded["repos"]}
-              onClick={handleSectionClick(`repos`, !sectionExpanded["repos"])}
+              setExpanded={hnadleExpanded('repos')}
+              expanded={sectionExpanded['repos']}
+              onClick={handleSectionClick(`repos`, !sectionExpanded['repos'])}
               title="Repos, links, and contracts"
             >
               <div className="space-y-4">
-                {project.github.map((repo) => (
+                {project.github.map(repo => (
                   <GithubBox key={repo.url} repo={repo} />
                 ))}
-                {project.links.map((contract) => (
+                {project.links.map(contract => (
                   <SimpleInfoBox
                     key={contract.url}
                     description={contract.description}
@@ -304,10 +306,10 @@ export const ProjectCard: React.FC<Props> = ({
                     type="link"
                   />
                 ))}
-                {project.contracts.map((contract) => (
+                {project.contracts.map(contract => (
                   <SimpleInfoBox
                     key={contract.address}
-                    description={contract.description || ""}
+                    description={contract.description || ''}
                     title={contract.address}
                     type="contract"
                   />
@@ -318,11 +320,11 @@ export const ProjectCard: React.FC<Props> = ({
             {project.testimonials?.length && (
               <Section
                 id={`testimonials-${name}`}
-                setExpanded={hnadleExpanded("testimonials")}
-                expanded={sectionExpanded["testimonials"]}
+                setExpanded={hnadleExpanded('testimonials')}
+                expanded={sectionExpanded['testimonials']}
                 onClick={handleSectionClick(
                   `testimonials`,
-                  !sectionExpanded["testimonials"]
+                  !sectionExpanded['testimonials']
                 )}
                 title="Testimonials"
               >
@@ -339,22 +341,24 @@ export const ProjectCard: React.FC<Props> = ({
             {project.impactStatement && (
               <Section
                 id={`impact-${name}`}
-                setExpanded={hnadleExpanded("impact")}
-                expanded={sectionExpanded["impact"]}
+                setExpanded={hnadleExpanded('impact')}
+                expanded={sectionExpanded['impact']}
                 onClick={handleSectionClick(
                   `impact`,
-                  !sectionExpanded["impact"]
+                  !sectionExpanded['impact']
                 )}
                 title="Impact statement"
               >
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <p>
-                      <strong className="text-gray-800">Category:</strong>{" "}
+                      <strong className="text-gray-800">Category:</strong>
+                      {' '}
                       {project.impactStatement.category}
                     </p>
                     <p>
-                      <strong className="text-gray-800">Subcategory:</strong>{" "}
+                      <strong className="text-gray-800">Subcategory:</strong>
+                      {' '}
                       {project.impactStatement.subcategory}
                     </p>
                     <p className="text-primary">
@@ -384,12 +388,12 @@ export const ProjectCard: React.FC<Props> = ({
 
             <Section
               id={`pricing-${name}`}
-              setExpanded={hnadleExpanded("pricing")}
+              setExpanded={hnadleExpanded('pricing')}
               onClick={handleSectionClick(
                 `pricing`,
-                !sectionExpanded["pricing"]
+                !sectionExpanded['pricing']
               )}
-              expanded={sectionExpanded["pricing"]}
+              expanded={sectionExpanded['pricing']}
               title="Pricing model"
             >
               <div className="space-y-2">
@@ -410,20 +414,20 @@ export const ProjectCard: React.FC<Props> = ({
 
             <Section
               id={`grants-${name}`}
-              setExpanded={hnadleExpanded("grants")}
-              onClick={handleSectionClick(`grants`, !sectionExpanded["grants"])}
-              expanded={sectionExpanded["grants"]}
+              setExpanded={hnadleExpanded('grants')}
+              onClick={handleSectionClick(`grants`, !sectionExpanded['grants'])}
+              expanded={sectionExpanded['grants']}
               title="Grants and investment"
             >
               <div className="space-y-2">
-                {project.grantsAndFunding.grants.map((grant) => (
+                {project.grantsAndFunding.grants.map(grant => (
                   <GrantBox
                     key={grant.grant}
                     description={grant.details}
                     link={grant.link}
                     amount={grant.amount}
                     date={grant.date}
-                    title={grant.grant || ""}
+                    title={grant.grant || ''}
                   />
                 ))}
               </div>
@@ -432,5 +436,5 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
