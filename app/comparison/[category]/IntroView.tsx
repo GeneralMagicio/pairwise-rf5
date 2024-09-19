@@ -25,12 +25,12 @@ const IntroView: FC<{ setIsFirstTime: Dispatch<SetStateAction<boolean>> }> = ({
             <span className="relative inline-block">
               <span className="relative text-primary">impact</span>
               <Image
-                src="/assets/images/scribble.png"
+                src="/assets/images/scribble.svg"
                 alt="scribble"
                 height={60}
                 width={100}
                 className="absolute inset-0 h-[60px] w-full -z-10 -top-3"
-                style={{ transform: "scale(1.7)" }}
+                style={{ transform: "scale(2.4)" }}
               />
             </span>{" "}
           </p>
