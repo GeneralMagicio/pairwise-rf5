@@ -20,7 +20,7 @@ import {
   useUpdateProjectUndo,
   useUpdateProjectVote,
 } from '../utils/data-fetching/vote'
-import { getBiggerNumber, truncate, usePrevious } from '@/app/utils/methods'
+import { getBiggerNumber, usePrevious } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
 import { IProject } from '../utils/types'
 import { useQueryClient } from '@tanstack/react-query'

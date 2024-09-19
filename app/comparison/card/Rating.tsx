@@ -1,4 +1,4 @@
-import { FC, use, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Rating as RatingComponent, Star } from '@smastrom/react-rating'
 
 interface Props {
