@@ -39,7 +39,6 @@
 				"argsIgnorePattern": "^_"
 			}
 		],
-		"import/named": "error",
 		"import/no-duplicates": [
 			"error",
 			{
