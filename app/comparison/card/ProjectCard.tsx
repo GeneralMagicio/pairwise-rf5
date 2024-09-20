@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Switch from 'react-switch'
+import { useCollapse } from 'react-collapsed'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
 import SimpleInfoBox from './SimpleInfoBox'
 import QABox from './QABox'
 import GrantBox from './GrantBox'
-import Switch from 'react-switch'
 import Team from './Team'
 import { ProjectMetadata } from '../utils/types'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import ConflictOfInterestModal from './modals/CoIModal'
-import { useCollapse } from 'react-collapsed'
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
 import CoILoadingModal from './modals/CoILoading'
 
@@ -100,8 +100,8 @@ interface Props {
   name: string
   sectionExpanded: Record<AutoScrollAction['section'], boolean>
   setSectionExpanded: (value: Props['sectionExpanded']) => void
+  key1: string
   key2: string
-  key: string
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -115,7 +115,7 @@ export const ProjectCard: React.FC<Props> = ({
   name,
   sectionExpanded,
   setSectionExpanded,
-  key,
+  key1,
   key2,
 }) => {
   const [aiMode, setAiMode] = useState(false)
@@ -151,7 +151,7 @@ export const ProjectCard: React.FC<Props> = ({
 
   useEffect(() => {
     scrollToTop()
-  }, [key2, key])
+  }, [key2, key1])
 
   useEffect(() => {
     if (render !== 0 && action && action.initiator !== name) {
@@ -330,7 +330,10 @@ export const ProjectCard: React.FC<Props> = ({
               >
                 <div className="space-y-4">
                   {project.testimonials.map((testimonial, index) => (
-                    <div key={`testimonial_${index}`} className="rounded border bg-gray-50 p-4">
+                    <div
+                      key={`testimonial_${index}`}
+                      className="rounded border bg-gray-50 p-4"
+                    >
                       <p className="italic">{testimonial.text}</p>
                     </div>
                   ))}
