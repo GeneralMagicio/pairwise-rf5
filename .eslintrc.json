@@ -1,16 +1,16 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:tailwindcss/recommended",
-    "plugin:@stylistic/recommended-extends"
-  ],
-  "plugins": [
-    "@stylistic",
-    "unused-imports"
-  ],
-  "rules": {
-    "no-unused-vars": "off",
+	"extends": [
+		"next/core-web-vitals",
+		"eslint:recommended",
+		"plugin:tailwindcss/recommended",
+		"plugin:@stylistic/recommended-extends"
+	],
+	"plugins": [
+		"@stylistic",
+		"unused-imports"
+	],
+	"rules": {
+		"no-unused-vars": "off",
 		"react/no-unescaped-entities": "warn",
 		"import/order": [
 			"error",
@@ -18,7 +18,11 @@
 				"groups": [
 					"builtin",
 					"external",
-					["internal", "parent", "sibling"],
+					[
+						"internal",
+						"parent",
+						"sibling"
+					],
 					"index",
 					"object",
 					"type"
@@ -35,14 +39,13 @@
 				"argsIgnorePattern": "^_"
 			}
 		],
-		"prettier/prettier": [
+		"import/named": "error",
+		"import/no-duplicates": [
 			"error",
 			{
-				"endOfLine": "auto"
+				"considerQueryString": true
 			}
-		],
-		"import/named": "error",
-		"import/no-duplicates": ["error", { "considerQueryString": true }]
+		]
 	},
 	"settings": {
 		"import/resolver": {
