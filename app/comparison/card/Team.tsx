@@ -1,6 +1,6 @@
+import React, { useState } from 'react'
 import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft'
 import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRightIcon'
-import React, { useState } from 'react'
 
 interface TeamMember {
   profileImg: string

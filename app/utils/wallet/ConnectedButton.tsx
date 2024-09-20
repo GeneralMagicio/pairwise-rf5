@@ -1,7 +1,7 @@
+import { FC, useState } from 'react'
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import { PowerIcon } from '@/public/assets/icon-components/Power'
-import { FC, useState } from 'react'
 
 interface Props {
   wallet: string

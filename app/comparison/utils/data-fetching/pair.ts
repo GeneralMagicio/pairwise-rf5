@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/app/utils/axiosInstance'
 import { useQuery } from '@tanstack/react-query'
+import { axiosInstance } from '@/app/utils/axiosInstance'
 import { IProject } from '../types'
 
 export interface IPairwisePairsResponse {

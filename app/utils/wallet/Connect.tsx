@@ -1,14 +1,14 @@
 'use client'
 
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import React from 'react'
+import { useAccount, useDisconnect } from 'wagmi'
 import { CoinbaseIcon } from '@/public/assets/icon-components/CoinbaseIcon'
 import { MetaMaskIcon } from '@/public/assets/icon-components/MetaMaskIcon'
 import { WalletIcon } from '@/public/assets/icon-components/Wallet'
 import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnectIcon'
 import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon'
-import { useWeb3Modal } from '@web3modal/wagmi/react'
-import React from 'react'
 import { ConnectedButton } from './ConnectedButton'
-import { useAccount, useDisconnect } from 'wagmi'
 import { useAuth } from './AuthProvider'
 // import { loginToAgora } from './agora-login'
 

@@ -8,10 +8,10 @@ import React, {
   useState,
 } from 'react'
 import { useAccount, useSignMessage } from 'wagmi'
+import { useRouter } from 'next/navigation'
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login'
 import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login'
 import { JWTPayload } from './types'
-import { useRouter } from 'next/navigation'
 import { axiosInstance } from '../axiosInstance'
 import { usePrevious } from '../methods'
 

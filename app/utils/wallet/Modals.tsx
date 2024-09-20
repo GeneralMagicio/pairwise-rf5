@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import Modal from '../Modal'
 import ConnectLoading from './modals/ConnectLoading'
 import NotBadgeHolder from './modals/NotBhModal'
 import SignInWithWallet from './modals/SignInModal'
 import { LogginToPwBackendState, useAuth } from './AuthProvider'
-import { usePathname } from 'next/navigation'
 
 export default function Modals() {
   const path = usePathname()

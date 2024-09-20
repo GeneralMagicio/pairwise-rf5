@@ -1,8 +1,8 @@
 import React from 'react'
+import { useDisconnect } from 'wagmi'
 import { NotBhCharacter } from '@/public/assets/icon-components/NotBhCharacter'
 import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft'
 import { useAuth } from '../AuthProvider'
-import { useDisconnect } from 'wagmi'
 
 const NotBadgeHolder: React.FC = () => {
   const { signOut, redirectToComparisonPage } = useAuth()

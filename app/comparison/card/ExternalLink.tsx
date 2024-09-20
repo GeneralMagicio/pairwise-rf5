@@ -1,8 +1,8 @@
+import { FC } from 'react'
 import { MirrorIcon } from '@/public/assets/icon-components/MirrorIcon'
 import { WarpcastIcon } from '@/public/assets/icon-components/WarpcaseIcon'
 import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon'
 import { XIcon } from '@/public/assets/icon-components/XIcon'
-import { FC } from 'react'
 
 interface Props {
   type: 'website' | 'warpcast' | 'x' | 'mirror'
