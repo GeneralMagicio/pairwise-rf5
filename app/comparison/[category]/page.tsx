@@ -1,5 +1,11 @@
 'use client'
 
+import React, { useEffect, useState } from 'react'
+import { redirect, useParams, useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAccount } from 'wagmi'
+
+import { useAuth } from '@/app/utils/wallet/AuthProvider'
 import { JWTPayload } from '@/app/utils/wallet/types'
 import { AutoScrollAction, ProjectCard } from '../card/ProjectCard'
 import ConflictButton from '../card/CoIButton'
@@ -7,10 +13,7 @@ import Header from '../card/Header'
 import { Rating } from '../card/Rating'
 import UndoButton from '../card/UndoButton'
 import VoteButton from '../card/VoteButton'
-import { useParams, useRouter } from 'next/navigation'
 import Modals from '@/app/utils/wallet/Modals'
-import { useAuth } from '@/app/utils/wallet/AuthProvider'
-import { useEffect, useState } from 'react'
 import {
   getPairwisePairsForProject,
   useGetPairwisePairs,
@@ -22,37 +25,33 @@ import {
 } from '../utils/data-fetching/vote'
 import { getBiggerNumber, usePrevious } from '@/app/utils/methods'
 import { useMarkCoi } from '../utils/data-fetching/coi'
-import { IProject } from '../utils/types'
-import { useQueryClient } from '@tanstack/react-query'
 import Modal from '@/app/utils/Modal'
+import { IProject } from '../utils/types'
 import FinishBallot from '../ballot/modals/FinishBallotModal'
 import BallotSuccessModal from '../ballot/modals/BallotSuccessModal'
 import BallotLoading from '../ballot/modals/BallotLoading'
 import { getBallot } from '../ballot/useGetBallot'
-import { useAccount } from 'wagmi'
 import { uploadBallot } from '@/app/utils/wallet/agora-login'
 import BallotError from '../ballot/modals/BallotError'
 import { mockProject1, mockProject2 } from '../card/mockData'
 import IntroView from './IntroView'
+import Spinner from '../../components/Spinner'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
-  switch (category) {
-    case 'ETHEREUM_CORE_CONTRIBUTIONS':
-      return 'Ethereum Core Contributors'
-    case 'OP_STACK_RESEARCH_AND_DEVELOPMENT':
-      return 'OP Stack R&D'
-    case 'OP_STACK_TOOLING':
-      return 'OP Stack Tooling'
-    default:
-      return 'OP Stack'
+  const labels = {
+    ETHEREUM_CORE_CONTRIBUTIONS: 'Ethereum Core Contributors',
+    OP_STACK_RESEARCH_AND_DEVELOPMENT: 'OP Stack R&D',
+    OP_STACK_TOOLING: 'OP Stack Tooling',
   }
+  return labels[category] || 'OP Stack'
 }
 
 export default function Home() {
-  const params = useParams()
-  const { category } = params
+  const { category } = useParams()
   const queryClient = useQueryClient()
   const router = useRouter()
+  const { address, chainId } = useAccount()
+  const { checkLoginFlow } = useAuth()
 
   const [rating1, setRating1] = useState<number | null>(null)
   const [rating2, setRating2] = useState<number | null>(null)
@@ -64,6 +63,11 @@ export default function Home() {
   const [progress, setProgress] = useState(0)
   const [lastAction, setLastAction] = useState<AutoScrollAction>()
 
+  const [showFinishBallot, setShowFinishBallot] = useState(false)
+  const [showSuccessBallot, setShowSuccessBallot] = useState(false)
+  const [ballotLoading, setBallotLoading] = useState(false)
+  const [ballotError, setBallotError] = useState(false)
+
   const [sectionExpanded1, setSectionExpanded1] = useState({
     repos: true,
     pricing: true,
@@ -71,7 +75,6 @@ export default function Home() {
     impact: true,
     testimonials: true,
   })
-
   const [sectionExpanded2, setSectionExpanded2] = useState({
     repos: true,
     pricing: true,
@@ -79,6 +82,88 @@ export default function Home() {
     impact: true,
     testimonials: true,
   })
+
+  const [temp, setTemp] = useState(0)
+  const [coi1, setCoi1] = useState(false)
+  const [coi2, setCoi2] = useState(false)
+  const [isInitialVisit, setIsInitialVisit] = useState(true)
+
+  const cid = convertCategoryNameToId(category as JWTPayload['category'])
+  const { data, isLoading } = useGetPairwisePairs(cid)
+  const prevProgress = usePrevious(progress)
+
+  const { mutateAsync: markProjectCoI } = useMarkCoi()
+  const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
+  const { mutateAsync: undo } = useUpdateProjectUndo({
+    categoryId: cid,
+    onSuccess: () => {
+      // if this temp state is omitted
+      // then when you CoI one project and
+      // then you call "undo", the app breaks
+      // we probably need to combine "/pairs" and "/pairs-for-project"
+      setTemp(temp + 1)
+      setBypassPrevProgress(true)
+    },
+  })
+
+  useEffect(() => {
+    checkLoginFlow()
+  }, [checkLoginFlow])
+
+  useEffect(() => {
+    if (bypassPrevProgress && data) {
+      setProgress(data.progress)
+      setBypassPrevProgress(false)
+    }
+    else {
+      setProgress(getBiggerNumber(prevProgress, data?.progress))
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (!data || data.pairs.length === 0) return
+    setRating1(data?.pairs[0][0].rating || null)
+    setRating2(data?.pairs[0][1].rating || null)
+  }, [data])
+
+  useEffect(() => {
+    if (!data) return
+    if (data.pairs.length === 0) {
+      setShowFinishBallot(true)
+      if (!project1 || !project2) {
+        setProject1(mockProject1)
+        setProject2(mockProject2)
+      }
+      return
+    }
+    setProject1(data.pairs[0][0])
+    setProject2(data.pairs[0][1])
+  }, [data, temp])
+
+  useEffect(() => {
+    const checkFirstTimeVisit = () => {
+      if (address && chainId) {
+        const hasVisitedKey = `has_visited_${chainId}_${address}`
+        const storageElement = localStorage.getItem(hasVisitedKey)
+
+        if (storageElement) setIsInitialVisit(true)
+
+        const hasVisited = storageElement === 'true'
+        setIsInitialVisit(!hasVisited)
+      }
+    }
+
+    const checkVotedPairs = () => {
+      if (data && !!data.votedPairs) {
+        setIsInitialVisit(false)
+      }
+      else {
+        checkFirstTimeVisit()
+      }
+    }
+
+    checkVotedPairs()
+  }, [address, chainId, data?.votedPairs])
 
   const dispatchAction
     = (initiator: AutoScrollAction['initiator']) =>
@@ -88,19 +173,6 @@ export default function Home() {
       ) => {
         setLastAction({ section, initiator, action })
       }
-
-  const [showFinishBallot, setShowFinishBallot] = useState(false)
-  const [showSuccessBallot, setShowSuccessBallot] = useState(false)
-  const [ballotLoading, setBallotLoading] = useState(false)
-  const [ballotError, setBallotError] = useState(false)
-
-  const [temp, setTemp] = useState(0)
-  const cid = convertCategoryNameToId(category as JWTPayload['category'])
-
-  const [coi1, setCoi1] = useState(false)
-  const [coi2, setCoi2] = useState(false)
-
-  const { address } = useAccount()
 
   const confirmCoI1 = async (id1: number, id2: number) => {
     await markProjectCoI({ data: { pid: id1 } })
@@ -150,66 +222,13 @@ export default function Home() {
   const showCoI2 = () => {
     setCoi2(true)
   }
-
-  const { checkLoginFlow } = useAuth()
-
-  useEffect(() => {
-    checkLoginFlow()
-  }, [checkLoginFlow])
-
-  const { data, isLoading } = useGetPairwisePairs(cid)
-  const prevProgress = usePrevious(progress)
-
-  const [isFirstTime, setIsFirstTime] = useState(
-    !data || data.pairs.length === 0
-  )
-
-  useEffect(() => {
-    if (bypassPrevProgress && data) {
-      setProgress(data.progress)
-      setBypassPrevProgress(false)
+  const setUserAsVisited = () => {
+    if (address && chainId) {
+      const hasVisitedKey = `has_visited_${chainId}_${address}`
+      localStorage.setItem(hasVisitedKey, 'true')
     }
-    else {
-      setProgress(getBiggerNumber(prevProgress, data?.progress))
-    }
-  }, [data])
-
-  // const {} = useGetPairwisePairsForProject(cid)
-
-  const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
-  const { mutateAsync: undo } = useUpdateProjectUndo({
-    categoryId: cid,
-    onSuccess: () => {
-      // if this temp state is omitted
-      // then when you CoI one project and
-      // then you call "undo", the app breaks
-      // we probably need to combine "/pairs" and "/pairs-for-project"
-      setTemp(temp + 1)
-      setBypassPrevProgress(true)
-    },
-  })
-  const { mutateAsync: markProjectCoI } = useMarkCoi()
-  // const { mutateAsync: markProject2CoI } = useMarkCoi({ projectId: project2 ? project2.id : 0 })
-  // const { setShowBhModal } = useAuth()
-  useEffect(() => {
-    if (!data || data.pairs.length === 0) return
-    setRating1(data?.pairs[0][0].rating || null)
-    setRating2(data?.pairs[0][1].rating || null)
-  }, [data])
-
-  useEffect(() => {
-    if (!data) return
-    if (data.pairs.length === 0) {
-      setShowFinishBallot(true)
-      if (!project1 || !project2) {
-        setProject1(mockProject1)
-        setProject2(mockProject2)
-      }
-      return
-    }
-    setProject1(data.pairs[0][0])
-    setProject2(data.pairs[0][1])
-  }, [data, temp])
+    setIsInitialVisit(false)
+  }
 
   const handleUnlockBallot = async () => {
     if (!address) return
@@ -229,20 +248,11 @@ export default function Home() {
     }
   }
 
-  console.log(project1)
-  console.log(project2)
-  console.log(data)
-  console.log(isLoading)
-  if (!project1 || !project2 || !data || isLoading) return
-
-  // const project1 = data.pairs[0][0]
-  // const project2 = data.pairs[0][1]
-
   const handleVote = (chosenId: number) => async () => {
     await vote({
       data: {
-        project1Id: project1.id,
-        project2Id: project2.id,
+        project1Id: project1!.id,
+        project2Id: project2!.id,
         project1Stars: rating1,
         project2Stars: rating2,
         pickedId: chosenId,
@@ -255,6 +265,12 @@ export default function Home() {
     setCoi2(false)
     await undo()
   }
+
+  if (isLoading) return <Spinner />
+
+  if (!address || !chainId) return redirect('/landing')
+
+  if (!project1 || !project2 || !data) return <div>No data</div>
 
   return (
     <div>
@@ -288,12 +304,12 @@ export default function Home() {
         progress={progress * 100}
         category={convertCategoryToLabel(category! as JWTPayload['category'])}
         question="Which project had the greatest impact on the OP Stack?"
-        isFirstSelection={isFirstTime}
+        isFirstSelection={isInitialVisit}
       />
 
-      {isFirstTime
+      {isInitialVisit
         ? (
-            <IntroView setIsFirstTime={setIsFirstTime} />
+            <IntroView setUserAsVisited={setUserAsVisited} />
           )
         : (
             <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
@@ -304,7 +320,7 @@ export default function Home() {
                   name="card1"
                   action={lastAction}
                   dispatchAction={dispatchAction('card1')}
-                  key={project1.RPGF5Id}
+                  key1={project1.RPGF5Id}
                   key2={project2.RPGF5Id}
                   coiLoading={coiLoading1}
                   coi={coi1}
@@ -320,7 +336,7 @@ export default function Home() {
                   name="card2"
                   action={lastAction}
                   dispatchAction={dispatchAction('card2')}
-                  key={project2.RPGF5Id}
+                  key1={project2.RPGF5Id}
                   key2={project1.RPGF5Id}
                   coiLoading={coiLoading2}
                   coi={coi2}
@@ -340,17 +356,17 @@ export default function Home() {
               onChange={(val: number) => {
                 setRating1(val)
               }}
-              disabled={isFirstTime}
+              disabled={isInitialVisit}
             />
             <VoteButton
               onClick={handleVote(project1.id)}
-              disabled={isFirstTime}
+              disabled={isInitialVisit}
             />
-            <ConflictButton onClick={showCoI1} disabled={isFirstTime} />
+            <ConflictButton onClick={showCoI1} disabled={isInitialVisit} />
           </div>
         )}
         <div className="absolute z-[1]">
-          <UndoButton disabled={isFirstTime} onClick={handleUndo} />
+          <UndoButton disabled={isInitialVisit} onClick={handleUndo} />
         </div>
         {!coi2 && !coiLoading2 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
@@ -359,13 +375,13 @@ export default function Home() {
               onChange={(val: number) => {
                 setRating2(val)
               }}
-              disabled={isFirstTime}
+              disabled={isInitialVisit}
             />
             <VoteButton
               onClick={handleVote(project2.id)}
-              disabled={isFirstTime}
+              disabled={isInitialVisit}
             />
-            <ConflictButton onClick={showCoI2} disabled={isFirstTime} />
+            <ConflictButton onClick={showCoI2} disabled={isInitialVisit} />
           </div>
         )}
       </footer>

@@ -1,6 +1,6 @@
 import Lottie from 'lottie-react'
-import hourglass from './hourglass.json'
 import React, { FC } from 'react'
+import hourglass from './hourglass.json'
 
 const CoILoadingModal: FC = () => {
   return (

@@ -1,18 +1,20 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Switch from 'react-switch'
+import { useCollapse } from 'react-collapsed'
 import { ExternalLink } from './ExternalLink'
 import GithubBox from './GithubBox'
 import SimpleInfoBox from './SimpleInfoBox'
 import QABox from './QABox'
 import GrantBox from './GrantBox'
-import Switch from 'react-switch'
 import Team from './Team'
 import { ProjectMetadata } from '../utils/types'
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
 import ConflictOfInterestModal from './modals/CoIModal'
-import { useCollapse } from 'react-collapsed'
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
 import CoILoadingModal from './modals/CoILoading'
+import ProjectDescription from './ProjectDescription'
+import { StarsIcon } from '@/public/assets/icon-components/Stars'
 
 interface CollapsibleProps {
   title: string
@@ -100,8 +102,8 @@ interface Props {
   name: string
   sectionExpanded: Record<AutoScrollAction['section'], boolean>
   setSectionExpanded: (value: Props['sectionExpanded']) => void
+  key1: string
   key2: string
-  key: string
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -115,11 +117,15 @@ export const ProjectCard: React.FC<Props> = ({
   name,
   sectionExpanded,
   setSectionExpanded,
-  key,
+  key1,
   key2,
 }) => {
   const [aiMode, setAiMode] = useState(false)
   const [render, setRender] = useState(0)
+  const [isSticky, setIsSticky] = useState(false)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const parentRef = useRef<HTMLDivElement>(null)
+  const offset = 150
 
   const divRef = useRef(null)
 
@@ -129,6 +135,27 @@ export const ProjectCard: React.FC<Props> = ({
       divRef.current.scrollTop = 0
     }
   }
+
+  useEffect(() => {
+    const parentElement = parentRef.current
+
+    const handleScroll = () => {
+      if (parentRef.current && titleRef.current) {
+        const rect = titleRef.current.getBoundingClientRect()
+        setIsSticky(rect.top <= offset && rect.top >= -offset)
+      }
+    }
+
+    if (parentElement) {
+      parentElement.addEventListener('scroll', handleScroll)
+    }
+
+    return () => {
+      if (parentElement) {
+        parentElement.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [offset])
 
   const handleChange = () => {
     setAiMode(!aiMode)
@@ -151,7 +178,7 @@ export const ProjectCard: React.FC<Props> = ({
 
   useEffect(() => {
     scrollToTop()
-  }, [key2, key])
+  }, [key2, key1])
 
   useEffect(() => {
     if (render !== 0 && action && action.initiator !== name) {
@@ -196,8 +223,9 @@ export const ProjectCard: React.FC<Props> = ({
     coi || coiLoading ? `brightness-50` : ``
     }`}
       >
-        <div className="h-[78vh] gap-10 overflow-y-auto">
+        <div ref={parentRef} className="h-[78vh] gap-10 overflow-y-auto">
           <div className="mr-4">
+            {/* Cover Image and Profile Avatar */}
             <div className="relative h-40">
               <Image
                 src={project.projectCoverImageUrl}
@@ -216,28 +244,50 @@ export const ProjectCard: React.FC<Props> = ({
                 className="absolute -bottom-8 left-4 z-[4] rounded-md"
               />
             </div>
-            <div className="mb-4 mt-16">
-              <h1 className="font-inter text-3xl font-semibold">
-                {project.name}
-              </h1>
-            </div>
-            {project.organization && (
-              <div className="mb-6 flex items-center gap-1 font-inter font-medium leading-6 text-slate-600">
-                <p>By</p>
-                {project.organization.organizationAvatarUrl && (
+            {/* Sticky Title Section */}
+            <div
+              ref={titleRef}
+              className={`mb-4 mt-16 transition-all ${
+                isSticky
+                  ? 'sticky left-0 top-0 z-50 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
+                  : ''
+              }`}
+            >
+              <div className="flex items-center gap-8">
+                {isSticky && (
                   <Image
-                    src={project.organization.organizationAvatarUrl}
-                    alt={project.organization.name}
-                    width={24}
-                    height={24}
-                    className="mx-1 rounded-full"
+                    src={project.profileAvatarUrl}
                     unoptimized
+                    alt={project.name}
+                    width={70}
+                    height={70}
+                    className="rounded-md"
                   />
                 )}
-                <p>{project.organization.name}</p>
+                <div className="flex flex-col gap-3">
+                  <h1 className="font-inter text-3xl font-semibold">
+                    {project.name}
+                  </h1>
+                  {project.organization && (
+                    <div className="flex items-center gap-1 font-inter font-medium leading-6 text-slate-600">
+                      <p>By</p>
+                      {project.organization.organizationAvatarUrl && (
+                        <Image
+                          src={project.organization.organizationAvatarUrl}
+                          alt={project.organization.name}
+                          width={24}
+                          height={24}
+                          className="mx-1 rounded-full"
+                          unoptimized
+                        />
+                      )}
+                      <p>{project.organization.name}</p>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-            <div className="mb-2 mt-8 flex items-center gap-3">
+            </div>
+            <div className="my-8 flex items-center gap-3">
               <Switch
                 onColor="#FF0420"
                 offColor="#E0E2EB"
@@ -248,11 +298,10 @@ export const ProjectCard: React.FC<Props> = ({
                 onChange={handleChange}
                 checked={aiMode}
               />
-              <p className="font-medium"> Toggle AI Mode </p>
+              <p className="font-medium"> TLDR </p>
+              <StarsIcon />
             </div>
-            <p className="mb-8 font-inter text-base font-normal leading-6 text-slate-600">
-              {project.description}
-            </p>
+            <ProjectDescription description={project.description} />
             {project.socialLinks && (
               <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
                 {project.socialLinks.website.map(item => (
@@ -275,7 +324,6 @@ export const ProjectCard: React.FC<Props> = ({
                 )}
               </div>
             )}
-
             {project.team?.length && (
               <div className="mb-6 w-full">
                 <Team
@@ -286,7 +334,6 @@ export const ProjectCard: React.FC<Props> = ({
                 />
               </div>
             )}
-
             <Section
               id={`repos-${name}`}
               setExpanded={hnadleExpanded('repos')}
@@ -316,7 +363,6 @@ export const ProjectCard: React.FC<Props> = ({
                 ))}
               </div>
             </Section>
-
             {project.testimonials?.length && (
               <Section
                 id={`testimonials-${name}`}
@@ -330,14 +376,16 @@ export const ProjectCard: React.FC<Props> = ({
               >
                 <div className="space-y-4">
                   {project.testimonials.map((testimonial, index) => (
-                    <div key={`testimonial_${index}`} className="rounded border bg-gray-50 p-4">
+                    <div
+                      key={`testimonial_${index}`}
+                      className="rounded border bg-gray-50 p-4"
+                    >
                       <p className="italic">{testimonial.text}</p>
                     </div>
                   ))}
                 </div>
               </Section>
             )}
-
             {project.impactStatement && (
               <Section
                 id={`impact-${name}`}
@@ -381,11 +429,9 @@ export const ProjectCard: React.FC<Props> = ({
                 </div>
               </Section>
             )}
-
             {/* <Section title="Project Support">
               <p>{project.projectSupport}</p>
             </Section> */}
-
             <Section
               id={`pricing-${name}`}
               setExpanded={hnadleExpanded('pricing')}
@@ -411,7 +457,6 @@ export const ProjectCard: React.FC<Props> = ({
             <p>{project.pricingModel.payToUse}</p> */}
               </div>
             </Section>
-
             <Section
               id={`grants-${name}`}
               setExpanded={hnadleExpanded('grants')}
@@ -420,9 +465,9 @@ export const ProjectCard: React.FC<Props> = ({
               title="Grants and investment"
             >
               <div className="space-y-2">
-                {project.grantsAndFunding.grants.map(grant => (
+                {project.grantsAndFunding.grants.map((grant, index) => (
                   <GrantBox
-                    key={grant.grant}
+                    key={`grant_${index}`}
                     description={grant.details}
                     link={grant.link}
                     amount={grant.amount}

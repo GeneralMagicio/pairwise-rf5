@@ -1,13 +1,13 @@
 'use client'
 
+import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 import { PwLogo } from '@/public/assets/icon-components/PairwiseLogo'
 import { LandingPart1 } from '../landing/part1'
 import { LandingPart2 } from '../landing/part2'
 import { LandingPart3 } from '../landing/part3'
 import { ConnectButton } from '../utils/wallet/Connect'
-import dynamic from 'next/dynamic'
 import { useAuth } from '../utils/wallet/AuthProvider'
-import { useEffect } from 'react'
 
 const NoSSRModals = dynamic(() => import('../utils/wallet/Modals'), { ssr: false })
 

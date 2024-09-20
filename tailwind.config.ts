@@ -26,6 +26,7 @@ const config: Config = {
         },
         dark: {
           500: '#05060B',
+          600: '#101828',
         },
       },
       fontFamily: {

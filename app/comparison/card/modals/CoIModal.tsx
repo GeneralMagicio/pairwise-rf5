@@ -1,5 +1,5 @@
-import { InfoIcon } from '@/public/assets/icon-components/Info'
 import React, { FC } from 'react'
+import { InfoIcon } from '@/public/assets/icon-components/Info'
 
 interface Props {
   onDeclareConflict: () => void

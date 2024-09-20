@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAccount } from 'wagmi'
-import { shortenWalletAddress } from '../ConnectedButton'
 import Image from 'next/image'
+import { shortenWalletAddress } from '../ConnectedButton'
 
 const NewWalletModal: React.FC = () => {
   const { address } = useAccount()

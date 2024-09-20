@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/app/utils/axiosInstance'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
+import { axiosInstance } from '@/app/utils/axiosInstance'
 import { IProject } from '../types'
 
 export const getProjectsByCategoryId = async (
