@@ -142,13 +142,6 @@ export const ProjectCard: React.FC<Props> = ({
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect()
-
-        console.log({
-          top: rect.top,
-          offset,
-          isSticky: rect.top <= offset && rect.top >= -offset,
-        })
-
         setIsSticky(rect.top <= offset && rect.top >= -offset)
       }
     }
