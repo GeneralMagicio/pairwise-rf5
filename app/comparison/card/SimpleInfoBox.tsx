@@ -13,7 +13,7 @@ interface Props {
 
 const OP_EXPLORER_URL = 'https://optimistic.etherscan.io/'
 
-const ICONS_MAP: Record<Props['type'], JSX.Element | null> = {
+const ICONS_MAP: Record<Props['type'], React.ReactNode> = {
   contract: <OPIcon />,
   link: <WebsiteIcon height={20} width={20} />,
   pricing: null,
