@@ -36,6 +36,7 @@ import BallotError from '../ballot/modals/BallotError'
 import { mockProject1, mockProject2 } from '../card/mockData'
 import IntroView from './IntroView'
 import Spinner from '../../components/Spinner'
+import LowRateModal from '../card/modals/LowRateModal'
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
@@ -48,10 +49,10 @@ const convertCategoryToLabel = (category: JWTPayload['category']) => {
 
 export default function Home() {
   const { category } = useParams()
-  const queryClient = useQueryClient()
   const router = useRouter()
-  const { address, chainId } = useAccount()
+  const queryClient = useQueryClient()
   const { checkLoginFlow } = useAuth()
+  const { address, chainId } = useAccount()
 
   const [rating1, setRating1] = useState<number | null>(null)
   const [rating2, setRating2] = useState<number | null>(null)
@@ -67,6 +68,10 @@ export default function Home() {
   const [showSuccessBallot, setShowSuccessBallot] = useState(false)
   const [ballotLoading, setBallotLoading] = useState(false)
   const [ballotError, setBallotError] = useState(false)
+  const [showLowRateModal, setShowLowRateModal] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  )
 
   const [sectionExpanded1, setSectionExpanded1] = useState({
     repos: true,
@@ -248,7 +253,27 @@ export default function Home() {
     }
   }
 
-  const handleVote = (chosenId: number) => async () => {
+  const checkLowRatedProjectSelected = (chosenId: number): boolean => {
+    const isLowRatedProjectSelected = (
+      selectedId: number,
+      ratingA: number | null | undefined,
+      ratingB: number | null | undefined
+    ) =>
+      chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB))
+
+    if (
+      isLowRatedProjectSelected(project1!.id, rating1, rating2)
+      || isLowRatedProjectSelected(project2!.id, rating2, rating1)
+    ) {
+      setSelectedProjectId(chosenId)
+      setShowLowRateModal(true)
+      return true
+    }
+
+    return false
+  }
+
+  const handleVote = async (chosenId: number) => {
     await vote({
       data: {
         project1Id: project1!.id,
@@ -277,7 +302,11 @@ export default function Home() {
       <Modals />
       <Modal
         isOpen={
-          showFinishBallot || showSuccessBallot || ballotLoading || ballotError
+          showFinishBallot
+          || showSuccessBallot
+          || ballotLoading
+          || ballotError
+          || showLowRateModal
         }
         onClose={() => {}}
       >
@@ -299,6 +328,15 @@ export default function Home() {
         )}
         {ballotLoading && <BallotLoading />}
         {ballotError && <BallotError onClick={handleUnlockBallot} />}
+        {showLowRateModal && (
+          <LowRateModal
+            proceedWithSelection={async () => {
+              await handleVote(selectedProjectId!)
+              setShowLowRateModal(false)
+            }}
+            cancelSelection={() => setShowLowRateModal(false)}
+          />
+        )}
       </Modal>
       <Header
         progress={progress * 100}
@@ -348,7 +386,7 @@ export default function Home() {
             </div>
           )}
 
-      <footer className="fixed bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
+      <footer className="sticky bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
         {!coi1 && !coiLoading1 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
@@ -359,7 +397,9 @@ export default function Home() {
               disabled={isInitialVisit}
             />
             <VoteButton
-              onClick={handleVote(project1.id)}
+              onClick={() =>
+                !checkLowRatedProjectSelected(project2.id)
+                && handleVote(project2.id)}
               disabled={isInitialVisit}
             />
             <ConflictButton onClick={showCoI1} disabled={isInitialVisit} />
@@ -378,7 +418,9 @@ export default function Home() {
               disabled={isInitialVisit}
             />
             <VoteButton
-              onClick={handleVote(project2.id)}
+              onClick={() =>
+                !checkLowRatedProjectSelected(project2.id)
+                && handleVote(project2.id)}
               disabled={isInitialVisit}
             />
             <ConflictButton onClick={showCoI2} disabled={isInitialVisit} />
