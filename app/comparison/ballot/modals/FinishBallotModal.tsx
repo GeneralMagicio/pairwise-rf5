@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 
 interface UnlockBallotProps {
   projectCount: number
@@ -50,7 +50,7 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({ projectCount, category, onU
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FinishBallot
+export default FinishBallot;

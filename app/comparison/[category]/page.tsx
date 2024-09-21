@@ -1,77 +1,77 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { redirect, useParams, useRouter } from 'next/navigation'
-import { useQueryClient } from '@tanstack/react-query'
-import { useAccount } from 'wagmi'
+import React, { useEffect, useState } from 'react';
+import { redirect, useParams, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
 
-import { useAuth } from '@/app/utils/wallet/AuthProvider'
-import { JWTPayload } from '@/app/utils/wallet/types'
-import { AutoScrollAction, ProjectCard } from '../card/ProjectCard'
-import ConflictButton from '../card/CoIButton'
-import Header from '../card/Header'
-import { Rating } from '../card/Rating'
-import UndoButton from '../card/UndoButton'
-import VoteButton from '../card/VoteButton'
-import Modals from '@/app/utils/wallet/Modals'
+import { useAuth } from '@/app/utils/wallet/AuthProvider';
+import { JWTPayload } from '@/app/utils/wallet/types';
+import { AutoScrollAction, ProjectCard } from '../card/ProjectCard';
+import ConflictButton from '../card/CoIButton';
+import Header from '../card/Header';
+import { Rating } from '../card/Rating';
+import UndoButton from '../card/UndoButton';
+import VoteButton from '../card/VoteButton';
+import Modals from '@/app/utils/wallet/Modals';
 import {
   getPairwisePairsForProject,
   useGetPairwisePairs,
-} from '../utils/data-fetching/pair'
-import { convertCategoryNameToId } from '../utils/helpers'
+} from '../utils/data-fetching/pair';
+import { convertCategoryNameToId } from '../utils/helpers';
 import {
   useUpdateProjectUndo,
   useUpdateProjectVote,
-} from '../utils/data-fetching/vote'
-import { getBiggerNumber, usePrevious } from '@/app/utils/methods'
-import { useMarkCoi } from '../utils/data-fetching/coi'
-import Modal from '@/app/utils/Modal'
-import { IProject } from '../utils/types'
-import FinishBallot from '../ballot/modals/FinishBallotModal'
-import BallotSuccessModal from '../ballot/modals/BallotSuccessModal'
-import BallotLoading from '../ballot/modals/BallotLoading'
-import { getBallot } from '../ballot/useGetBallot'
-import { uploadBallot } from '@/app/utils/wallet/agora-login'
-import BallotError from '../ballot/modals/BallotError'
-import { mockProject1, mockProject2 } from '../card/mockData'
-import IntroView from './IntroView'
-import Spinner from '../../components/Spinner'
-import LowRateModal from '../card/modals/LowRateModal'
+} from '../utils/data-fetching/vote';
+import { getBiggerNumber, usePrevious } from '@/app/utils/methods';
+import { useMarkCoi } from '../utils/data-fetching/coi';
+import Modal from '@/app/utils/Modal';
+import { IProject } from '../utils/types';
+import FinishBallot from '../ballot/modals/FinishBallotModal';
+import BallotSuccessModal from '../ballot/modals/BallotSuccessModal';
+import BallotLoading from '../ballot/modals/BallotLoading';
+import { getBallot } from '../ballot/useGetBallot';
+import { uploadBallot } from '@/app/utils/wallet/agora-login';
+import BallotError from '../ballot/modals/BallotError';
+import { mockProject1, mockProject2 } from '../card/mockData';
+import IntroView from './IntroView';
+import Spinner from '../../components/Spinner';
+import LowRateModal from '../card/modals/LowRateModal';
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
     ETHEREUM_CORE_CONTRIBUTIONS: 'Ethereum Core Contributors',
     OP_STACK_RESEARCH_AND_DEVELOPMENT: 'OP Stack R&D',
     OP_STACK_TOOLING: 'OP Stack Tooling',
-  }
-  return labels[category] || 'OP Stack'
-}
+  };
+  return labels[category] || 'OP Stack';
+};
 
 export default function Home() {
-  const { category } = useParams()
-  const router = useRouter()
-  const queryClient = useQueryClient()
-  const { checkLoginFlow } = useAuth()
-  const { address, chainId } = useAccount()
+  const { category } = useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { checkLoginFlow } = useAuth();
+  const { address, chainId } = useAccount();
 
-  const [rating1, setRating1] = useState<number | null>(null)
-  const [rating2, setRating2] = useState<number | null>(null)
-  const [project1, setProject1] = useState<IProject>()
-  const [project2, setProject2] = useState<IProject>()
-  const [coiLoading1, setCoiLoading1] = useState(false)
-  const [coiLoading2, setCoiLoading2] = useState(false)
-  const [bypassPrevProgress, setBypassPrevProgress] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [lastAction, setLastAction] = useState<AutoScrollAction>()
+  const [rating1, setRating1] = useState<number | null>(null);
+  const [rating2, setRating2] = useState<number | null>(null);
+  const [project1, setProject1] = useState<IProject>();
+  const [project2, setProject2] = useState<IProject>();
+  const [coiLoading1, setCoiLoading1] = useState(false);
+  const [coiLoading2, setCoiLoading2] = useState(false);
+  const [bypassPrevProgress, setBypassPrevProgress] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [lastAction, setLastAction] = useState<AutoScrollAction>();
 
-  const [showFinishBallot, setShowFinishBallot] = useState(false)
-  const [showSuccessBallot, setShowSuccessBallot] = useState(false)
-  const [ballotLoading, setBallotLoading] = useState(false)
-  const [ballotError, setBallotError] = useState(false)
-  const [showLowRateModal, setShowLowRateModal] = useState(false)
+  const [showFinishBallot, setShowFinishBallot] = useState(false);
+  const [showSuccessBallot, setShowSuccessBallot] = useState(false);
+  const [ballotLoading, setBallotLoading] = useState(false);
+  const [ballotError, setBallotError] = useState(false);
+  const [showLowRateModal, setShowLowRateModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null
-  )
+  );
 
   const [sectionExpanded1, setSectionExpanded1] = useState({
     repos: true,
@@ -79,26 +79,26 @@ export default function Home() {
     grants: true,
     impact: true,
     testimonials: true,
-  })
+  });
   const [sectionExpanded2, setSectionExpanded2] = useState({
     repos: true,
     pricing: true,
     grants: true,
     impact: true,
     testimonials: true,
-  })
+  });
 
-  const [temp, setTemp] = useState(0)
-  const [coi1, setCoi1] = useState(false)
-  const [coi2, setCoi2] = useState(false)
-  const [isInitialVisit, setIsInitialVisit] = useState(true)
+  const [temp, setTemp] = useState(0);
+  const [coi1, setCoi1] = useState(false);
+  const [coi2, setCoi2] = useState(false);
+  const [isInitialVisit, setIsInitialVisit] = useState(true);
 
-  const cid = convertCategoryNameToId(category as JWTPayload['category'])
-  const { data, isLoading } = useGetPairwisePairs(cid)
-  const prevProgress = usePrevious(progress)
+  const cid = convertCategoryNameToId(category as JWTPayload['category']);
+  const { data, isLoading } = useGetPairwisePairs(cid);
+  const prevProgress = usePrevious(progress);
 
-  const { mutateAsync: markProjectCoI } = useMarkCoi()
-  const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid })
+  const { mutateAsync: markProjectCoI } = useMarkCoi();
+  const { mutateAsync: vote } = useUpdateProjectVote({ categoryId: cid });
   const { mutateAsync: undo } = useUpdateProjectUndo({
     categoryId: cid,
     onSuccess: () => {
@@ -106,69 +106,69 @@ export default function Home() {
       // then when you CoI one project and
       // then you call "undo", the app breaks
       // we probably need to combine "/pairs" and "/pairs-for-project"
-      setTemp(temp + 1)
-      setBypassPrevProgress(true)
+      setTemp(temp + 1);
+      setBypassPrevProgress(true);
     },
-  })
+  });
 
   useEffect(() => {
-    checkLoginFlow()
-  }, [checkLoginFlow])
+    checkLoginFlow();
+  }, [checkLoginFlow]);
 
   useEffect(() => {
     if (bypassPrevProgress && data) {
-      setProgress(data.progress)
-      setBypassPrevProgress(false)
+      setProgress(data.progress);
+      setBypassPrevProgress(false);
     }
     else {
-      setProgress(getBiggerNumber(prevProgress, data?.progress))
+      setProgress(getBiggerNumber(prevProgress, data?.progress));
     }
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
-    if (!data || data.pairs.length === 0) return
-    setRating1(data?.pairs[0][0].rating || null)
-    setRating2(data?.pairs[0][1].rating || null)
-  }, [data])
+    if (!data || data.pairs.length === 0) return;
+    setRating1(data?.pairs[0][0].rating || null);
+    setRating2(data?.pairs[0][1].rating || null);
+  }, [data]);
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
     if (data.pairs.length === 0) {
-      setShowFinishBallot(true)
+      setShowFinishBallot(true);
       if (!project1 || !project2) {
-        setProject1(mockProject1)
-        setProject2(mockProject2)
+        setProject1(mockProject1);
+        setProject2(mockProject2);
       }
-      return
+      return;
     }
-    setProject1(data.pairs[0][0])
-    setProject2(data.pairs[0][1])
-  }, [data, temp])
+    setProject1(data.pairs[0][0]);
+    setProject2(data.pairs[0][1]);
+  }, [data, temp]);
 
   useEffect(() => {
     const checkFirstTimeVisit = () => {
       if (address && chainId) {
-        const hasVisitedKey = `has_visited_${chainId}_${address}`
-        const storageElement = localStorage.getItem(hasVisitedKey)
+        const hasVisitedKey = `has_visited_${chainId}_${address}`;
+        const storageElement = localStorage.getItem(hasVisitedKey);
 
-        if (storageElement) setIsInitialVisit(true)
+        if (storageElement) setIsInitialVisit(true);
 
-        const hasVisited = storageElement === 'true'
-        setIsInitialVisit(!hasVisited)
+        const hasVisited = storageElement === 'true';
+        setIsInitialVisit(!hasVisited);
       }
-    }
+    };
 
     const checkVotedPairs = () => {
       if (data && !!data.votedPairs) {
-        setIsInitialVisit(false)
+        setIsInitialVisit(false);
       }
       else {
-        checkFirstTimeVisit()
+        checkFirstTimeVisit();
       }
-    }
+    };
 
-    checkVotedPairs()
-  }, [address, chainId, data?.votedPairs])
+    checkVotedPairs();
+  }, [address, chainId, data?.votedPairs]);
 
   const dispatchAction
     = (initiator: AutoScrollAction['initiator']) =>
@@ -176,82 +176,82 @@ export default function Home() {
         section: AutoScrollAction['section'],
         action: AutoScrollAction['action']
       ) => {
-        setLastAction({ section, initiator, action })
-      }
+        setLastAction({ section, initiator, action });
+      };
 
   const confirmCoI1 = async (id1: number, id2: number) => {
-    await markProjectCoI({ data: { pid: id1 } })
-    setCoi1(false)
-    setCoiLoading1(true)
+    await markProjectCoI({ data: { pid: id1 } });
+    setCoi1(false);
+    setCoiLoading1(true);
     try {
-      const pair = await getPairwisePairsForProject(cid, id2)
-      setProject1(pair.pairs[0].find(project => project.id !== id2)!)
+      const pair = await getPairwisePairsForProject(cid, id2);
+      setProject1(pair.pairs[0].find(project => project.id !== id2)!);
     }
     catch (e) {
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', cid],
-      })
+      });
     }
-    setCoiLoading1(false)
-  }
+    setCoiLoading1(false);
+  };
 
   const cancelCoI1 = () => {
-    setCoi1(false)
-  }
+    setCoi1(false);
+  };
 
   const showCoI1 = () => {
-    setCoi1(true)
-  }
+    setCoi1(true);
+  };
 
   const confirmCoI2 = async (id1: number, id2: number) => {
-    await markProjectCoI({ data: { pid: id2 } })
-    setCoi2(false)
-    setCoiLoading2(true)
+    await markProjectCoI({ data: { pid: id2 } });
+    setCoi2(false);
+    setCoiLoading2(true);
     try {
-      const pair = await getPairwisePairsForProject(cid, id1)
-      setProject2(pair.pairs[0].find(project => project.id !== id1)!)
-      setCoi2(false)
+      const pair = await getPairwisePairsForProject(cid, id1);
+      setProject2(pair.pairs[0].find(project => project.id !== id1)!);
+      setCoi2(false);
     }
     catch (e) {
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', cid],
-      })
+      });
     }
-    setCoiLoading2(false)
-  }
+    setCoiLoading2(false);
+  };
 
   const cancelCoI2 = () => {
-    setCoi2(false)
-  }
+    setCoi2(false);
+  };
 
   const showCoI2 = () => {
-    setCoi2(true)
-  }
+    setCoi2(true);
+  };
   const setUserAsVisited = () => {
     if (address && chainId) {
-      const hasVisitedKey = `has_visited_${chainId}_${address}`
-      localStorage.setItem(hasVisitedKey, 'true')
+      const hasVisitedKey = `has_visited_${chainId}_${address}`;
+      localStorage.setItem(hasVisitedKey, 'true');
     }
-    setIsInitialVisit(false)
-  }
+    setIsInitialVisit(false);
+  };
 
   const handleUnlockBallot = async () => {
-    if (!address) return
-    setShowFinishBallot(false)
-    setBallotLoading(true)
-    setBallotError(false)
+    if (!address) return;
+    setShowFinishBallot(false);
+    setBallotLoading(true);
+    setBallotError(false);
     try {
-      const ballot = await getBallot(cid)
-      await uploadBallot(ballot, address)
-      setShowSuccessBallot(true)
+      const ballot = await getBallot(cid);
+      await uploadBallot(ballot, address);
+      setShowSuccessBallot(true);
     }
     catch (e) {
-      setBallotError(true)
+      setBallotError(true);
     }
     finally {
-      setBallotLoading(false)
+      setBallotLoading(false);
     }
-  }
+  };
 
   const checkLowRatedProjectSelected = (chosenId: number): boolean => {
     const isLowRatedProjectSelected = (
@@ -259,19 +259,19 @@ export default function Home() {
       ratingA: number | null | undefined,
       ratingB: number | null | undefined
     ) =>
-      chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB))
+      chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB));
 
     if (
       isLowRatedProjectSelected(project1!.id, rating1, rating2)
       || isLowRatedProjectSelected(project2!.id, rating2, rating1)
     ) {
-      setSelectedProjectId(chosenId)
-      setShowLowRateModal(true)
-      return true
+      setSelectedProjectId(chosenId);
+      setShowLowRateModal(true);
+      return true;
     }
 
-    return false
-  }
+    return false;
+  };
 
   const handleVote = async (chosenId: number) => {
     await vote({
@@ -282,20 +282,20 @@ export default function Home() {
         project2Stars: rating2,
         pickedId: chosenId,
       },
-    })
-  }
+    });
+  };
 
   const handleUndo = async () => {
-    setCoi1(false)
-    setCoi2(false)
-    await undo()
-  }
+    setCoi1(false);
+    setCoi2(false);
+    await undo();
+  };
 
-  if (isLoading) return <Spinner />
+  if (isLoading) return <Spinner />;
 
-  if (!address || !chainId) return redirect('/landing')
+  if (!address || !chainId) return redirect('/landing');
 
-  if (!project1 || !project2 || !data) return <div>No data</div>
+  if (!project1 || !project2 || !data) return <div>No data</div>;
 
   return (
     <div>
@@ -322,7 +322,7 @@ export default function Home() {
         {showSuccessBallot && (
           <BallotSuccessModal
             onClick={() => {
-              router.push(`https://develop-op-voting.up.railway.app/ballot`)
+              router.push(`https://develop-op-voting.up.railway.app/ballot`);
             }}
           />
         )}
@@ -331,8 +331,8 @@ export default function Home() {
         {showLowRateModal && (
           <LowRateModal
             proceedWithSelection={async () => {
-              await handleVote(selectedProjectId!)
-              setShowLowRateModal(false)
+              await handleVote(selectedProjectId!);
+              setShowLowRateModal(false);
             }}
             cancelSelection={() => setShowLowRateModal(false)}
           />
@@ -392,7 +392,7 @@ export default function Home() {
             <Rating
               value={rating1 || 3}
               onChange={(val: number) => {
-                setRating1(val)
+                setRating1(val);
               }}
               disabled={isInitialVisit}
             />
@@ -413,7 +413,7 @@ export default function Home() {
             <Rating
               value={rating2 || 3}
               onChange={(val: number) => {
-                setRating2(val)
+                setRating2(val);
               }}
               disabled={isInitialVisit}
             />
@@ -428,5 +428,5 @@ export default function Home() {
         )}
       </footer>
     </div>
-  )
+  );
 }

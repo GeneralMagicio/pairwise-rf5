@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import { useCollapse } from 'react-collapsed'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
-import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon'
-import { TimeIcon } from '@/public/assets/icon-components/Time'
-import { OPIcon } from '@/public/assets/icon-components/OP'
-import { USDIcon } from '@/public/assets/icon-components/Usd'
-import { truncate } from '@/app/utils/methods'
+import React, { FC } from 'react';
+import { useCollapse } from 'react-collapsed';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
+import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
+import { TimeIcon } from '@/public/assets/icon-components/Time';
+import { OPIcon } from '@/public/assets/icon-components/OP';
+import { USDIcon } from '@/public/assets/icon-components/Usd';
+import { truncate } from '@/app/utils/methods';
 
 interface Props {
   title: string
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
@@ -66,7 +66,7 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
         <p className="my-3 text-gray-600">{description}</p>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default GrantBox
+export default GrantBox;

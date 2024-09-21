@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import { axiosInstance } from '@/app/utils/axiosInstance'
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '@/app/utils/axiosInstance';
 
 export type AgoraBallotPost = {
   projects: {
@@ -12,13 +12,13 @@ export type AgoraBallotPost = {
 export const getBallot = async (
   cid: number,
 ): Promise<AgoraBallotPost> => {
-  const { data } = await axiosInstance.get(`flow/ballot?cid=${cid}`)
-  return data
-}
+  const { data } = await axiosInstance.get(`flow/ballot?cid=${cid}`);
+  return data;
+};
 
 export const useGetBallot = (cid: number) => {
   return useQuery({
     queryKey: ['ballot', cid],
     queryFn: () => getBallot(cid),
-  })
-}
+  });
+};

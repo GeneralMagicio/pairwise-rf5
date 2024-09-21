@@ -1,11 +1,11 @@
-import React from 'react'
-import { useAuth } from '../AuthProvider'
+import React from 'react';
+import { useAuth } from '../AuthProvider';
 
 interface SignInWithWalletProps {
 }
 
 const SignInWithWallet: React.FC<SignInWithWalletProps> = () => {
-  const { checkLoginFlow } = useAuth()
+  const { checkLoginFlow } = useAuth();
   return (
     <div className="mx-auto max-w-sm rounded-lg bg-white p-6 shadow-md">
       <h2 className="mb-4 text-center text-xl font-semibold">Sign in with wallet</h2>
@@ -19,7 +19,7 @@ const SignInWithWallet: React.FC<SignInWithWalletProps> = () => {
         Sign in
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default SignInWithWallet
+export default SignInWithWallet;

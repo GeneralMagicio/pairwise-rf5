@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 
 interface UnlockBallotProps {
   onClick: () => void
@@ -31,7 +31,7 @@ const BallotSuccessModal: React.FC<UnlockBallotProps> = ({ onClick }) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BallotSuccessModal
+export default BallotSuccessModal;

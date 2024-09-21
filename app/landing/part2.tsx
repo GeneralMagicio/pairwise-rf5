@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
 export const LandingPart2 = () => {
   return (
@@ -27,5 +27,5 @@ export const LandingPart2 = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

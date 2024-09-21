@@ -1,30 +1,30 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react';
 
 export const truncate = (text: string, maxChar: number) => {
-  if (text.length < maxChar) return text
+  if (text.length < maxChar) return text;
 
-  const slice = text.slice(0, maxChar)
+  const slice = text.slice(0, maxChar);
 
-  return `${slice}...`
-}
+  return `${slice}...`;
+};
 
 export const usePrevious = <T>(value: T): T | undefined => {
-  const ref = useRef<T>()
+  const ref = useRef<T>();
   useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
-}
+    ref.current = value;
+  });
+  return ref.current;
+};
 
 export function getBiggerNumber(a: number | undefined, b: number | undefined) {
   if (a === undefined && b === undefined) {
-    return 0
+    return 0;
   }
   if (a === undefined) {
-    return b as number
+    return b as number;
   }
   if (b === undefined) {
-    return a as number
+    return a as number;
   }
-  return a > b ? a : b
+  return a > b ? a : b;
 }

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { axiosInstance } from '@/app/utils/axiosInstance'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { axiosInstance } from '@/app/utils/axiosInstance';
 
 type ProjectVoteData = {
   data: {
@@ -12,30 +12,30 @@ type ProjectVoteData = {
 }
 
 export const updateProjectVote = async ({ data }: ProjectVoteData) => {
-  return (await axiosInstance.post('flow/projects/vote', data))
-}
+  return (await axiosInstance.post('flow/projects/vote', data));
+};
 
 export const updateProjectUndo = (cid: Number) => {
-  return axiosInstance.post('flow/pairs/back', { collectionId: cid })
-}
+  return axiosInstance.post('flow/pairs/back', { collectionId: cid });
+};
 
 export const useUpdateProjectVote = ({
   categoryId,
 }: {
   categoryId: number
 }) => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: updateProjectVote,
     onSuccess: ({ data }) => {
-      console.log('OnSuccess', data)
+      console.log('OnSuccess', data);
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', categoryId],
-      })
+      });
     },
-  })
-}
+  });
+};
 
 export const useUpdateProjectUndo = ({
   categoryId,
@@ -44,7 +44,7 @@ export const useUpdateProjectUndo = ({
   categoryId: number
   onSuccess: () => void
 }) => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => updateProjectUndo(categoryId),
@@ -52,8 +52,8 @@ export const useUpdateProjectUndo = ({
       // console.log('OnSuccess', data)
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', categoryId],
-      })
-      onSuccess()
+      });
+      onSuccess();
     },
-  })
-}
+  });
+};

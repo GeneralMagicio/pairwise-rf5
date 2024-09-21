@@ -12,5 +12,5 @@ export const ArrowUpIcon = ({ color, width, height }: { color?: string, width?: 
         fill={color || '#0F111A'}
       />
     </svg>
-  )
-}
+  );
+};

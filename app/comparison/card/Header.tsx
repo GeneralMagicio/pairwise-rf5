@@ -1,6 +1,6 @@
-import React from 'react'
-import Image from 'next/image'
-import { ConnectButton } from '@/app/utils/wallet/Connect'
+import React from 'react';
+import Image from 'next/image';
+import { ConnectButton } from '@/app/utils/wallet/Connect';
 
 interface HeaderProps {
   progress: number
@@ -17,7 +17,7 @@ const OPCharacter: React.FC = () => (
     height={48}
     unoptimized
   />
-)
+);
 
 const Header: React.FC<HeaderProps> = ({
   progress,
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

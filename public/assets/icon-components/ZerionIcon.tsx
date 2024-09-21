@@ -43,5 +43,5 @@ export const ZerionIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

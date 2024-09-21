@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { InfoIcon } from '@/public/assets/icon-components/Info'
+import React, { FC } from 'react';
+import { InfoIcon } from '@/public/assets/icon-components/Info';
 
 interface Props {
   onDeclareConflict: () => void
@@ -38,7 +38,7 @@ const ConflictOfInterestModal: FC<Props> = ({ onDeclareConflict, onCancel }) => 
         Cancel
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default ConflictOfInterestModal
+export default ConflictOfInterestModal;

@@ -10,5 +10,5 @@ export const NotBhCharacter = () => {
       </defs>
     </svg>
 
-  )
-}
+  );
+};

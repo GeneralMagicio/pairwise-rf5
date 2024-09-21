@@ -1,20 +1,20 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import Switch from 'react-switch'
-import { useCollapse } from 'react-collapsed'
-import { ExternalLink } from './ExternalLink'
-import GithubBox from './GithubBox'
-import SimpleInfoBox from './SimpleInfoBox'
-import QABox from './QABox'
-import GrantBox from './GrantBox'
-import Team from './Team'
-import { ProjectMetadata } from '../utils/types'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
-import ConflictOfInterestModal from './modals/CoIModal'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import CoILoadingModal from './modals/CoILoading'
-import ProjectDescription from './ProjectDescription'
-import { StarsIcon } from '@/public/assets/icon-components/Stars'
+import React, { FC, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import Switch from 'react-switch';
+import { useCollapse } from 'react-collapsed';
+import { ExternalLink } from './ExternalLink';
+import GithubBox from './GithubBox';
+import SimpleInfoBox from './SimpleInfoBox';
+import QABox from './QABox';
+import GrantBox from './GrantBox';
+import Team from './Team';
+import { ProjectMetadata } from '../utils/types';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
+import ConflictOfInterestModal from './modals/CoIModal';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import CoILoadingModal from './modals/CoILoading';
+import ProjectDescription from './ProjectDescription';
+import { StarsIcon } from '@/public/assets/icon-components/Stars';
 
 interface CollapsibleProps {
   title: string
@@ -41,12 +41,12 @@ const Section: FC<CollapsibleProps> = ({
 }) => {
   const { getCollapseProps, getToggleProps } = useCollapse({
     isExpanded: expanded,
-  })
+  });
 
   const handleClick = () => {
-    onClick()
-    setExpanded(!expanded)
-  }
+    onClick();
+    setExpanded(!expanded);
+  };
 
   return (
     <>
@@ -74,17 +74,17 @@ const Section: FC<CollapsibleProps> = ({
         </section>
       </div>
     </>
-  )
-}
+  );
+};
 
 function smoothScrollToElement(elementId: string) {
-  const element = document.getElementById(elementId)
+  const element = document.getElementById(elementId);
 
   if (element) {
     element.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
-    })
+    });
   }
 }
 
@@ -120,83 +120,83 @@ export const ProjectCard: React.FC<Props> = ({
   key1,
   key2,
 }) => {
-  const [aiMode, setAiMode] = useState(false)
-  const [render, setRender] = useState(0)
-  const [isSticky, setIsSticky] = useState(false)
-  const titleRef = useRef<HTMLDivElement>(null)
-  const parentRef = useRef<HTMLDivElement>(null)
-  const OFFSET = 20
+  const [aiMode, setAiMode] = useState(false);
+  const [render, setRender] = useState(0);
+  const [isSticky, setIsSticky] = useState(false);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const OFFSET = 150;
 
-  const divRef = useRef(null)
+  const divRef = useRef(null);
 
   const scrollToTop = () => {
     if (divRef.current) {
       // @ts-ignore
-      divRef.current.scrollTop = 0
+      divRef.current.scrollTop = 0;
     }
-  }
+  };
 
   useEffect(() => {
-    const parentElement = parentRef.current
+    const parentElement = parentRef.current;
 
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
-        const rect = titleRef.current.getBoundingClientRect()
-        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET)
+        const rect = titleRef.current.getBoundingClientRect();
+        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET);
       }
-    }
+    };
 
     if (parentElement) {
-      parentElement.addEventListener('scroll', handleScroll)
+      parentElement.addEventListener('scroll', handleScroll);
     }
 
     return () => {
       if (parentElement) {
-        parentElement.removeEventListener('scroll', handleScroll)
+        parentElement.removeEventListener('scroll', handleScroll);
       }
-    }
-  }, [OFFSET])
+    };
+  }, [OFFSET]);
 
   const handleChange = () => {
-    setAiMode(!aiMode)
-  }
+    setAiMode(!aiMode);
+  };
 
   const handleSectionClick
     = (id: AutoScrollAction['section'], expanded: AutoScrollAction['action']) =>
       () => {
-        dispatchAction(id, expanded)
-      }
+        dispatchAction(id, expanded);
+      };
 
   const hnadleExpanded
     = (section: AutoScrollAction['section']) => (value: boolean) => {
-      setSectionExpanded({ ...sectionExpanded, [section]: value })
-    }
+      setSectionExpanded({ ...sectionExpanded, [section]: value });
+    };
 
   useEffect(() => {
-    setRender(1)
-  }, [])
+    setRender(1);
+  }, []);
 
   useEffect(() => {
-    scrollToTop()
-  }, [key2, key1])
+    scrollToTop();
+  }, [key2, key1]);
 
   useEffect(() => {
     if (render !== 0 && action && action.initiator !== name) {
-      console.log('in', name, 'with action', action)
-      console.log('section states', sectionExpanded)
-      smoothScrollToElement(`${action.section}-${name}`)
+      console.log('in', name, 'with action', action);
+      console.log('section states', sectionExpanded);
+      smoothScrollToElement(`${action.section}-${name}`);
       if (action.action !== sectionExpanded[action.section]) {
         console.log('launched in', name, {
           ...sectionExpanded,
           [action.section]: action.action,
-        })
+        });
         setSectionExpanded({
           ...sectionExpanded,
           [action.section]: action.action,
-        })
+        });
       }
     }
-  }, [action, name, sectionExpanded])
+  }, [action, name, sectionExpanded]);
 
   return (
     <div ref={divRef} className="relative">
@@ -481,5 +481,5 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

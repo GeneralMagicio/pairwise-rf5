@@ -1,6 +1,6 @@
-import Lottie from 'lottie-react'
-import React, { FC } from 'react'
-import hourglass from '../../card/modals/hourglass.json'
+import Lottie from 'lottie-react';
+import React, { FC } from 'react';
+import hourglass from '../../card/modals/hourglass.json';
 
 const BallotLoading: FC = () => {
   return (
@@ -17,7 +17,7 @@ const BallotLoading: FC = () => {
         Please wait while we update your ballot...
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default BallotLoading
+export default BallotLoading;

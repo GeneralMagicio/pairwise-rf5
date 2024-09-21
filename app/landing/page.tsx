@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
-import { PwLogo } from '@/public/assets/icon-components/PairwiseLogo'
-import { LandingPart1 } from '../landing/part1'
-import { LandingPart2 } from '../landing/part2'
-import { LandingPart3 } from '../landing/part3'
-import { ConnectButton } from '../utils/wallet/Connect'
-import { useAuth } from '../utils/wallet/AuthProvider'
+import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import { PwLogo } from '@/public/assets/icon-components/PairwiseLogo';
+import { LandingPart1 } from '../landing/part1';
+import { LandingPart2 } from '../landing/part2';
+import { LandingPart3 } from '../landing/part3';
+import { ConnectButton } from '../utils/wallet/Connect';
+import { useAuth } from '../utils/wallet/AuthProvider';
 
-const NoSSRModals = dynamic(() => import('../utils/wallet/Modals'), { ssr: false })
+const NoSSRModals = dynamic(() => import('../utils/wallet/Modals'), { ssr: false });
 
 const Landing = () => {
-  const { checkLoginFlow } = useAuth()
+  const { checkLoginFlow } = useAuth();
 
   useEffect(() => {
-    checkLoginFlow()
-  }, [checkLoginFlow])
+    checkLoginFlow();
+  }, [checkLoginFlow]);
 
   return (
     <div className="w-full bg-[#F2F3F8]">
@@ -31,7 +31,7 @@ const Landing = () => {
         <LandingPart3 />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Landing
+export default Landing;

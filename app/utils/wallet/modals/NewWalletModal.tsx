@@ -1,10 +1,10 @@
-import React from 'react'
-import { useAccount } from 'wagmi'
-import Image from 'next/image'
-import { shortenWalletAddress } from '../ConnectedButton'
+import React from 'react';
+import { useAccount } from 'wagmi';
+import Image from 'next/image';
+import { shortenWalletAddress } from '../ConnectedButton';
 
 const NewWalletModal: React.FC = () => {
-  const { address } = useAccount()
+  const { address } = useAccount();
   return (
     <div className="relative flex flex-col items-center justify-center rounded-lg bg-white p-8 text-center shadow-md">
       {/* <Image
@@ -34,7 +34,7 @@ const NewWalletModal: React.FC = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NewWalletModal
+export default NewWalletModal;

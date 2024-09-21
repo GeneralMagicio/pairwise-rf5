@@ -1,6 +1,6 @@
-import Lottie from 'lottie-react'
-import React, { FC } from 'react'
-import hourglass from './hourglass.json'
+import Lottie from 'lottie-react';
+import React, { FC } from 'react';
+import hourglass from './hourglass.json';
 
 const CoILoadingModal: FC = () => {
   return (
@@ -17,7 +17,7 @@ const CoILoadingModal: FC = () => {
         Hold on...Loading Project
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default CoILoadingModal
+export default CoILoadingModal;

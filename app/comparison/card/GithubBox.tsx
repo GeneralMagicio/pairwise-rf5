@@ -1,23 +1,23 @@
-import React, { FC } from 'react'
-import { useCollapse } from 'react-collapsed'
-import { GithubIcon } from '@/public/assets/icon-components/Github'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import { TimeIcon } from '@/public/assets/icon-components/Time'
-import { DevIcon } from '@/public/assets/icon-components/Dev'
-import { CommitIcon } from '@/public/assets/icon-components/Commit'
-import { ForkIcon } from '@/public/assets/icon-components/Fork'
-import { StarIcon } from '@/public/assets/icon-components/Star'
-import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource'
+import React, { FC } from 'react';
+import { useCollapse } from 'react-collapsed';
+import { GithubIcon } from '@/public/assets/icon-components/Github';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import { TimeIcon } from '@/public/assets/icon-components/Time';
+import { DevIcon } from '@/public/assets/icon-components/Dev';
+import { CommitIcon } from '@/public/assets/icon-components/Commit';
+import { ForkIcon } from '@/public/assets/icon-components/Fork';
+import { StarIcon } from '@/public/assets/icon-components/Star';
+import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource';
 
-import { ProjectMetadata } from '../utils/types'
+import { ProjectMetadata } from '../utils/types';
 
 interface Props {
   repo: ProjectMetadata['github'][0]
 }
 
 const GithubBox: FC<Props> = ({ repo }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 py-[12px] font-inter">
@@ -90,7 +90,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default GithubBox
+export default GithubBox;

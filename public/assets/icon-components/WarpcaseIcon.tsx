@@ -20,5 +20,5 @@ export const WarpcastIcon = () => {
         fill="#404454"
       />
     </svg>
-  )
-}
+  );
+};

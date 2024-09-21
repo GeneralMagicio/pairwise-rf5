@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import Image from 'next/image'
+import React, { FC } from 'react';
+import Image from 'next/image';
 
 interface ILowRateModalProps {
   proceedWithSelection: () => void
@@ -45,7 +45,7 @@ const LowRateModal: FC<ILowRateModalProps> = ({
         Cancel
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default LowRateModal
+export default LowRateModal;

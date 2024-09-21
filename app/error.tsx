@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 export default function Error() {
   return (
@@ -6,5 +6,5 @@ export default function Error() {
       <h1 className="text-4xl font-bold text-primary">502</h1>
       <p className="text-2xl font-bold text-dark-500">Something went wrong</p>
     </div>
-  )
+  );
 }

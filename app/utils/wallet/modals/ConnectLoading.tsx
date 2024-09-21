@@ -1,6 +1,6 @@
-import React from 'react'
-import Lottie from 'lottie-react'
-import spinner from './spinner-animation.json'
+import React from 'react';
+import Lottie from 'lottie-react';
+import spinner from './spinner-animation.json';
 
 const ConnectLoading: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const ConnectLoading: React.FC = () => {
         Please check your wallet and sign in to continue
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default ConnectLoading
+export default ConnectLoading;

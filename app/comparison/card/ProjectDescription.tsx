@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import styles from '@/app/styles/Project.module.css'
+import React, { useState } from 'react';
+import styles from '@/app/styles/Project.module.css';
 
 const ProjectDescription = ({ description }: { description: string }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded)
-  }
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <div className="mb-8 flex flex-col gap-2">
@@ -35,7 +35,7 @@ const ProjectDescription = ({ description }: { description: string }) => {
         </span>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProjectDescription
+export default ProjectDescription;
