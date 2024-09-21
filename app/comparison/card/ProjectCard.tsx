@@ -217,9 +217,9 @@ export const ProjectCard: React.FC<Props> = ({
         style={{
           maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)',
         }}
-        className={`container relative mx-auto mb-16
-      mt-4 h-[80vh] w-full rounded-xl 
-      border border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
+        className={`container relative mx-auto my-4
+      h-[80vh] w-full rounded-xl border 
+      border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
     coi || coiLoading ? `brightness-50` : ``
     }`}
       >

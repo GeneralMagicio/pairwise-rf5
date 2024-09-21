@@ -24,7 +24,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <GithubIcon />
-          <a href={repo.url} className="break-all text-gray-700 hover:underline">
+          <a href={repo.url} className="break-all text-gray-700 hover:underline" target="_blank">
             {repo.name || repo.url?.replace('https://' || 'http://', '')}
           </a>
           <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-1 text-xs text-blue-foreground">

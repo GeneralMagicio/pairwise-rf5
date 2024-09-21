@@ -11,36 +11,42 @@ interface Props {
   type: 'contract' | 'link' | 'pricing'
 }
 
-const getIcon = (type: Props['type']) => {
-  switch (type) {
-    case 'contract':
-      return <OPIcon />
-    case 'link':
-      return <WebsiteIcon height={20} width={20} />
-    case 'pricing':
-      return null
-    default:
-      return null
-  }
+const OP_EXPLORER_URL = 'https://optimistic.etherscan.io/'
+
+const ICONS_MAP: Record<Props['type'], JSX.Element | null> = {
+  contract: <OPIcon />,
+  link: <WebsiteIcon height={20} width={20} />,
+  pricing: null,
 }
 
 const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
 
+  const renderTitle = () => {
+    if (type === 'pricing') return title
+
+    const isContract = type === 'contract'
+    const href = isContract ? `${OP_EXPLORER_URL}/address/${title}` : title
+    const displayTitle = isContract ? title : title.split('https://')[1]
+
+    return (
+      <a
+        href={href}
+        target="_blank"
+        className="break-all text-gray-700 hover:underline"
+        rel="noopener noreferrer"
+      >
+        {displayTitle}
+      </a>
+    )
+  }
+
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="size-5">{getIcon(type)}</span>
-          {type === 'pricing'
-            ? (
-                title
-              )
-            : (
-                <a href={title} className="break-all text-gray-700 hover:underline">
-                  {type === 'link' ? title.split('https://')[1] : title}
-                </a>
-              )}
+          <span className="size-5">{ICONS_MAP[type]}</span>
+          {renderTitle()}
         </div>
         {description.length > 0 && (
           <button
