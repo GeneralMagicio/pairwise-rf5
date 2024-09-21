@@ -125,7 +125,7 @@ export const ProjectCard: React.FC<Props> = ({
   const [isSticky, setIsSticky] = useState(false)
   const titleRef = useRef<HTMLDivElement>(null)
   const parentRef = useRef<HTMLDivElement>(null)
-  const offset = 150
+  const OFFSET = 20
 
   const divRef = useRef(null)
 
@@ -142,7 +142,7 @@ export const ProjectCard: React.FC<Props> = ({
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect()
-        setIsSticky(rect.top <= offset && rect.top >= -offset)
+        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET)
       }
     }
 
@@ -155,7 +155,7 @@ export const ProjectCard: React.FC<Props> = ({
         parentElement.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [offset])
+  }, [OFFSET])
 
   const handleChange = () => {
     setAiMode(!aiMode)
