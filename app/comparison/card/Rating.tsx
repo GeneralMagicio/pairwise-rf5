@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import { Rating as RatingComponent, Star } from "@smastrom/react-rating";
+import { FC, useEffect, useState } from 'react';
+import { Rating as RatingComponent, Star } from '@smastrom/react-rating';
 
 interface Props {
   value: number;
@@ -17,17 +17,17 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
   function getStarsColoring(num?: number) {
     switch (num) {
       case 1:
-        return { hoverFillColor: "#FF9999", activeFillColor: "#FF1D1D" };
+        return { hoverFillColor: '#FF9999', activeFillColor: '#FF1D1D' };
       case 2:
-        return { hoverFillColor: "#FFB570", activeFillColor: "#FF8C22" };
+        return { hoverFillColor: '#FFB570', activeFillColor: '#FF8C22' };
       case 3:
-        return { hoverFillColor: "#FFE870", activeFillColor: "#ffcc00" };
+        return { hoverFillColor: '#FFE870', activeFillColor: '#ffcc00' };
       case 4:
-        return { hoverFillColor: "#B2E6B4", activeFillColor: "#46C34C" };
+        return { hoverFillColor: '#B2E6B4', activeFillColor: '#46C34C' };
       case 5:
-        return { hoverFillColor: "#479F7899", activeFillColor: "#479F78" };
+        return { hoverFillColor: '#479F7899', activeFillColor: '#479F78' };
       default:
-        return { hoverFillColor: "#D0D5DD", activeFillColor: "#D0D5DD" };
+        return { hoverFillColor: '#D0D5DD', activeFillColor: '#D0D5DD' };
     }
   }
 
@@ -66,7 +66,7 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
         itemStyles={{
           itemShapes: Star,
           activeFillColor: starsColoring,
-          inactiveFillColor: "#aaa",
+          inactiveFillColor: '#aaa',
         }}
         isDisabled={disabled}
       />
