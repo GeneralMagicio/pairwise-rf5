@@ -44,7 +44,8 @@
 				"considerQueryString": true
 			}
 		],
-		"semi": ["error", "always"]
+		"semi": ["error", "always"],
+		"quotes": ["error", "single"] 
 	},
 	"settings": {
 		"import/resolver": {

@@ -19,7 +19,7 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({ projectCount, category, onU
           className="mx-auto mb-6"
         />
         <h2 className="mb-2 text-xl font-medium">
-          {`Nice work! You're ready to unlock your ballot and distribute rewards`}
+          {'Nice work! You\'re ready to unlock your ballot and distribute rewards'}
         </h2>
         <p className="mb-6 text-gray-600">
           {`You've ranked all

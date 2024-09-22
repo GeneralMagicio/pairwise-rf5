@@ -1,16 +1,15 @@
-import { FC, useEffect, useState } from 'react';
-import { Rating as RatingComponent, Star } from '@smastrom/react-rating';
+import { FC, useEffect, useState } from "react";
+import { Rating as RatingComponent, Star } from "@smastrom/react-rating";
 
 interface Props {
-  value: number
-  disabled?: boolean
-  onChange: (value: number) => void
+  value: number;
+  disabled?: boolean;
+  onChange: (value: number) => void;
 }
 
 export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const [currentValue, setCurrentValue] = useState(value ?? 3);
-  const [seletedValue, setSelectedValue] = useState(value ?? 3);
   const [starsColoring, setStarsColoring] = useState(
     getStarsColoring(value).activeFillColor
   );
@@ -18,17 +17,17 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
   function getStarsColoring(num?: number) {
     switch (num) {
       case 1:
-        return { hoverFillColor: '#FF9999', activeFillColor: '#FF1D1D' };
+        return { hoverFillColor: "#FF9999", activeFillColor: "#FF1D1D" };
       case 2:
-        return { hoverFillColor: '#FFB570', activeFillColor: '#FF8C22' };
+        return { hoverFillColor: "#FFB570", activeFillColor: "#FF8C22" };
       case 3:
-        return { hoverFillColor: '#FFE870', activeFillColor: '#ffcc00' };
+        return { hoverFillColor: "#FFE870", activeFillColor: "#ffcc00" };
       case 4:
-        return { hoverFillColor: '#B2E6B4', activeFillColor: '#46C34C' };
+        return { hoverFillColor: "#B2E6B4", activeFillColor: "#46C34C" };
       case 5:
-        return { hoverFillColor: '#479F7899', activeFillColor: '#479F78' };
+        return { hoverFillColor: "#479F7899", activeFillColor: "#479F78" };
       default:
-        return { hoverFillColor: '#D0D5DD', activeFillColor: '#D0D5DD' };
+        return { hoverFillColor: "#D0D5DD", activeFillColor: "#D0D5DD" };
     }
   }
 
@@ -36,12 +35,16 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
     if (hoverValue) {
       setStarsColoring(getStarsColoring(hoverValue).hoverFillColor);
       setCurrentValue(hoverValue);
-    }
-    else {
+    } else {
       setStarsColoring(getStarsColoring(value).activeFillColor);
-      setCurrentValue(seletedValue);
+      setCurrentValue(value);
     }
   }, [hoverValue]);
+
+  useEffect(() => {
+    setStarsColoring(getStarsColoring(value).activeFillColor);
+    setCurrentValue(value);
+  }, [ value]);
 
   useEffect(() => {
     if (disabled) {
@@ -56,7 +59,6 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
         style={{ maxWidth: 220, gap: 10 }}
         value={currentValue}
         onChange={(value: number) => {
-          setSelectedValue(value);
           onChange(value);
         }}
         onHoverChange={setHoverValue}
@@ -64,7 +66,7 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
         itemStyles={{
           itemShapes: Star,
           activeFillColor: starsColoring,
-          inactiveFillColor: '#aaa',
+          inactiveFillColor: "#aaa",
         }}
         isDisabled={disabled}
       />

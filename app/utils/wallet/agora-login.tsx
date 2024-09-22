@@ -7,7 +7,7 @@ import { axiosInstance } from '../axiosInstance';
 
 // TODO: this should probably be an environment variable
 // const BASE_URL = `https://vote.optimism.io`
-const BASE_URL = `https://pairwise-cors.liara.run/https://vote.optimism.io`;
+const BASE_URL = 'https://pairwise-cors.liara.run/https://vote.optimism.io';
 const API_PREFIX = '/api/v1';
 const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt';
 export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum';
