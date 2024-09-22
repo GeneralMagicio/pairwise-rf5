@@ -11,22 +11,23 @@ export const mockProject1: IProject = {
   parentId: 1,
   image:
     'https://storage.googleapis.com/op-atlas/973ba7db-8101-405b-98a0-1f7d93a0f344.png',
+  // @ts-ignore
   metadata: {
     id: '0x716ad2474c6acff63481ec2283e01a2c4bef79250a1e85119324edae7b8d53ce',
     applicationId:
-      '0x716ad2474c6acff63481ec2283e01a2c4bef79250a1e85119324edae7b8d53ce',
+        '0x716ad2474c6acff63481ec2283e01a2c4bef79250a1e85119324edae7b8d53ce',
     projectId:
-      '0x8ec88058175ef4c1c9b1f26910c4d4f2cfa733d6fcd1dbd9385476a313d9e12d',
+        '0x8ec88058175ef4c1c9b1f26910c4d4f2cfa733d6fcd1dbd9385476a313d9e12d',
     category: 'Utility',
     applicationCategory: 'ETHEREUM_CORE_CONTRIBUTIONS',
     organization: null,
     name: 'Lodestar',
     description:
-      'Lodestar is a Typescript ecosystem for Ethereum consensus, developed by ChainSafe Systems. Our flagship products are our production-capable beacon chain and validator client. In addition, we maintain public repositories of useful tools for public use. Some of these libraries include JS implementations for BLS, SSZ, Discv5, Gossipsub, Noise and Yamux. Our work contributes to the backbone infrastructure required to keep the Ethereum blockchain progressing within the rules as defined by the specification.\n\nLodestar’s niche is in its implementation language, TypeScript. Our software and tooling is uniquely situated as the go-to for researchers and developers for rapid prototyping such as our Prover, a verified web3 provider using light clients to increase decentralization and security of the JSON-RPC. Millions of developers around the world are familiar with Typescript, and Lodestar’s high-quality codebases are excellent introductions to the Ethereum protocol, with the goal of increasing client diversity and attracting new talent from one of the largest groups of developers in the world.',
+        'Lodestar is a Typescript ecosystem for Ethereum consensus, developed by ChainSafe Systems. Our flagship products are our production-capable beacon chain and validator client. In addition, we maintain public repositories of useful tools for public use. Some of these libraries include JS implementations for BLS, SSZ, Discv5, Gossipsub, Noise and Yamux. Our work contributes to the backbone infrastructure required to keep the Ethereum blockchain progressing within the rules as defined by the specification.\n\nLodestar’s niche is in its implementation language, TypeScript. Our software and tooling is uniquely situated as the go-to for researchers and developers for rapid prototyping such as our Prover, a verified web3 provider using light clients to increase decentralization and security of the JSON-RPC. Millions of developers around the world are familiar with Typescript, and Lodestar’s high-quality codebases are excellent introductions to the Ethereum protocol, with the goal of increasing client diversity and attracting new talent from one of the largest groups of developers in the world.',
     profileAvatarUrl:
-      'https://storage.googleapis.com/op-atlas/973ba7db-8101-405b-98a0-1f7d93a0f344.png',
+        'https://storage.googleapis.com/op-atlas/973ba7db-8101-405b-98a0-1f7d93a0f344.png',
     projectCoverImageUrl:
-      'https://storage.googleapis.com/op-atlas/3bb2834a-dcfd-4a71-ae2f-1e4fbef4209c.png',
+        'https://storage.googleapis.com/op-atlas/3bb2834a-dcfd-4a71-ae2f-1e4fbef4209c.png',
     socialLinks: {
       website: [
         'https://lodestar.chainsafe.io',
@@ -36,7 +37,7 @@ export const mockProject1: IProject = {
       ],
       farcaster: ['https://warpcast.com/lodestar'],
       twitter: 'https://x.com/lodestar_eth',
-      mirror: null,
+      mirror: '',
     },
     team: [
       {
@@ -75,19 +76,19 @@ export const mockProject1: IProject = {
         url: 'https://explorer.rated.network/o/ChainSafe%20-%20Lido?network=mainnet&timeWindow=30d&idType=poolShare',
         name: 'ChainSafe Validator Metrics',
         description:
-          'This page shows the performance of Lodestar as a validator client, run by ChainSafe infrastructure to support client diversity on mainnet validators via Lido.',
+            'This page shows the performance of Lodestar as a validator client, run by ChainSafe infrastructure to support client diversity on mainnet validators via Lido.',
       },
       {
         url: 'https://probelab.io/ethereum/discv5/2024-34/',
         name: 'Probelab Discv5 Distribution',
         description:
-          'This page represents the distribution of various user agents within the Ethereum discv5 DHT.',
+            'This page represents the distribution of various user agents within the Ethereum discv5 DHT.',
       },
       {
         url: 'https://npm-stat.com/charts.html?package=%40chainsafe%2Flodestar&from=2021-06-26&to=2024-08-26',
         name: 'NPM Download Stats',
         description:
-          'This mono-repository contains a suite of Ethereum Consensus packages.',
+            'This mono-repository contains a suite of Ethereum Consensus packages.',
       },
     ],
     contracts: [],
@@ -95,23 +96,24 @@ export const mockProject1: IProject = {
       ventureFunding: [],
       grants: [
         {
-          grant: null,
+          grant: 'retroFunding',
           link: null,
           amount: '248448.21',
           date: '',
           details: null,
         },
         {
-          grant: null,
+          grant: 'retroFunding',
           link: null,
           amount: '79662.51',
           date: '',
           details: null,
         },
       ],
-      revenue: [],
-    },
-    pricingModel: 'free',
+      revenue: null,
+      investment: [],
+    } as any,
+    pricingModel: { type: 'free', details: '' },
     impactStatement: {
       category: 'ETHEREUM_CORE_CONTRIBUTIONS',
       subcategory: [
@@ -123,23 +125,20 @@ export const mockProject1: IProject = {
       statement: [
         {
           answer:
-            'Lodestar provides ongoing research, development and implementation of core infrastructure relied upon by OP Stack for consensus on Layer 1. Most notably, EIP-4844 (Shard Blob Transactions) has allowed for scaling Ethereum to allow L2s such as OP to utilize blob transactions instead of calldata for efficiencies in cost for utilizing Ethereum settlement. By contributing to the Typescript implementation, testing infrastructure and maintaining other libraries required for its success (such as nodeJS bindings for c-kzg), we were able to deliver this feature for the benefit of OP. In addition, EIPs such as EIP-4788 allows for embedding L1 beacon block roots into Layer 2 to reduce trust assumptions relating to Ethereum\'s consensus state. ',
+              'Lodestar provides ongoing research, development and implementation of core infrastructure relied upon by OP Stack for consensus on Layer 1. Most notably, EIP-4844 (Shard Blob Transactions) has allowed for scaling Ethereum to allow L2s such as OP to utilize blob transactions instead of calldata for efficiencies in cost for utilizing Ethereum settlement. By contributing to the Typescript implementation, testing infrastructure and maintaining other libraries required for its success (such as nodeJS bindings for c-kzg), we were able to deliver this feature for the benefit of OP. In addition, EIPs such as EIP-4788 allows for embedding L1 beacon block roots into Layer 2 to reduce trust assumptions relating to Ethereum\'s consensus state. ',
           question:
-            'How does your project support, or is a dependency of, the OP Stack?',
+              'How does your project support, or is a dependency of, the OP Stack?',
         },
         {
           answer:
-            'Without the impact of Lodestar and its efforts to Ethereum protocol R&D, the specification would lack input from engineers familiar with the consensus specifications and how it impacts protocol implementation on a Typescript-based client. We regularly contribute to research, spec design, devnets, testnets and provide continuous infrastructure to support a increasingly larger network which requires more than one entity to provide stability and reliability, especially for networks where nothing is actually at stake (e.g. public testnets). ',
+              'Without the impact of Lodestar and its efforts to Ethereum protocol R&D, the specification would lack input from engineers familiar with the consensus specifications and how it impacts protocol implementation on a Typescript-based client. We regularly contribute to research, spec design, devnets, testnets and provide continuous infrastructure to support a increasingly larger network which requires more than one entity to provide stability and reliability, especially for networks where nothing is actually at stake (e.g. public testnets). ',
           question:
-            'How would it impact the OP Stack if your project ceased to exist?',
+              'How would it impact the OP Stack if your project ceased to exist?',
         },
       ],
     },
-    testimonials: [
-      {
-        text: 'Lodestar has been a key player in the Ethereum ecosystem, providing a high-quality Typescript implementation for the Ethereum consensus layer. Our team has been able to rapidly prototype and develop new features for the Ethereum protocol, and we are proud to be a part of the OP Stack.',
-      },
-    ],
+    testimonials: 'https://www.metricsgarden.xyz/projects/Lodestar',
+
   },
   createdAt: '2024-09-15T09:52:43.489Z',
   type: 'project',
@@ -157,6 +156,7 @@ export const mockProject2: IProject = {
   parentId: 1,
   image:
     'https://storage.googleapis.com/op-atlas/d7cf4059-4f9c-48aa-a37a-df2f8c81933c.png',
+  // @ts-ignore
   metadata: {
     id: '0x43a266d84aa8ce67af3e6afc1bed4021fd7a06693e9eee94e1ef4767b429cc0d',
     applicationId:
@@ -171,7 +171,7 @@ export const mockProject2: IProject = {
         'Ethereum Foundation team dedicated at developing Formal Verification Tools for Ethereum Smart Contracts',
       organizationAvatarUrl:
         'https://storage.googleapis.com/op-atlas/5b371001-feaf-4002-8671-c4314150460c.png',
-      organizationCoverImageUrl: null,
+      organizationCoverImageUrl: '',
       socialLinks: {
         website: ['https://fv.ethereum.org'],
         farcaster: [],
@@ -190,8 +190,8 @@ export const mockProject2: IProject = {
     socialLinks: {
       website: ['https://hevm.dev/', 'https://github.com/ethereum/hevm/'],
       farcaster: [],
-      twitter: null,
-      mirror: null,
+      twitter: '',
+      mirror: '',
     },
     team: [
       {
@@ -199,11 +199,7 @@ export const mockProject2: IProject = {
         object: 'user',
         pfp_url:
           'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/3c06e9f4-a279-46c8-95ca-8f442b82a800/rectcrop3',
-        profile: {
-          bio: {
-            text: '',
-          },
-        },
+        profile: { bio: { text: '' } },
         username: 'zoepar',
         power_badge: false,
         display_name: 'Zoe Par',
@@ -212,10 +208,7 @@ export const mockProject2: IProject = {
         follower_count: 0,
         custody_address: '0xa5ccabf951e698fdd5fb8351f209b67dfe800d57',
         following_count: 0,
-        verified_addresses: {
-          eth_addresses: [],
-          sol_addresses: [],
-        },
+        verified_addresses: { eth_addresses: [], sol_addresses: [] },
       },
       {
         fid: 844134,
@@ -223,9 +216,7 @@ export const mockProject2: IProject = {
         pfp_url:
           'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/2ecdf9e0-8529-4ed6-716f-ecb9b6087600/rectcrop3',
         profile: {
-          bio: {
-            text: 'Symbolic Execution, SAT solving, Model Counting',
-          },
+          bio: { text: 'Symbolic Execution, SAT solving, Model Counting' },
         },
         username: 'msoos',
         power_badge: false,
@@ -251,11 +242,7 @@ export const mockProject2: IProject = {
         object: 'user',
         pfp_url:
           'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/7687568d-7499-457f-3d33-4457de55a800/rectcrop3',
-        profile: {
-          bio: {
-            text: '',
-          },
-        },
+        profile: { bio: { text: '' } },
         username: 'blishko',
         power_badge: false,
         display_name: 'blishko',
@@ -264,21 +251,14 @@ export const mockProject2: IProject = {
         follower_count: 0,
         custody_address: '0x85dc38e7ed932370fad4d865384401f3720e6099',
         following_count: 0,
-        verified_addresses: {
-          eth_addresses: [],
-          sol_addresses: [],
-        },
+        verified_addresses: { eth_addresses: [], sol_addresses: [] },
       },
       {
         fid: 848682,
         object: 'user',
         pfp_url:
           'https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/d1157019-9a42-4db6-5c83-4082c1343e00/rectcrop3',
-        profile: {
-          bio: {
-            text: '',
-          },
-        },
+        profile: { bio: { text: '' } },
         username: 'dxo-',
         power_badge: false,
         display_name: 'dxo',
@@ -287,10 +267,7 @@ export const mockProject2: IProject = {
         follower_count: 0,
         custody_address: '0xa5543ddbb26700244b1b9b5f8721f204ca199abe',
         following_count: 0,
-        verified_addresses: {
-          eth_addresses: [],
-          sol_addresses: [],
-        },
+        verified_addresses: { eth_addresses: [], sol_addresses: [] },
       },
     ],
     github: [
@@ -298,6 +275,20 @@ export const mockProject2: IProject = {
         url: 'https://github.com/ethereum/hevm',
         name: 'hevm',
         description: 'hevm source code',
+        metrics: {
+          trust_rank_for_repo_in_category: '19.0',
+          num_contributors: '35.0',
+          num_trusted_contributors: '2.0',
+          num_contributors_last_6_months: '19.0',
+          num_stars: '227',
+          num_trusted_stars: '13.0',
+          trust_weighted_stars: '0.0107888958114171',
+          num_forks: '46',
+          num_trusted_forks: '2.0',
+          trust_weighted_forks: '0.0011979582433935',
+          age_of_project_years: '2.0',
+          license: 'AGPL-3.0',
+        },
       },
     ],
     packages: [],
@@ -312,9 +303,10 @@ export const mockProject2: IProject = {
     grantsAndFunding: {
       ventureFunding: [],
       grants: [],
-      revenue: [],
-    },
-    pricingModel: 'free',
+      revenue: null,
+      investment: [],
+    } as any,
+    pricingModel: { type: 'free', details: '' },
     impactStatement: {
       category: 'ETHEREUM_CORE_CONTRIBUTIONS',
       subcategory: ['Ethereum client implementations'],
@@ -333,11 +325,7 @@ export const mockProject2: IProject = {
         },
       ],
     },
-    testimonials: [
-      {
-        text: 'hevm has been a key player in the Ethereum ecosystem, providing a high-quality symbolic execution engine for the EVM. Our team has been able to rapidly prototype and develop new features for the Ethereum protocol, and we are proud to be a part of the OP Stack.',
-      },
-    ],
+    testimonials: 'https://www.metricsgarden.xyz/projects/hevm',
   },
   createdAt: '2024-09-15T09:52:43.489Z',
   type: 'project',

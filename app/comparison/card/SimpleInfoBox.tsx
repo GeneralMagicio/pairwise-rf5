@@ -48,7 +48,7 @@ const SimpleInfoBox: FC<Props> = ({
   };
 
   return (
-    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && <span className="size-5">{ICONS_MAP[type]}</span>}

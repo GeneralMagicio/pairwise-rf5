@@ -29,7 +29,7 @@ export const ExternalLink: FC<Props> = ({ address, type }) => {
     <div className="flex items-center gap-1">
       {getIcon(type)}
       <a target="_blank" rel="noopener noreferrer" href={address} className="break-all">
-        {type === 'website' ? address : address.split('https://')[1]}
+        {type === 'website' ? address : address.includes('https://') ? address.split('https://')[1] : address}
       </a>
     </div>
   );
