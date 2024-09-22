@@ -327,7 +327,7 @@ export const ProjectCard: React.FC<Props> = ({
             {project.team?.length && (
               <div className="mb-6 w-full">
                 <Team
-                  team={(project.team || []).filter((el) => "pfp_url" in el).map(item => ({
+                  team={(project.team || []).filter(el => 'pfp_url' in el).map(item => ({
                     profileImg: item.pfp_url,
                     urlLink: `https://warpcast.com/${item.username}`,
                   }))}
@@ -356,7 +356,7 @@ export const ProjectCard: React.FC<Props> = ({
                 {project.contracts?.map(contract => (
                   <SimpleInfoBox
                     key={contract.address}
-                    description={''}
+                    description=""
                     title={contract.address}
                     type="contract"
                   />
@@ -374,11 +374,11 @@ export const ProjectCard: React.FC<Props> = ({
                 )}
                 title="Testimonials"
               >
-                    <div
-                      className="rounded border bg-gray-50 p-4"
-                    >
-                      <p className="italic">{project.testimonials}</p>
-                    </div>
+                <div
+                  className="rounded border bg-gray-50 p-4"
+                >
+                  <p className="italic">{project.testimonials}</p>
+                </div>
               </Section>
             )}
             {project.impactStatement && (
@@ -441,11 +441,13 @@ export const ProjectCard: React.FC<Props> = ({
                 {/* <div className="rounded border bg-gray-50 p-4">
                   <p className="font-medium">{project.pricingModel}</p>
                 </div> */}
-                {project.pricingModel && typeof project.pricingModel === "object" && <SimpleInfoBox
-                  title={project.pricingModel.type || ""}
-                  description={project.pricingModel.details || ""}
-                  type="pricing"
-                />}
+                {project.pricingModel && typeof project.pricingModel === 'object' && (
+                  <SimpleInfoBox
+                    title={project.pricingModel.type || ''}
+                    description={project.pricingModel.details || ''}
+                    type="pricing"
+                  />
+                )}
                 {/* <h3 className="font-semibold">Freemium</h3>
             <p>{project.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
@@ -480,14 +482,14 @@ export const ProjectCard: React.FC<Props> = ({
                     title={grant.grant || ''}
                   />
                 ))} */}
-                {project.grantsAndFunding.ventureFunding?.map((funding) => (
+                {project.grantsAndFunding.ventureFunding?.map(funding => (
                   <GrantBox
                     key={funding.details}
                     description={funding.details}
                     link={null}
                     amount={funding.amount}
                     date={null}
-                    title={'Funding'}
+                    title="Funding"
                   />
                 ))}
               </div>

@@ -12,9 +12,9 @@ import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource'
 
 import { ProjectMetadata } from '../utils/types'
 
-type ArrayElement<ArrayType extends readonly unknown[]> = 
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-  
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never
+
 interface Props {
   repo: ArrayElement<Exclude<ProjectMetadata['github'], null>>
 }
@@ -53,44 +53,46 @@ const GithubBox: FC<Props> = ({ repo }) => {
       </div>
       <section {...getCollapseProps()}>
         <p className="mb-4 text-gray-600">{repo.description}</p>
-        {"metrics" in repo && repo.metrics && <div className="mb-4 grid grid-cols-3 gap-2 font-inter text-sm font-normal leading-5">
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <TimeIcon />
-            <span className="text-sm">{`${Number(repo.metrics.age_of_project_years).toFixed(2) || 0} years old`}</span>
+        {'metrics' in repo && repo.metrics && (
+          <div className="mb-4 grid grid-cols-3 gap-2 font-inter text-sm font-normal leading-5">
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <TimeIcon />
+              <span className="text-sm">{`${Number(repo.metrics.age_of_project_years).toFixed(2) || 0} years old`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <DevIcon />
+              <span className="text-sm">{`${Number(repo.metrics.num_contributors).toFixed(0) || 0} full time devs`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <DevIcon />
+              <span className="text-sm">{`${Number(repo.metrics.num_contributors_last_6_months).toFixed(0) || 0} contributers last 6 months`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <CommitIcon />
+              <span className="text-sm"> 5 commits last 1mo</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <ForkIcon />
+              <span className="text-sm">{`${repo.metrics.num_forks || 0} forks`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <ForkIcon />
+              <span className="text-sm">{`${repo.metrics.num_trusted_forks || 0} forks from top devs`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <StarIcon />
+              <span className="text-sm">{`${repo.metrics.num_stars || 0} stars`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <StarIcon />
+              <span className="text-sm">{`${repo.metrics.num_trusted_stars || 0} stars from top devs`}</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
+              <OpenSourceIcon />
+              <span className="text-sm">Open source</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <DevIcon />
-            <span className="text-sm">{`${Number(repo.metrics.num_contributors).toFixed(0) || 0} full time devs`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <DevIcon />
-            <span className="text-sm">{`${Number(repo.metrics.num_contributors_last_6_months).toFixed(0) || 0} contributers last 6 months`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <CommitIcon />
-            <span className="text-sm"> 5 commits last 1mo</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <ForkIcon />
-            <span className="text-sm">{`${repo.metrics.num_forks || 0} forks`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <ForkIcon />
-            <span className="text-sm">{`${repo.metrics.num_trusted_forks || 0} forks from top devs`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <StarIcon />
-            <span className="text-sm">{`${repo.metrics.num_stars || 0} stars`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <StarIcon />
-            <span className="text-sm">{`${repo.metrics.num_trusted_stars || 0} stars from top devs`}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
-            <OpenSourceIcon />
-            <span className="text-sm">Open source</span>
-          </div>
-        </div>}
+        )}
       </section>
     </div>
   )
