@@ -8,7 +8,7 @@ interface Props {
 
 const ConflictOfInterestModal: FC<Props> = ({ onDeclareConflict, onCancel }) => {
   return (
-    <div className="mx-auto max-w-sm rounded-lg bg-white p-6 shadow-lg">
+    <div className="mx-auto rounded-lg bg-white p-6 shadow-lg">
       <div className="mb-4 flex justify-center">
         <div className="rounded-full p-2">
           <InfoIcon />

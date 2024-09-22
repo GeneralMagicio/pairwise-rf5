@@ -6,9 +6,10 @@ import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 
 interface Props {
-  title: string
-  description: string
-  type: 'contract' | 'link' | 'pricing'
+  title: string;
+  description: string;
+  type: 'contract' | 'link' | 'pricing';
+  showIcon?: boolean;
 }
 
 const OP_EXPLORER_URL = 'https://optimistic.etherscan.io/';
@@ -19,7 +20,12 @@ const ICONS_MAP: Record<Props['type'], React.ReactNode> = {
   pricing: null,
 };
 
-const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
+const SimpleInfoBox: FC<Props> = ({
+  description,
+  title,
+  type,
+  showIcon = true,
+}) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   const renderTitle = () => {
@@ -45,7 +51,7 @@ const SimpleInfoBox: FC<Props> = ({ description, title, type }) => {
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="size-5">{ICONS_MAP[type]}</span>
+          {showIcon && <span className="size-5">{ICONS_MAP[type]}</span>}
           {renderTitle()}
         </div>
         {description.length > 0 && (

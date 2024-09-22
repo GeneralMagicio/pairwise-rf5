@@ -375,7 +375,7 @@ export const ProjectCard: React.FC<Props> = ({
                 ))}
               </div>
             </Section>
-            {project.testimonials?.length && (
+            {project.testimonials?.length > 0 && (
               <Section
                 id={`testimonials-${name}`}
                 setExpanded={hnadleExpanded(ProjectSection.TESTIMONIALS)}
@@ -387,14 +387,30 @@ export const ProjectCard: React.FC<Props> = ({
                 title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
               >
                 <div className="space-y-4">
-                  {project.testimonials.map((testimonial, index) => (
-                    <div
-                      key={`testimonial_${index}`}
-                      className="rounded border bg-gray-50 p-4"
-                    >
-                      <p className="italic">{testimonial.text}</p>
+                  {Array.isArray(project.testimonials) ? (
+                    project.testimonials.map((testimonial, index) => (
+                      <div
+                        key={`testimonial_${index}`}
+                        className="rounded border bg-gray-50 p-4"
+                      >
+                        <SimpleInfoBox
+                          title={testimonial.text}
+                          description=""
+                          type="link"
+                          showIcon={false}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded border bg-gray-50 p-4">
+                      <SimpleInfoBox
+                        title={project.testimonials}
+                        description=""
+                        type="link"
+                        showIcon={false}
+                      />
                     </div>
-                  ))}
+                  )}
                 </div>
               </Section>
             )}
@@ -453,18 +469,16 @@ export const ProjectCard: React.FC<Props> = ({
               title={ProjectSectionTitles[ProjectSection.PRICING]}
             >
               <div className="space-y-2">
-                <div className="rounded border bg-gray-50 p-4">
-                  <p className="font-medium">{project.pricingModel}</p>
-                </div>
                 {/* <SimpleInfoBox
             title="Pay-to-use"
             description={project.pricingModel.payToUse}
             type="pricing"
           /> */}
-                {/* <h3 className="font-semibold">Freemium</h3>
-            <p>{project.pricingModel.freemium}</p>
-            <h3 className="font-semibold mt-4">Pay-to-use</h3>
-            <p>{project.pricingModel.payToUse}</p> */}
+                <div className="rounded border bg-gray-50 p-4">
+                  <p className="font-medium capitalize">
+                    {project.pricingModel.type}
+                  </p>
+                </div>
               </div>
             </Section>
             <Section

@@ -11,14 +11,14 @@ const LowRateModal: FC<ILowRateModalProps> = ({
   cancelSelection,
 }) => {
   return (
-    <div className="mx-auto max-w-sm rounded-lg bg-white bg-rating-illustration bg-no-repeat p-6 shadow-lg">
+    <div className="mx-auto rounded-lg bg-white bg-rating-illustration bg-no-repeat p-6 shadow-lg">
       <div className="mb-4 flex justify-center">
         <div className="rounded-full p-2">
           <Image
             src="/assets/images/rating-illustration.svg"
             alt="Rating Illustration"
-            width={1230}
-            height={50}
+            width={304}
+            height={60}
           />
         </div>
       </div>
