@@ -304,10 +304,10 @@ export const ProjectCard: React.FC<Props> = ({
             <ProjectDescription description={project.description} />
             {project.socialLinks && (
               <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
-                {project.socialLinks.website.map(item => (
+                {project.socialLinks.website?.map(item => (
                   <ExternalLink key={item} address={item} type="website" />
                 ))}
-                {project.socialLinks.farcaster.map(item => (
+                {project.socialLinks.farcaster?.map(item => (
                   <ExternalLink key={item} address={item} type="warpcast" />
                 ))}
                 {project.socialLinks.twitter && (
@@ -327,7 +327,7 @@ export const ProjectCard: React.FC<Props> = ({
             {project.team?.length && (
               <div className="mb-6 w-full">
                 <Team
-                  team={(project.team || []).map(item => ({
+                  team={(project.team || []).filter((el) => "pfp_url" in el).map(item => ({
                     profileImg: item.pfp_url,
                     urlLink: `https://warpcast.com/${item.username}`,
                   }))}
@@ -342,10 +342,10 @@ export const ProjectCard: React.FC<Props> = ({
               title="Repos, links, and contracts"
             >
               <div className="space-y-4">
-                {project.github.map(repo => (
+                {project.github?.map(repo => (
                   <GithubBox key={repo.url} repo={repo} />
                 ))}
-                {project.links.map(contract => (
+                {project.links?.map(contract => (
                   <SimpleInfoBox
                     key={contract.url}
                     description={contract.description}
@@ -353,10 +353,10 @@ export const ProjectCard: React.FC<Props> = ({
                     type="link"
                   />
                 ))}
-                {project.contracts.map(contract => (
+                {project.contracts?.map(contract => (
                   <SimpleInfoBox
                     key={contract.address}
-                    description={contract.description || ''}
+                    description={''}
                     title={contract.address}
                     type="contract"
                   />
@@ -374,16 +374,11 @@ export const ProjectCard: React.FC<Props> = ({
                 )}
                 title="Testimonials"
               >
-                <div className="space-y-4">
-                  {project.testimonials.map((testimonial, index) => (
                     <div
-                      key={`testimonial_${index}`}
                       className="rounded border bg-gray-50 p-4"
                     >
-                      <p className="italic">{testimonial.text}</p>
+                      <p className="italic">{project.testimonials}</p>
                     </div>
-                  ))}
-                </div>
               </Section>
             )}
             {project.impactStatement && (
@@ -416,7 +411,7 @@ export const ProjectCard: React.FC<Props> = ({
                     </p>
                   </div>
                   <div className="space-y-2">
-                    {project.impactStatement.statement.map(
+                    {project.impactStatement.statement?.map(
                       ({ question, answer }) => (
                         <QABox
                           key={question}
@@ -443,14 +438,14 @@ export const ProjectCard: React.FC<Props> = ({
               title="Pricing model"
             >
               <div className="space-y-2">
-                <div className="rounded border bg-gray-50 p-4">
+                {/* <div className="rounded border bg-gray-50 p-4">
                   <p className="font-medium">{project.pricingModel}</p>
-                </div>
-                {/* <SimpleInfoBox
-            title="Pay-to-use"
-            description={project.pricingModel.payToUse}
-            type="pricing"
-          /> */}
+                </div> */}
+                {project.pricingModel && typeof project.pricingModel === "object" && <SimpleInfoBox
+                  title={project.pricingModel.type || ""}
+                  description={project.pricingModel.details || ""}
+                  type="pricing"
+                />}
                 {/* <h3 className="font-semibold">Freemium</h3>
             <p>{project.pricingModel.freemium}</p>
             <h3 className="font-semibold mt-4">Pay-to-use</h3>
@@ -465,7 +460,7 @@ export const ProjectCard: React.FC<Props> = ({
               title="Grants and investment"
             >
               <div className="space-y-2">
-                {project.grantsAndFunding.grants.map((grant, index) => (
+                {project.grantsAndFunding.grants?.map((grant, index) => (
                   <GrantBox
                     key={`grant_${index}`}
                     description={grant.details}
@@ -473,6 +468,26 @@ export const ProjectCard: React.FC<Props> = ({
                     amount={grant.amount}
                     date={grant.date}
                     title={grant.grant || ''}
+                  />
+                ))}
+                {/* {project.grantsAndFunding.revenue?.map((grant, index) => (
+                  <GrantBox
+                    key={`grant_${index}`}
+                    description={grant.details}
+                    link={grant.link}
+                    amount={grant.amount}
+                    date={grant.date}
+                    title={grant.grant || ''}
+                  />
+                ))} */}
+                {project.grantsAndFunding.ventureFunding?.map((funding) => (
+                  <GrantBox
+                    key={funding.details}
+                    description={funding.details}
+                    link={null}
+                    amount={funding.amount}
+                    date={null}
+                    title={'Funding'}
                   />
                 ))}
               </div>
