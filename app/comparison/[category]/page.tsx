@@ -37,6 +37,8 @@ import { mockProject1, mockProject2 } from '../card/mockData';
 import IntroView from './IntroView';
 import Spinner from '../../components/Spinner';
 import LowRateModal from '../card/modals/LowRateModal';
+import PostRatingModal from '../card/modals/PostRatingModal';
+import GoodRatingModal from '../card/modals/GoodRatingModal';
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
@@ -69,6 +71,14 @@ export default function Home() {
   const [ballotLoading, setBallotLoading] = useState(false);
   const [ballotError, setBallotError] = useState(false);
   const [showLowRateModal, setShowLowRateModal] = useState(false);
+  const [showPostRatingModal, setShowPostRatingModal] = useState({
+    show: false,
+    disabeled: false,
+  });
+  const [showGoodRatingModal, setShowGoodRatingModal] = useState({
+    show: false,
+    disabeled: false,
+  });
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null
   );
@@ -129,6 +139,8 @@ export default function Home() {
     console.log(data);
     setRating1(data.pairs[0][0].rating || 3);
     setRating2(data.pairs[0][1].rating || 3);
+    setShowGoodRatingModal({ show: false, disabeled: false });
+    setShowPostRatingModal({ show: false, disabeled: false });
   }, [data]);
 
   useEffect(() => {
@@ -144,6 +156,25 @@ export default function Home() {
     setProject1(data.pairs[0][0]);
     setProject2(data.pairs[0][1]);
   }, [data, temp]);
+
+  useEffect(() => {
+    const initialRating1 = data?.pairs[0][0].rating || 3;
+    const initialRating2 = data?.pairs[0][1].rating || 3;
+
+    // observe if user rated both projects
+    if (rating1 !== initialRating1 && rating2 !== initialRating2) {
+      console.log(rating1, initialRating1, rating2, initialRating2);
+      setShowPostRatingModal({ ...showPostRatingModal, show: true });
+    }
+
+    // observe if first rated project is rated good >= 4
+    if (
+      (rating1 >= 4 && rating2 === initialRating2) ||
+      (rating2 >= 4 && rating1 === initialRating1)
+    ) {
+      setShowGoodRatingModal({ ...showGoodRatingModal, show: true });
+    }
+  }, [rating1, rating2]);
 
   useEffect(() => {
     const checkFirstTimeVisit = () => {
@@ -301,7 +332,9 @@ export default function Home() {
           showSuccessBallot ||
           ballotLoading ||
           ballotError ||
-          showLowRateModal
+          showLowRateModal ||
+          (showPostRatingModal.show && !showPostRatingModal.disabeled) ||
+          (showGoodRatingModal.show && !showGoodRatingModal.disabeled)
         }
         onClose={() => {}}
       >
@@ -330,6 +363,20 @@ export default function Home() {
               setShowLowRateModal(false);
             }}
             cancelSelection={() => setShowLowRateModal(false)}
+          />
+        )}
+        {showPostRatingModal.show && !showPostRatingModal.disabeled && (
+          <PostRatingModal
+            confirm={() =>
+              setShowPostRatingModal({ show: false, disabeled: true })
+            }
+          />
+        )}
+        {showGoodRatingModal.show && !showGoodRatingModal.disabeled && (
+          <GoodRatingModal
+            confirm={() =>
+              setShowGoodRatingModal({ show: false, disabeled: true })
+            }
           />
         )}
       </Modal>
@@ -385,7 +432,7 @@ export default function Home() {
         {!coi1 && !coiLoading1 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
-              value={rating1 || 3}
+              value={rating1}
               onChange={setRating1}
               disabled={isInitialVisit}
             />
@@ -405,7 +452,7 @@ export default function Home() {
         {!coi2 && !coiLoading2 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
-              value={rating2 || 3}
+              value={rating2}
               onChange={setRating2}
               disabled={isInitialVisit}
             />
