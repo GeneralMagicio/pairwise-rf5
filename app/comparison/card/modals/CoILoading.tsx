@@ -4,7 +4,7 @@ import hourglass from './hourglass.json';
 
 const CoILoadingModal: FC = () => {
   return (
-    <div className="mx-auto flex w-80 flex-col items-center justify-center rounded-lg bg-white p-6 shadow-lg">
+    <div className="mx-auto flex flex-col items-center justify-center rounded-lg bg-white bg-loading-modal bg-no-repeat p-6 shadow-lg">
       <div className="size-32">
         <Lottie
           animationData={hourglass}
@@ -13,7 +13,7 @@ const CoILoadingModal: FC = () => {
         />
       </div>
 
-      <p className="mt-6 text-center text-gray-600">
+      <p className="mt-6 text-center text-gray-400">
         Hold on...Loading Project
       </p>
     </div>
