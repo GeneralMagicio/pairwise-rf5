@@ -22,5 +22,5 @@ export const StarsIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

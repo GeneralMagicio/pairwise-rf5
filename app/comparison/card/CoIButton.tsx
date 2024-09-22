@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { WarningIcon } from '@/public/assets/icon-components/Warning'
+import { FC } from 'react';
+import { WarningIcon } from '@/public/assets/icon-components/Warning';
 
 interface Props {
   disabled?: boolean
@@ -15,7 +15,7 @@ const ConflictButton: FC<Props> = ({ disabled, onClick }) => {
     >
       <WarningIcon color="#FF0420" size={20} />
     </button>
-  )
-}
+  );
+};
 
-export default ConflictButton
+export default ConflictButton;

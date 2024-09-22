@@ -1,16 +1,16 @@
-import React, { FC } from 'react'
-import { useCollapse } from 'react-collapsed'
-import { GithubIcon } from '@/public/assets/icon-components/Github'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import { TimeIcon } from '@/public/assets/icon-components/Time'
-import { DevIcon } from '@/public/assets/icon-components/Dev'
-import { CommitIcon } from '@/public/assets/icon-components/Commit'
-import { ForkIcon } from '@/public/assets/icon-components/Fork'
-import { StarIcon } from '@/public/assets/icon-components/Star'
-import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource'
+import React, { FC } from 'react';
+import { useCollapse } from 'react-collapsed';
+import { GithubIcon } from '@/public/assets/icon-components/Github';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import { TimeIcon } from '@/public/assets/icon-components/Time';
+import { DevIcon } from '@/public/assets/icon-components/Dev';
+import { CommitIcon } from '@/public/assets/icon-components/Commit';
+import { ForkIcon } from '@/public/assets/icon-components/Fork';
+import { StarIcon } from '@/public/assets/icon-components/Star';
+import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource';
 
-import { ProjectMetadata } from '../utils/types'
+import { ProjectMetadata } from '../utils/types';
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never
@@ -20,14 +20,14 @@ interface Props {
 }
 
 const GithubBox: FC<Props> = ({ repo }) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse()
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 py-[12px] font-inter">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <GithubIcon />
-          <a href={repo.url} className="break-all text-gray-700 hover:underline">
+          <a href={repo.url} className="break-all text-gray-700 hover:underline" target="_blank">
             {repo.name || repo.url?.replace('https://' || 'http://', '')}
           </a>
           <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-1 text-xs text-blue-foreground">
@@ -95,7 +95,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
         )}
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default GithubBox
+export default GithubBox;

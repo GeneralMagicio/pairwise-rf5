@@ -12,5 +12,5 @@ export const ArrowDownIcon = ({ width, height }: { width?: number, height?: numb
         fill="#0F111A"
       />
     </svg>
-  )
-}
+  );
+};

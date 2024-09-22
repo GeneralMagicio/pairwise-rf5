@@ -1,35 +1,35 @@
-'use client'
+'use client';
 
-import { useWeb3Modal } from '@web3modal/wagmi/react'
-import React from 'react'
-import { useAccount, useDisconnect } from 'wagmi'
-import { CoinbaseIcon } from '@/public/assets/icon-components/CoinbaseIcon'
-import { MetaMaskIcon } from '@/public/assets/icon-components/MetaMaskIcon'
-import { WalletIcon } from '@/public/assets/icon-components/Wallet'
-import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnectIcon'
-import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon'
-import { ConnectedButton } from './ConnectedButton'
-import { useAuth } from './AuthProvider'
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import React from 'react';
+import { useAccount, useDisconnect } from 'wagmi';
+import { CoinbaseIcon } from '@/public/assets/icon-components/CoinbaseIcon';
+import { MetaMaskIcon } from '@/public/assets/icon-components/MetaMaskIcon';
+import { WalletIcon } from '@/public/assets/icon-components/Wallet';
+import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnectIcon';
+import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon';
+import { ConnectedButton } from './ConnectedButton';
+import { useAuth } from './AuthProvider';
 // import { loginToAgora } from './agora-login'
 
 export const ConnectButton = () => {
-  const { open } = useWeb3Modal()
-  const { address, isConnected } = useAccount()
-  const { disconnectAsync } = useDisconnect()
-  const { signOut } = useAuth()
+  const { open } = useWeb3Modal();
+  const { address, isConnected } = useAccount();
+  const { disconnectAsync } = useDisconnect();
+  const { signOut } = useAuth();
 
   const logout = async () => {
-    await disconnectAsync()
-    signOut()
-  }
+    await disconnectAsync();
+    signOut();
+  };
   // const { signMessageAsync } = useSignMessage()
 
   function handleOpen() {
     try {
-      open()
+      open();
     }
     catch (_e) {
-      open()
+      open();
     }
   }
 
@@ -46,15 +46,15 @@ export const ConnectButton = () => {
 
   if (isConnected && address) return (
     <ConnectedButton onLogout={logout} wallet={address} />
-  )
+  );
 
   return (
     <button onClick={handleOpen} className="flex h-max items-center rounded-full bg-primary px-8 py-3 font-semibold text-white shadow-md transition duration-300 hover:bg-red-600">
       <WalletIcon />
       <span className="ml-2">Connect</span>
     </button>
-  )
-}
+  );
+};
 
 const ConnectWalletModal = () => {
   return (
@@ -92,7 +92,7 @@ const ConnectWalletModal = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ConnectWalletModal
+export default ConnectWalletModal;

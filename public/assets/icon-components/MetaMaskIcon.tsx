@@ -124,5 +124,5 @@ export const MetaMaskIcon = () => {
         fill="#F5841F"
       />
     </svg>
-  )
-}
+  );
+};

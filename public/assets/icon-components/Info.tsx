@@ -15,5 +15,5 @@ export const InfoIcon = () => {
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
+  );
+};

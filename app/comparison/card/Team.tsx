@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft'
-import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRightIcon'
+import React, { useState } from 'react';
+import { ArrowLeftIcon } from '@/public/assets/icon-components/ArrowLeft';
+import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRightIcon';
 
 interface TeamMember {
   profileImg: string
@@ -21,12 +21,12 @@ export const mockTeam: TeamProps['team'] = [
   { profileImg: 'https://assets.vercel.com/image/upload/q_auto/front/about/individual-investors/davidcramer.png', urlLink: 'link2' },
   { profileImg: 'https://assets.vercel.com/image/upload/q_auto/front/about/individual-investors/anthonycasalena.png', urlLink: 'link2' },
   { profileImg: 'https://assets.vercel.com/image/upload/q_auto/front/about/individual-investors/matiaswoloski.png', urlLink: 'link2' },
-]
+];
 
 const Team: React.FC<TeamProps> = ({ team }) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(false);
 
-  const displayedTeam = expanded ? team : team.slice(0, 5)
+  const displayedTeam = expanded ? team : team.slice(0, 5);
 
   return (
     <div className="flex items-center">
@@ -65,7 +65,7 @@ const Team: React.FC<TeamProps> = ({ team }) => {
         </button>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Team
+export default Team;

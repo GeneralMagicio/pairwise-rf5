@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { FC, ReactNode, useEffect } from 'react'
-import ReactDOM from 'react-dom'
+import { FC, ReactNode, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean
@@ -10,29 +10,29 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  const modalNode = document.getElementById('modal-root')
+  const modalNode = document.getElementById('modal-root');
 
   useEffect(() => {
     // Optional: Handle escape key press to close modal
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose()
+        onClose();
       }
-    }
-    window.addEventListener('keyup', handleKeyUp)
-    return () => window.removeEventListener('keyup', handleKeyUp)
-  }, [onClose])
+    };
+    window.addEventListener('keyup', handleKeyUp);
+    return () => window.removeEventListener('keyup', handleKeyUp);
+  }, [onClose]);
 
-  if (!isOpen || !modalNode) return null
+  if (!isOpen || !modalNode) return null;
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="max-w-md rounded-lg bg-white shadow-lg">
+      <div className="w-[300px] rounded-lg bg-white shadow-lg md:w-[420px]">
         {children}
       </div>
     </div>,
     modalNode,
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

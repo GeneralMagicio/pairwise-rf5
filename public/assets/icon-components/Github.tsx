@@ -12,5 +12,5 @@ export const GithubIcon = () => {
         fill="#0F111A"
       />
     </svg>
-  )
-}
+  );
+};

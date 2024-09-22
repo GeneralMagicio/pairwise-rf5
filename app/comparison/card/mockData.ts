@@ -1,4 +1,4 @@
-import { IProject } from '../utils/types'
+import { IProject } from '../utils/types';
 
 export const mockProject1: IProject = {
   id: 14,
@@ -143,7 +143,7 @@ export const mockProject1: IProject = {
   createdAt: '2024-09-15T09:52:43.489Z',
   type: 'project',
   rating: null,
-}
+};
 
 export const mockProject2: IProject = {
   id: 15,
@@ -330,4 +330,4 @@ export const mockProject2: IProject = {
   createdAt: '2024-09-15T09:52:43.489Z',
   type: 'project',
   rating: 3,
-}
+};

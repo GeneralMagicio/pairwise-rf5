@@ -12,5 +12,5 @@ export const USDIcon = () => {
         fill="black"
       />
     </svg>
-  )
-}
+  );
+};

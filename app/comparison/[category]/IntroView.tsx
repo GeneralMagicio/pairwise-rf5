@@ -1,5 +1,5 @@
-import { Dispatch, FC } from 'react'
-import Image from 'next/image'
+import { Dispatch, FC } from 'react';
+import Image from 'next/image';
 
 const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
   setUserAsVisited,
@@ -45,8 +45,8 @@ const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
         height={1167}
       />
     </div>
-  )
-}
+  );
+};
 
 const TextBlock: FC<{
   mainText: string
@@ -78,7 +78,7 @@ const TextBlock: FC<{
     {' '}
     {description}
   </p>
-)
+);
 
 const ActionButton: FC<{ onClick: () => void, text: string }> = ({ onClick, text }) => (
   <button
@@ -87,6 +87,6 @@ const ActionButton: FC<{ onClick: () => void, text: string }> = ({ onClick, text
   >
     {text}
   </button>
-)
+);
 
-export default IntroView
+export default IntroView;

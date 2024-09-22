@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 
 interface UnlockBallotProps {
   onClick: () => void
@@ -7,19 +7,19 @@ interface UnlockBallotProps {
 
 const BallotSuccessModal: React.FC<UnlockBallotProps> = ({ onClick }) => {
   return (
-    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white shadow-lg">
+    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-rating-illustration bg-no-repeat shadow-lg">
       <div className="p-10 text-center">
         <Image
-          src="/assets/images/ballot-success.png"
+          src="/assets/images/ballot-success.svg"
           alt="Celebration"
           width={320}
           height={250}
           className="mx-auto mb-6"
         />
-        <h2 className="mb-2 text-xl font-medium">
+        <h2 className="mb-4 text-xl font-medium text-dark-500">
           Ballot updated successfully!!
         </h2>
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-gray-400">
           Your ballot has been updated successfully.
           Click to go back to the voting app.
         </p>
@@ -31,7 +31,7 @@ const BallotSuccessModal: React.FC<UnlockBallotProps> = ({ onClick }) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BallotSuccessModal
+export default BallotSuccessModal;

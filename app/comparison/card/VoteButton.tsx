@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 
 interface Props {
   disabled?: boolean
@@ -16,7 +16,7 @@ const VoteButton: FC<Props> = ({ disabled, onClick }) => {
     >
       <span className={disabled ? 'text-gray-500' : 'text-white'}>Select</span>
     </button>
-  )
-}
+  );
+};
 
-export default VoteButton
+export default VoteButton;

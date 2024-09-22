@@ -1,5 +1,5 @@
-import React from 'react'
-import { UndoIcon } from '@/public/assets/icon-components/Undo'
+import React from 'react';
+import { UndoIcon } from '@/public/assets/icon-components/Undo';
 
 interface UndoButtonProps {
   disabled?: boolean
@@ -16,7 +16,7 @@ const UndoButton: React.FC<UndoButtonProps> = ({ disabled, onClick }) => {
       <UndoIcon color="#636779" />
       <span className="mt-1 text-xs text-gray-400">Undo</span>
     </button>
-  )
-}
+  );
+};
 
-export default UndoButton
+export default UndoButton;

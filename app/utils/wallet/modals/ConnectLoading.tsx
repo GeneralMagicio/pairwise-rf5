@@ -1,10 +1,10 @@
-import React from 'react'
-import Lottie from 'lottie-react'
-import spinner from './spinner-animation.json'
+import React from 'react';
+import Lottie from 'lottie-react';
+import spinner from './spinner-animation.json';
 
 const ConnectLoading: React.FC = () => {
   return (
-    <div className="relative flex max-w-md flex-col items-center justify-center rounded-lg bg-white p-8 text-center shadow-md">
+    <div className="relative flex flex-col items-center justify-center rounded-lg bg-white p-8 text-center shadow-md">
       {/* <Image
         src="assets/images/vector3.svg"
         alt="vector"
@@ -24,7 +24,7 @@ const ConnectLoading: React.FC = () => {
         Please check your wallet and sign in to continue
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default ConnectLoading
+export default ConnectLoading;

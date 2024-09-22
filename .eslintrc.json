@@ -2,8 +2,7 @@
 	"extends": [
 		"next/core-web-vitals",
 		"eslint:recommended",
-		"plugin:tailwindcss/recommended",
-		"plugin:@stylistic/recommended-extends"
+		"plugin:tailwindcss/recommended"
 	],
 	"plugins": [
 		"@stylistic",
@@ -44,11 +43,14 @@
 			{
 				"considerQueryString": true
 			}
-		]
+		],
+		"semi": ["error", "always"],
+		"quotes": ["error", "single"] 
 	},
 	"settings": {
 		"import/resolver": {
 			"typescript": {}
 		}
-	}
+	},
+	"parser": "@typescript-eslint/parser"
 }

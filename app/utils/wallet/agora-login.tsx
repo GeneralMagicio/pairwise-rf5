@@ -1,16 +1,16 @@
-import { SIWEConfig } from 'connectkit'
-import { SiweMessage } from 'siwe'
-import { decodeJwt } from 'jose'
-import { JWTPayload, VerifyResponse } from './types'
-import { AgoraBallotPost } from '@/app/comparison/ballot/useGetBallot'
-import { axiosInstance } from '../axiosInstance'
+import { SIWEConfig } from 'connectkit';
+import { SiweMessage } from 'siwe';
+import { decodeJwt } from 'jose';
+import { JWTPayload, VerifyResponse } from './types';
+import { AgoraBallotPost } from '@/app/comparison/ballot/useGetBallot';
+import { axiosInstance } from '../axiosInstance';
 
 // TODO: this should probably be an environment variable
 // const BASE_URL = `https://vote.optimism.io`
-const BASE_URL = `https://pairwise-cors.liara.run/https://vote.optimism.io`
-const API_PREFIX = '/api/v1'
-const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt'
-export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum'
+const BASE_URL = 'https://pairwise-cors.liara.run/https://vote.optimism.io';
+const API_PREFIX = '/api/v1';
+const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt';
+export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum';
 
 /* There's currently nothing stored on the backend to maintain session state.
 // All session state is stateless and stored in the JWT issued by the server.
@@ -29,25 +29,25 @@ export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum'
 
 export const loginToAgora = async (address: `0x${string}`, chainId: number, signFunc: ({ message }: { message: string }) => Promise<string>,
 ) => {
-  const nonce = await getNonce()
+  const nonce = await getNonce();
   const message = await createMessage({
     address,
     chainId,
     nonce,
-  })
+  });
 
-  const signature = await signFunc({ message })
+  const signature = await signFunc({ message });
 
-  const isVerified = await verifyMessage({ message, signature })
+  const isVerified = await verifyMessage({ message, signature });
 
-  return isVerified
-}
+  return isVerified;
+};
 
 const getNonce = async () => {
-  const res = await axiosInstance.get(`${BASE_URL}${API_PREFIX}/auth/nonce`)
+  const res = await axiosInstance.get(`${BASE_URL}${API_PREFIX}/auth/nonce`);
 
-  return res.data
-}
+  return res.data;
+};
 
 const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId }) =>
   new SiweMessage({
@@ -58,7 +58,7 @@ const createMessage: SIWEConfig['createMessage'] = ({ nonce, address, chainId })
     address,
     chainId,
     nonce,
-  }).prepareMessage()
+  }).prepareMessage();
 
 const verifyMessage = async ({ message, signature }: { message: string, signature: string }) => {
   const res = await axiosInstance.post<VerifyResponse>(`${BASE_URL}${API_PREFIX}/auth/verify`, JSON.stringify({
@@ -68,40 +68,40 @@ const verifyMessage = async ({ message, signature }: { message: string, signatur
     headers: {
       'Content-Type': 'application/json',
     },
-  })
+  });
 
   // save JWT from verify to local storage
-  const token = res.data
-  localStorage.setItem(LOCAL_STORAGE_JWT_KEY, JSON.stringify(token))
-  const payload: JWTPayload = decodeJwt(token.access_token)
-  return payload
-}
+  const token = res.data;
+  localStorage.setItem(LOCAL_STORAGE_JWT_KEY, JSON.stringify(token));
+  const payload: JWTPayload = decodeJwt(token.access_token);
+  return payload;
+};
 
 export const isLoggedInToAgora = (): JWTPayload | false => {
   try {
     // return JWT from local storage
-    const session = localStorage.getItem(LOCAL_STORAGE_JWT_KEY)
+    const session = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
     if (!session) {
-      return false
+      return false;
     }
-    const parsedObj: VerifyResponse = JSON.parse(session)
+    const parsedObj: VerifyResponse = JSON.parse(session);
     // decode JWT to get session info
-    const decoded: JWTPayload = decodeJwt(parsedObj.access_token)
+    const decoded: JWTPayload = decodeJwt(parsedObj.access_token);
 
-    if (Date.now() < (decoded.exp * 1000)) return decoded
-    else return false
+    if (Date.now() < (decoded.exp * 1000)) return decoded;
+    else return false;
   }
   catch (e) {
-    return false
+    return false;
   }
-}
+};
 
 export const uploadBallot = async (
   ballot: AgoraBallotPost,
   address: string,
 ) => {
-  const agoraJwt = localStorage.getItem(LOCAL_STORAGE_JWT_KEY)
-  const parsed: VerifyResponse = JSON.parse(agoraJwt || '')
+  const agoraJwt = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
+  const parsed: VerifyResponse = JSON.parse(agoraJwt || '');
 
   const { data } = await axiosInstance.post(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}/projects`,
     ballot, {
@@ -109,10 +109,10 @@ export const uploadBallot = async (
         'Authorization': `Bearer ${parsed.access_token}`,
         'Content-Type': 'application/json',
       },
-    })
-  return data
-}
+    });
+  return data;
+};
 
 export const signOutFromAgora = () => {
-  localStorage.removeItem(LOCAL_STORAGE_JWT_KEY)
-}
+  localStorage.removeItem(LOCAL_STORAGE_JWT_KEY);
+};

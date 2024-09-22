@@ -1,8 +1,8 @@
-import { FC } from 'react'
-import { MirrorIcon } from '@/public/assets/icon-components/MirrorIcon'
-import { WarpcastIcon } from '@/public/assets/icon-components/WarpcaseIcon'
-import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon'
-import { XIcon } from '@/public/assets/icon-components/XIcon'
+import { FC } from 'react';
+import { MirrorIcon } from '@/public/assets/icon-components/MirrorIcon';
+import { WarpcastIcon } from '@/public/assets/icon-components/WarpcaseIcon';
+import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
+import { XIcon } from '@/public/assets/icon-components/XIcon';
 
 interface Props {
   type: 'website' | 'warpcast' | 'x' | 'mirror'
@@ -12,17 +12,17 @@ interface Props {
 const getIcon = (type: Props['type']) => {
   switch (type) {
     case 'mirror':
-      return <MirrorIcon />
+      return <MirrorIcon />;
     case 'warpcast':
-      return <WarpcastIcon />
+      return <WarpcastIcon />;
     case 'website':
-      return <WebsiteIcon />
+      return <WebsiteIcon />;
     case 'x':
-      return <XIcon />
+      return <XIcon />;
     default:
-      return <WebsiteIcon />
+      return <WebsiteIcon />;
   }
-}
+};
 
 export const ExternalLink: FC<Props> = ({ address, type }) => {
   return (
@@ -32,5 +32,5 @@ export const ExternalLink: FC<Props> = ({ address, type }) => {
         {type === 'website' ? address : address.includes('https://') ? address.split('https://')[1] : address}
       </a>
     </div>
-  )
-}
+  );
+};

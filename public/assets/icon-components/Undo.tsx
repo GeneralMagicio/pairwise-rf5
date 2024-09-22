@@ -15,5 +15,5 @@ export const UndoIcon = ({ color }: { color: string }) => {
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
+  );
+};

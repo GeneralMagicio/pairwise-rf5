@@ -12,5 +12,5 @@ export const TimeIcon = () => {
         fill="#404454"
       />
     </svg>
-  )
-}
+  );
+};

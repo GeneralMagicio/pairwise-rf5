@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { InfoIcon } from '@/public/assets/icon-components/Info'
+import React, { FC } from 'react';
+import { InfoIcon } from '@/public/assets/icon-components/Info';
 
 interface Props {
   onDeclareConflict: () => void
@@ -8,18 +8,18 @@ interface Props {
 
 const ConflictOfInterestModal: FC<Props> = ({ onDeclareConflict, onCancel }) => {
   return (
-    <div className="mx-auto max-w-sm rounded-lg bg-white p-6 shadow-lg">
+    <div className="mx-auto rounded-lg bg-white bg-rating-illustration bg-no-repeat p-6 shadow-lg">
       <div className="mb-4 flex justify-center">
         <div className="rounded-full p-2">
           <InfoIcon />
         </div>
       </div>
 
-      <h2 className="mb-4 text-center text-xl font-bold">
+      <h2 className="mb-4 text-center text-xl font-bold text-dark-500">
         Declare a conflict of interest
       </h2>
 
-      <p className="mb-6 text-center text-gray-600">
+      <p className="mb-6 text-center text-gray-400">
         {`        A conflict of interest exists if you get income from this
         organization or project, or if any portion of this projects reward will flow to you.`}
       </p>
@@ -38,7 +38,7 @@ const ConflictOfInterestModal: FC<Props> = ({ onDeclareConflict, onCancel }) => 
         Cancel
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default ConflictOfInterestModal
+export default ConflictOfInterestModal;

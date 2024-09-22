@@ -12,5 +12,5 @@ export const DevIcon = () => {
         fill="#404454"
       />
     </svg>
-  )
-}
+  );
+};

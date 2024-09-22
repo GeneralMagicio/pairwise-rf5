@@ -21,5 +21,5 @@ export const WarningIcon = ({
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
+  );
+};

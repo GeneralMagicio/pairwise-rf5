@@ -1,4 +1,4 @@
-import styles from '../app/styles/NotFound.module.css'
+import styles from '../app/styles/NotFound.module.css';
 
 export default function NotFound() {
   return (
@@ -6,5 +6,5 @@ export default function NotFound() {
       <h1 className={styles.title}>404</h1>
       <p className={styles.message}>Page not found</p>
     </div>
-  )
+  );
 }

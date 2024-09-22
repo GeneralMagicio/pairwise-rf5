@@ -1,35 +1,51 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import Switch from 'react-switch'
-import { useCollapse } from 'react-collapsed'
-import { ExternalLink } from './ExternalLink'
-import GithubBox from './GithubBox'
-import SimpleInfoBox from './SimpleInfoBox'
-import QABox from './QABox'
-import GrantBox from './GrantBox'
-import Team from './Team'
-import { ProjectMetadata } from '../utils/types'
-import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp'
-import ConflictOfInterestModal from './modals/CoIModal'
-import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown'
-import CoILoadingModal from './modals/CoILoading'
-import ProjectDescription from './ProjectDescription'
-import { StarsIcon } from '@/public/assets/icon-components/Stars'
+import React, { FC, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import Switch from 'react-switch';
+import { useCollapse } from 'react-collapsed';
+import { ExternalLink } from './ExternalLink';
+import GithubBox from './GithubBox';
+import SimpleInfoBox from './SimpleInfoBox';
+import QABox from './QABox';
+import GrantBox from './GrantBox';
+import Team from './Team';
+import { ProjectMetadata } from '../utils/types';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
+import ConflictOfInterestModal from './modals/CoIModal';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import CoILoadingModal from './modals/CoILoading';
+import ProjectDescription from './ProjectDescription';
+import { StarsIcon } from '@/public/assets/icon-components/Stars';
+
+enum ProjectSection {
+  REPOS = 'repos',
+  TESTIMONIALS = 'testimonials',
+  IMPACT = 'impact',
+  PRICING = 'pricing',
+  GRANTS = 'grants',
+}
 
 interface CollapsibleProps {
-  title: string
-  children: React.ReactNode
-  onClick: () => void
-  id: string
-  expanded: boolean
-  setExpanded: (value: boolean) => void
+  title: string;
+  children: React.ReactNode;
+  onClick: () => void;
+  id: string;
+  expanded: boolean;
+  setExpanded: (value: boolean) => void;
 }
 
 export interface AutoScrollAction {
-  section: 'repos' | 'pricing' | 'grants' | 'impact' | 'testimonials' // id of the section
-  initiator: 'card1' | 'card2'
-  action: true | false // mapping to expanded/collapsed
+  section: ProjectSection;
+  initiator: 'card1' | 'card2';
+  action: boolean;
 }
+
+const ProjectSectionTitles = {
+  [ProjectSection.REPOS]: 'Repos, links, and contracts',
+  [ProjectSection.TESTIMONIALS]: 'Testimonials',
+  [ProjectSection.IMPACT]: 'Impact statement',
+  [ProjectSection.PRICING]: 'Pricing model',
+  [ProjectSection.GRANTS]: 'Grants and investment',
+};
 
 const Section: FC<CollapsibleProps> = ({
   title,
@@ -41,12 +57,12 @@ const Section: FC<CollapsibleProps> = ({
 }) => {
   const { getCollapseProps, getToggleProps } = useCollapse({
     isExpanded: expanded,
-  })
+  });
 
-  const handleClick = () => {
-    onClick()
-    setExpanded(!expanded)
-  }
+  const expandSection = () => {
+    onClick();
+    setExpanded(!expanded);
+  };
 
   return (
     <>
@@ -56,17 +72,15 @@ const Section: FC<CollapsibleProps> = ({
           <button className="font-inter text-xl font-medium">{title}</button>
           <button
             {...getToggleProps({
-              onClick: handleClick,
+              onClick: expandSection,
             })}
             className="flex cursor-pointer items-center gap-1 text-sm text-primary"
           >
-            {expanded
-              ? (
-                  <ArrowUpIcon color="black" width={20} height={20} />
-                )
-              : (
-                  <ArrowDownIcon width={20} height={20} />
-                )}
+            {expanded ? (
+              <ArrowUpIcon color="black" width={20} height={20} />
+            ) : (
+              <ArrowDownIcon width={20} height={20} />
+            )}
           </button>
         </div>
         <section {...getCollapseProps()} className="p-2">
@@ -74,36 +88,33 @@ const Section: FC<CollapsibleProps> = ({
         </section>
       </div>
     </>
-  )
-}
+  );
+};
 
 function smoothScrollToElement(elementId: string) {
-  const element = document.getElementById(elementId)
+  const element = document.getElementById(elementId);
 
   if (element) {
     element.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
-    })
+    });
   }
 }
 
 interface Props {
-  project: ProjectMetadata
-  coi: boolean
-  onCoICancel: () => void
-  onCoIConfirm: () => void
-  coiLoading: boolean
-  dispatchAction: (
-    section: AutoScrollAction['section'],
-    action: AutoScrollAction['action']
-  ) => void
-  action: AutoScrollAction | undefined
-  name: string
-  sectionExpanded: Record<AutoScrollAction['section'], boolean>
-  setSectionExpanded: (value: Props['sectionExpanded']) => void
-  key1: string
-  key2: string
+  project: ProjectMetadata;
+  coi: boolean;
+  onCoICancel: () => void;
+  onCoIConfirm: () => void;
+  coiLoading: boolean;
+  dispatchAction: (section: ProjectSection, action: boolean) => void;
+  action: AutoScrollAction | undefined;
+  name: string;
+  sectionExpanded: Record<ProjectSection, boolean>;
+  setSectionExpanded: (value: Props['sectionExpanded']) => void;
+  key1: string;
+  key2: string;
 }
 
 export const ProjectCard: React.FC<Props> = ({
@@ -120,83 +131,81 @@ export const ProjectCard: React.FC<Props> = ({
   key1,
   key2,
 }) => {
-  const [aiMode, setAiMode] = useState(false)
-  const [render, setRender] = useState(0)
-  const [isSticky, setIsSticky] = useState(false)
-  const titleRef = useRef<HTMLDivElement>(null)
-  const parentRef = useRef<HTMLDivElement>(null)
-  const offset = 150
+  const [aiMode, setAiMode] = useState(false);
+  const [render, setRender] = useState(0);
+  const [isSticky, setIsSticky] = useState(false);
 
-  const divRef = useRef(null)
+  const titleRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
-  const scrollToTop = () => {
-    if (divRef.current) {
-      // @ts-ignore
-      divRef.current.scrollTop = 0
-    }
-  }
+  const OFFSET = 150;
 
   useEffect(() => {
-    const parentElement = parentRef.current
+    const parentElement = parentRef.current;
 
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
-        const rect = titleRef.current.getBoundingClientRect()
-        setIsSticky(rect.top <= offset && rect.top >= -offset)
+        const rect = titleRef.current.getBoundingClientRect();
+        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET);
       }
-    }
+    };
 
     if (parentElement) {
-      parentElement.addEventListener('scroll', handleScroll)
+      parentElement.addEventListener('scroll', handleScroll);
     }
+
+    setRender(1);
 
     return () => {
       if (parentElement) {
-        parentElement.removeEventListener('scroll', handleScroll)
+        parentElement.removeEventListener('scroll', handleScroll);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    scrollToTop();
+  }, [key2, key1]);
+
+  useEffect(() => {
+    if (render === 0 || !action || action.initiator === name) return;
+
+    console.log('in', name, 'with action', action);
+    console.log('section states', sectionExpanded);
+
+    smoothScrollToElement(`${action.section}-${name}`);
+
+    const isSectionUpdated = action.action !== sectionExpanded[action.section];
+    if (isSectionUpdated) {
+      console.log('launched in', name, {
+        ...sectionExpanded,
+        [action.section]: action.action,
+      });
+      setSectionExpanded({
+        ...sectionExpanded,
+        [action.section]: action.action,
+      });
     }
-  }, [offset])
+  }, [action, name, sectionExpanded, render]);
+
+  const scrollToTop = () => {
+    if (divRef.current) {
+      divRef.current.scrollTop = 0;
+    }
+  };
 
   const handleChange = () => {
-    setAiMode(!aiMode)
-  }
+    setAiMode(!aiMode);
+  };
 
-  const handleSectionClick
-    = (id: AutoScrollAction['section'], expanded: AutoScrollAction['action']) =>
-      () => {
-        dispatchAction(id, expanded)
-      }
+  const handleSectionClick = (id: ProjectSection, expanded: boolean) => () => {
+    dispatchAction(id, expanded);
+  };
 
-  const hnadleExpanded
-    = (section: AutoScrollAction['section']) => (value: boolean) => {
-      setSectionExpanded({ ...sectionExpanded, [section]: value })
-    }
-
-  useEffect(() => {
-    setRender(1)
-  }, [])
-
-  useEffect(() => {
-    scrollToTop()
-  }, [key2, key1])
-
-  useEffect(() => {
-    if (render !== 0 && action && action.initiator !== name) {
-      console.log('in', name, 'with action', action)
-      console.log('section states', sectionExpanded)
-      smoothScrollToElement(`${action.section}-${name}`)
-      if (action.action !== sectionExpanded[action.section]) {
-        console.log('launched in', name, {
-          ...sectionExpanded,
-          [action.section]: action.action,
-        })
-        setSectionExpanded({
-          ...sectionExpanded,
-          [action.section]: action.action,
-        })
-      }
-    }
-  }, [action, name, sectionExpanded])
+  const hnadleExpanded = (section: ProjectSection) => (value: boolean) => {
+    setSectionExpanded({ ...sectionExpanded, [section]: value });
+  };
 
   return (
     <div ref={divRef} className="relative">
@@ -217,11 +226,11 @@ export const ProjectCard: React.FC<Props> = ({
         style={{
           maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)',
         }}
-        className={`container relative mx-auto mb-16
-      mt-4 h-[80vh] w-full rounded-xl 
-      border border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
-    coi || coiLoading ? `brightness-50` : ``
-    }`}
+        className={`container relative mx-auto my-4
+      h-[80vh] w-full rounded-xl border 
+      border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
+        coi || coiLoading ? 'brightness-50' : ''
+      }`}
       >
         <div ref={parentRef} className="h-[78vh] gap-10 overflow-y-auto">
           <div className="mr-4">
@@ -336,10 +345,13 @@ export const ProjectCard: React.FC<Props> = ({
             )}
             <Section
               id={`repos-${name}`}
-              setExpanded={hnadleExpanded('repos')}
-              expanded={sectionExpanded['repos']}
-              onClick={handleSectionClick(`repos`, !sectionExpanded['repos'])}
-              title="Repos, links, and contracts"
+              setExpanded={hnadleExpanded(ProjectSection.REPOS)}
+              expanded={sectionExpanded[ProjectSection.REPOS]}
+              onClick={handleSectionClick(
+                ProjectSection.REPOS,
+                !sectionExpanded[ProjectSection.REPOS]
+              )}
+              title={ProjectSectionTitles[ProjectSection.REPOS]}
             >
               <div className="space-y-4">
                 {project.github?.map(repo => (
@@ -363,45 +375,45 @@ export const ProjectCard: React.FC<Props> = ({
                 ))}
               </div>
             </Section>
-            {project.testimonials?.length && (
+            {project.testimonials?.length > 0 && (
               <Section
                 id={`testimonials-${name}`}
-                setExpanded={hnadleExpanded('testimonials')}
-                expanded={sectionExpanded['testimonials']}
+                setExpanded={hnadleExpanded(ProjectSection.TESTIMONIALS)}
+                expanded={sectionExpanded[ProjectSection.TESTIMONIALS]}
                 onClick={handleSectionClick(
-                  `testimonials`,
-                  !sectionExpanded['testimonials']
+                  ProjectSection.TESTIMONIALS,
+                  !sectionExpanded[ProjectSection.TESTIMONIALS]
                 )}
-                title="Testimonials"
+                title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
               >
-                <div
-                  className="rounded border bg-gray-50 p-4"
-                >
-                  <p className="italic">{project.testimonials}</p>
-                </div>
+
+                      <SimpleInfoBox
+                        title={project.testimonials}
+                        description=""
+                        type="link"
+                        showIcon={false}
+                      />
               </Section>
             )}
             {project.impactStatement && (
               <Section
                 id={`impact-${name}`}
-                setExpanded={hnadleExpanded('impact')}
-                expanded={sectionExpanded['impact']}
+                setExpanded={hnadleExpanded(ProjectSection.IMPACT)}
+                expanded={sectionExpanded[ProjectSection.IMPACT]}
                 onClick={handleSectionClick(
-                  `impact`,
-                  !sectionExpanded['impact']
+                  ProjectSection.IMPACT,
+                  !sectionExpanded[ProjectSection.IMPACT]
                 )}
-                title="Impact statement"
+                title={ProjectSectionTitles[ProjectSection.IMPACT]}
               >
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <p>
-                      <strong className="text-gray-800">Category:</strong>
-                      {' '}
+                      <strong className="text-gray-800">Category:</strong>{' '}
                       {project.impactStatement.category}
                     </p>
                     <p>
-                      <strong className="text-gray-800">Subcategory:</strong>
-                      {' '}
+                      <strong className="text-gray-800">Subcategory:</strong>{' '}
                       {project.impactStatement.subcategory}
                     </p>
                     <p className="text-primary">
@@ -429,13 +441,13 @@ export const ProjectCard: React.FC<Props> = ({
             </Section> */}
             <Section
               id={`pricing-${name}`}
-              setExpanded={hnadleExpanded('pricing')}
+              setExpanded={hnadleExpanded(ProjectSection.PRICING)}
               onClick={handleSectionClick(
-                `pricing`,
-                !sectionExpanded['pricing']
+                ProjectSection.PRICING,
+                !sectionExpanded[ProjectSection.PRICING]
               )}
-              expanded={sectionExpanded['pricing']}
-              title="Pricing model"
+              expanded={sectionExpanded[ProjectSection.PRICING]}
+              title={ProjectSectionTitles[ProjectSection.PRICING]}
             >
               <div className="space-y-2">
                 {/* <div className="rounded border bg-gray-50 p-4">
@@ -456,10 +468,13 @@ export const ProjectCard: React.FC<Props> = ({
             </Section>
             <Section
               id={`grants-${name}`}
-              setExpanded={hnadleExpanded('grants')}
-              onClick={handleSectionClick(`grants`, !sectionExpanded['grants'])}
-              expanded={sectionExpanded['grants']}
-              title="Grants and investment"
+              setExpanded={hnadleExpanded(ProjectSection.GRANTS)}
+              onClick={handleSectionClick(
+                ProjectSection.GRANTS,
+                !sectionExpanded[ProjectSection.GRANTS]
+              )}
+              expanded={sectionExpanded[ProjectSection.GRANTS]}
+              title={ProjectSectionTitles[ProjectSection.GRANTS]}
             >
               <div className="space-y-2">
                 {project.grantsAndFunding.grants?.map((grant, index) => (
@@ -498,5 +513,5 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

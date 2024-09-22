@@ -1,15 +1,19 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 
 interface UnlockBallotProps {
-  projectCount: number
-  category: string
-  onUnlock: () => void
+  projectCount: number;
+  category: string;
+  onUnlock: () => void;
 }
 
-const FinishBallot: React.FC<UnlockBallotProps> = ({ projectCount, category, onUnlock }) => {
+const FinishBallot: React.FC<UnlockBallotProps> = ({
+  projectCount,
+  category,
+  onUnlock,
+}) => {
   return (
-    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white shadow-lg">
+    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-rating-illustration bg-no-repeat shadow-lg">
       <div className="p-10 text-center">
         <Image
           src="/assets/images/finish-celebration.png"
@@ -18,10 +22,12 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({ projectCount, category, onU
           height={250}
           className="mx-auto mb-6"
         />
-        <h2 className="mb-2 text-xl font-medium">
-          {`Nice work! You're ready to unlock your ballot and distribute rewards`}
+        <h2 className="mb-4 text-xl font-medium text-dark-500">
+          {
+            'Nice work! You\'re ready to unlock your ballot and distribute rewards'
+          }
         </h2>
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-gray-400">
           {`You've ranked all
           ${projectCount}
           projects in the
@@ -50,7 +56,7 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({ projectCount, category, onU
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FinishBallot
+export default FinishBallot;

@@ -11,5 +11,5 @@ export const WalletConnectIcon = () => {
       </defs>
     </svg>
 
-  )
-}
+  );
+};
