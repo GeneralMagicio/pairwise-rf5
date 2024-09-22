@@ -51,7 +51,10 @@ export interface ProjectMetadata {
     }>
     revenue: any[]
   }
-  pricingModel: string
+  pricingModel: {
+    type: string
+    details: string
+  }
   impactStatement: {
     category: string
     subcategory: string[]
