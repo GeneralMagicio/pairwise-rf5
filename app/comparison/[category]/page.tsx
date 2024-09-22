@@ -434,43 +434,39 @@ export default function Home() {
       )}
 
       <footer className="sticky bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
-        {!coi1 && !coiLoading1 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
               value={rating1}
               onChange={setRating1}
-              disabled={isInitialVisit}
+              disabled={isInitialVisit || coiLoading1}
             />
             <VoteButton
               onClick={() =>
                 !checkLowRatedProjectSelected(project1.id) &&
                 handleVote(project1.id)
               }
-              disabled={isInitialVisit}
+              disabled={isInitialVisit || coiLoading1}
             />
-            <ConflictButton onClick={showCoI1} disabled={isInitialVisit} />
+            <ConflictButton onClick={showCoI1} disabled={isInitialVisit || coiLoading1} />
           </div>
-        )}
         <div className="absolute z-[1]">
           <UndoButton disabled={isInitialVisit} onClick={handleUndo} />
         </div>
-        {!coi2 && !coiLoading2 && (
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
               value={rating2}
               onChange={setRating2}
-              disabled={isInitialVisit}
+              disabled={isInitialVisit || coiLoading2}
             />
             <VoteButton
               onClick={() =>
                 !checkLowRatedProjectSelected(project2.id) &&
                 handleVote(project2.id)
               }
-              disabled={isInitialVisit}
+              disabled={isInitialVisit || coiLoading2}
             />
-            <ConflictButton onClick={showCoI2} disabled={isInitialVisit} />
+            <ConflictButton onClick={showCoI2} disabled={isInitialVisit || coiLoading2} />
           </div>
-        )}
       </footer>
     </div>
   );
