@@ -165,14 +165,13 @@ export default function Home() {
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
-      console.log(rating1, initialRating1, rating2, initialRating2);
       setShowPostRatingModal({ ...showPostRatingModal, show: true });
     }
 
     // observe if first rated project is rated good >= 4
     if (
-      (rating1 >= 4 && rating2 === initialRating2) ||
-      (rating2 >= 4 && rating1 === initialRating1)
+      (rating1 >= 4 && rating2 === initialRating2 && rating1 !== initialRating1) ||
+      (rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
     ) {
       setShowGoodRatingModal({ ...showGoodRatingModal, show: true });
     }
@@ -184,7 +183,7 @@ export default function Home() {
         const hasVisitedKey = `has_visited_${chainId}_${address}`;
         const storageElement = localStorage.getItem(hasVisitedKey);
 
-        if (storageElement) setIsInitialVisit(true);
+        if (!storageElement) setIsInitialVisit(true);
 
         const hasVisited = storageElement === 'true';
         setIsInitialVisit(!hasVisited);
