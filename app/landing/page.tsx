@@ -22,7 +22,7 @@ const Landing = () => {
     <div className="w-full bg-[#F2F3F8]">
       <NoSSRModals />
       <div className="mx-auto w-[85%] space-y-8 pt-4">
-        <div className="sticky top-0 bg-[#F2F3F8] h-24 w-full flex items-center justify-between z-[5]">
+        <div className="sticky top-0 z-[5] flex h-24 w-full items-center justify-between bg-[#F2F3F8]">
           <PwLogo />
           <ConnectButton />
         </div>

@@ -39,6 +39,7 @@ import Spinner from '../../components/Spinner';
 import LowRateModal from '../card/modals/LowRateModal';
 import PostRatingModal from '../card/modals/PostRatingModal';
 import GoodRatingModal from '../card/modals/GoodRatingModal';
+import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
@@ -70,6 +71,7 @@ export default function Home() {
   const [showSuccessBallot, setShowSuccessBallot] = useState(false);
   const [ballotLoading, setBallotLoading] = useState(false);
   const [ballotError, setBallotError] = useState(false);
+  const [revertingBack, setRevertingBack] = useState(false);
   const [showLowRateModal, setShowLowRateModal] = useState(false);
   const [showPostRatingModal, setShowPostRatingModal] = useState({
     show: false,
@@ -312,9 +314,11 @@ export default function Home() {
   };
 
   const handleUndo = async () => {
+    setRevertingBack(true);
     setCoi1(false);
     setCoi2(false);
     await undo();
+    setRevertingBack(false);
   };
 
   if (isLoading) return <Spinner />;
@@ -333,6 +337,7 @@ export default function Home() {
           ballotLoading ||
           ballotError ||
           showLowRateModal ||
+          revertingBack ||
           (showPostRatingModal.show && !showPostRatingModal.disabeled) ||
           (showGoodRatingModal.show && !showGoodRatingModal.disabeled)
         }
@@ -356,6 +361,7 @@ export default function Home() {
         )}
         {ballotLoading && <BallotLoading />}
         {ballotError && <BallotError onClick={handleUnlockBallot} />}
+        {revertingBack && <RevertLoadingModal />}
         {showLowRateModal && (
           <LowRateModal
             proceedWithSelection={async () => {
