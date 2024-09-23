@@ -222,7 +222,7 @@ export default function Home() {
     ) => {
       // console.log('The conditions: incoming section:', section, 'current section', autoScrollAction?.section,
       //    '&& time diff:', Date.now() - (autoScrollAction?.time || 0) > 500);
-      if (section !== autoScrollAction?.section && Date.now() - (autoScrollAction?.time || 0) > 1000) {
+      if (section !== autoScrollAction?.section && Date.now() - (autoScrollAction?.time || 0) > 500) {
         console.log('date.now():', Date.now());
         console.log('previous date:', autoScrollAction);
         console.log('incoming section:', section, 'by:', initiator);

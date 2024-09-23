@@ -1,25 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useDidUpdateEffect } from '@/app/utils/methods';
 
 interface Props {
   children: React.ReactNode;
   handleLogic: (visibleIds: string[]) => void
+  trigger: number
 }
 
-const ViewportLogger: React.FC<Props> = ({ children, handleLogic }) => {
+const ViewportLogger: React.FC<Props> = ({ children, handleLogic, trigger }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleIds, setVisibleIds] = useState<string[]>([]);
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     // eslint-disable-next-line no-undef
     const observerOptions: IntersectionObserverInit = {
       root: null,
       rootMargin: '0px',
-      threshold: 1, // Trigger when 25% of the element is visible
+      threshold: 0.5, // Trigger when 25% of the element is visible
     };
 
     // eslint-disable-next-line no-undef
     const observerCallback: IntersectionObserverCallback = (entries) => {
       const newVisibleIds: string[] = [];
+
+      console.log('running');
 
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.target.id) {
@@ -39,12 +43,15 @@ const ViewportLogger: React.FC<Props> = ({ children, handleLogic }) => {
     if (containerRef.current) {
       const childElements = containerRef.current.querySelectorAll('[id]');
       childElements.forEach((element) => observer.observe(element));
+      setTimeout(() => {
+        childElements.forEach((element) => observer.unobserve(element));
+      }, 20);
     }
 
     return () => {
       observer.disconnect();
     };
-  }, [handleLogic]);
+  }, [handleLogic, trigger]);
 
   return <div className='scroll-smooth' ref={containerRef}>{children}</div>;
 };

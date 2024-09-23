@@ -104,9 +104,19 @@ function smoothScrollToElement(elementId: string) {
   const element = document.getElementById(elementId);
 
   if (element) {
-    console.log('Found element?', element);
     element.scrollIntoView({
       behavior: 'smooth',
+    });
+  }
+
+}
+function smoothScrollToElementForAutoScroll(elementId: string) {
+  const element = document.getElementById(elementId);
+
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
     });
   }
 }
@@ -146,6 +156,7 @@ export const ProjectCard: React.FC<Props> = ({
 }) => {
   const [aiMode, setAiMode] = useState(false);
   const [render, setRender] = useState(0);
+  const [autoScrollTrigger, setAutoScrollTrigger] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
 
   const titleRef = useRef<HTMLDivElement>(null);
@@ -206,7 +217,7 @@ export const ProjectCard: React.FC<Props> = ({
     if (render === 0 || !autoScrollAction || autoScrollAction.initiator === name) return;
 
     console.log('Smooth auto scroll to:', `${autoScrollAction.section}-${name}`);
-    smoothScrollToElement(`${autoScrollAction.section}-${name}`);
+    smoothScrollToElementForAutoScroll(`${autoScrollAction.section}-${name}`);
 
   }, [autoScrollAction, name, render]);
 
@@ -239,7 +250,7 @@ export const ProjectCard: React.FC<Props> = ({
   };
 
   return (
-    <ViewportLogger handleLogic={handleAutoScroll}>
+    <ViewportLogger trigger={autoScrollTrigger} handleLogic={handleAutoScroll}>
       <div ref={divRef} className="relative">
         {coi && (
           <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
@@ -264,7 +275,8 @@ export const ProjectCard: React.FC<Props> = ({
           coi || coiLoading ? 'brightness-50' : ''
         }`}
         >
-          <div ref={parentRef} className="h-[78vh] gap-10 overflow-y-auto">
+          <div onScroll={() => {console.log('ons in', name); setAutoScrollTrigger(autoScrollTrigger + 1);}} 
+          ref={parentRef} className="h-[78vh] gap-10 overflow-y-auto">
             <div className="mr-4">
               <div id={`${ProjectSection.HEADER}-${name}`}>
                 {/* Cover Image and Profile Avatar */}
