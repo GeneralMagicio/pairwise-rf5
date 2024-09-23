@@ -9,7 +9,7 @@ interface Props {
 
 const ViewportLogger: React.FC<Props> = ({ children, handleLogic, trigger }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [visibleIds, setVisibleIds] = useState<string[]>([]);
+  const [_visibleIds, setVisibleIds] = useState<string[]>([]);
 
   useDidUpdateEffect(() => {
     // eslint-disable-next-line no-undef
@@ -31,7 +31,7 @@ const ViewportLogger: React.FC<Props> = ({ children, handleLogic, trigger }) => 
         }
       });
 
-      setVisibleIds((prevIds) => {
+      setVisibleIds(() => {
         const updatedIds = Array.from(new Set([...newVisibleIds]));
         handleLogic(updatedIds);
         return updatedIds;
