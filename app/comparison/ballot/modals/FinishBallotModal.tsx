@@ -13,7 +13,7 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({
   onUnlock,
 }) => {
   return (
-    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-rating-illustration bg-no-repeat shadow-lg">
+    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-ballot bg-no-repeat shadow-lg">
       <div className="p-10 text-center">
         <Image
           src="/assets/images/finish-celebration.png"
