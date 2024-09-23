@@ -16,6 +16,32 @@ interface Props {
   description: string | null
 }
 
+export function formatAmount(amount: string) {
+  const num = Number(amount);
+  if (num === undefined || num === null) {
+    return undefined;
+  }
+  if (typeof num !== 'number') {
+    return num;
+  }
+
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M';
+  }
+  else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K';
+  }
+  else {
+    const decimalPlaces = (num.toString().split('.')[1] || []).length;
+    if (decimalPlaces > 3) {
+      return num.toFixed(3);
+    }
+    else {
+      return num.toString();
+    }
+  }
+}
+
 const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
@@ -37,13 +63,13 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
             ? (
                 <span className="flex items-center gap-2 text-sm">
                   <OPIcon />
-                  {amount}
+                  {formatAmount(amount)}
                 </span>
               )
             : (
                 <span className="flex items-center gap-2 text-sm">
                   <USDIcon />
-                  {amount}
+                  {formatAmount(amount)}
                 </span>
               )}
           {date && (
