@@ -170,7 +170,9 @@ export default function Home() {
 
     // observe if first rated project is rated good >= 4
     if (
-      (rating1 >= 4 && rating2 === initialRating2 && rating1 !== initialRating1) ||
+      (rating1 >= 4 &&
+        rating2 === initialRating2 &&
+        rating1 !== initialRating1) ||
       (rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
     ) {
       setShowGoodRatingModal({ ...showGoodRatingModal, show: true });
@@ -178,28 +180,30 @@ export default function Home() {
   }, [rating1, rating2]);
 
   useEffect(() => {
+    const getVisitKey = () => `has_visited_${chainId}_${address}`;
+    
     const checkFirstTimeVisit = () => {
       if (address && chainId) {
-        const hasVisitedKey = `has_visited_${chainId}_${address}`;
-        const storageElement = localStorage.getItem(hasVisitedKey);
-
-        if (!storageElement) setIsInitialVisit(true);
-
-        const hasVisited = storageElement === 'true';
+        const visitKey = getVisitKey();
+        const hasVisited = localStorage.getItem(visitKey) === 'true';
         setIsInitialVisit(!hasVisited);
       }
     };
-
-    const checkVotedPairs = () => {
-      if (data && !!data.votedPairs) {
-        setIsInitialVisit(false);
-      } else {
-        checkFirstTimeVisit();
+  
+    const markAsVisited = () => {
+      if (address && chainId) {
+        localStorage.setItem(getVisitKey(), 'true');
       }
+      setIsInitialVisit(false);
     };
-
-    checkVotedPairs();
+  
+    if (data?.votedPairs) {
+      markAsVisited();
+    } else {
+      checkFirstTimeVisit();
+    }
   }, [address, chainId, data?.votedPairs]);
+  
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -256,8 +260,15 @@ export default function Home() {
   const showCoI2 = () => {
     setCoi2(true);
   };
+
   const setUserAsVisited = () => {
+    console.log('setting user as visited 1');
+    console.log({
+      address,
+      chainId,
+    });
     if (address && chainId) {
+      console.log('setting user as visited 2');
       const hasVisitedKey = `has_visited_${chainId}_${address}`;
       localStorage.setItem(hasVisitedKey, 'true');
     }
@@ -391,7 +402,6 @@ export default function Home() {
         question="Which project had the greatest impact on the OP Stack?"
         isFirstSelection={isInitialVisit}
       />
-
       {isInitialVisit ? (
         <IntroView setUserAsVisited={setUserAsVisited} />
       ) : (
@@ -434,39 +444,45 @@ export default function Home() {
       )}
 
       <footer className="sticky bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
-          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
-            <Rating
-              value={rating1}
-              onChange={setRating1}
-              disabled={isInitialVisit || coiLoading1}
-            />
-            <VoteButton
-              onClick={() =>
-                !checkLowRatedProjectSelected(project1.id) &&
-                handleVote(project1.id)
-              }
-              disabled={isInitialVisit || coiLoading1}
-            />
-            <ConflictButton onClick={showCoI1} disabled={isInitialVisit || coiLoading1} />
-          </div>
+        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+          <Rating
+            value={rating1}
+            onChange={setRating1}
+            disabled={isInitialVisit || coiLoading1}
+          />
+          <VoteButton
+            onClick={() =>
+              !checkLowRatedProjectSelected(project1.id) &&
+              handleVote(project1.id)
+            }
+            disabled={isInitialVisit || coiLoading1}
+          />
+          <ConflictButton
+            onClick={showCoI1}
+            disabled={isInitialVisit || coiLoading1}
+          />
+        </div>
         <div className="absolute z-[1]">
           <UndoButton disabled={isInitialVisit} onClick={handleUndo} />
         </div>
-          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
-            <Rating
-              value={rating2}
-              onChange={setRating2}
-              disabled={isInitialVisit || coiLoading2}
-            />
-            <VoteButton
-              onClick={() =>
-                !checkLowRatedProjectSelected(project2.id) &&
-                handleVote(project2.id)
-              }
-              disabled={isInitialVisit || coiLoading2}
-            />
-            <ConflictButton onClick={showCoI2} disabled={isInitialVisit || coiLoading2} />
-          </div>
+        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+          <Rating
+            value={rating2}
+            onChange={setRating2}
+            disabled={isInitialVisit || coiLoading2}
+          />
+          <VoteButton
+            onClick={() =>
+              !checkLowRatedProjectSelected(project2.id) &&
+              handleVote(project2.id)
+            }
+            disabled={isInitialVisit || coiLoading2}
+          />
+          <ConflictButton
+            onClick={showCoI2}
+            disabled={isInitialVisit || coiLoading2}
+          />
+        </div>
       </footer>
     </div>
   );
