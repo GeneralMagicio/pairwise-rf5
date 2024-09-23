@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 
 import { useAuth } from '@/app/utils/wallet/AuthProvider';
 import { JWTPayload } from '@/app/utils/wallet/types';
-import { AutoScrollAction, ProjectCard } from '../card/ProjectCard';
+import { AutoScrollAction, ExpandCollapseAction, ProjectCard } from '../card/ProjectCard';
 import ConflictButton from '../card/CoIButton';
 import Header from '../card/Header';
 import { Rating } from '../card/Rating';
@@ -65,7 +65,8 @@ export default function Home() {
   const [coiLoading2, setCoiLoading2] = useState(false);
   const [bypassPrevProgress, setBypassPrevProgress] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [lastAction, setLastAction] = useState<AutoScrollAction>();
+  const [lastAction, setLastAction] = useState<ExpandCollapseAction>();
+  const [autoScrollAction, setAutoScrollAction] = useState<AutoScrollAction>();
 
   const [showFinishBallot, setShowFinishBallot] = useState(false);
   const [showSuccessBallot, setShowSuccessBallot] = useState(false);
@@ -201,14 +202,34 @@ export default function Home() {
     checkVotedPairs();
   }, [address, chainId, data?.votedPairs]);
 
+  useEffect(() => {
+    console.log('Auto scroll action', autoScrollAction);
+  }, [autoScrollAction]);
+
   const dispatchAction =
-    (initiator: AutoScrollAction['initiator']) =>
+    (initiator: ExpandCollapseAction['initiator']) =>
     (
-      section: AutoScrollAction['section'],
-      action: AutoScrollAction['action']
+      section: ExpandCollapseAction['section'],
+      action: ExpandCollapseAction['action']
     ) => {
       setLastAction({ section, initiator, action });
     };
+
+  const dispatchAutoScrollAction = useCallback(
+    (initiator: AutoScrollAction['initiator']) =>
+    (
+      section: AutoScrollAction['section'],
+    ) => {
+      // console.log('The conditions: incoming section:', section, 'current section', autoScrollAction?.section,
+      //    '&& time diff:', Date.now() - (autoScrollAction?.time || 0) > 500);
+      if (section !== autoScrollAction?.section && Date.now() - (autoScrollAction?.time || 0) > 1000) {
+        console.log('date.now():', Date.now());
+        console.log('previous date:', autoScrollAction);
+        console.log('incoming section:', section, 'by:', initiator);
+        console.log('current section:', autoScrollAction?.section, 'by:', autoScrollAction?.initiator);
+        setAutoScrollAction({ section, initiator, time: Date.now() });
+      }
+    }, [autoScrollAction]);
 
   const confirmCoI1 = async (id1: number, id2: number) => {
     await markProjectCoI({ data: { pid: id1 } });
@@ -404,6 +425,8 @@ export default function Home() {
               name="card1"
               action={lastAction}
               dispatchAction={dispatchAction('card1')}
+              autoScrollAction={autoScrollAction}
+              dispatchAutoScrollAction={dispatchAutoScrollAction('card1')}
               key1={project1.RPGF5Id}
               key2={project2.RPGF5Id}
               coiLoading={coiLoading1}
@@ -421,6 +444,8 @@ export default function Home() {
               name="card2"
               action={lastAction}
               dispatchAction={dispatchAction('card2')}
+              autoScrollAction={autoScrollAction}
+              dispatchAutoScrollAction={dispatchAutoScrollAction('card2')}
               key1={project2.RPGF5Id}
               key2={project1.RPGF5Id}
               coiLoading={coiLoading2}
