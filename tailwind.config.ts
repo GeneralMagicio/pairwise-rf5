@@ -38,7 +38,9 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'rating-illustration': 'url(\'/assets/images/rating-bg.svg\')',
-        'loading-modal': 'url(\'/assets/images/loading-bg.svg\')',
+        'conflict-loading': 'url(\'/assets/images/loading-bg.svg\')',
+        'good-rating': 'url(\'/assets/images/good-rating-bg.svg\')',
+        'ballot': 'url(\'/assets/images/ballot-bg.svg\')',
       },
       screens: {
         // small laptops

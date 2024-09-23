@@ -7,7 +7,7 @@ interface UnlockBallotProps {
 
 const BallotSuccessModal: React.FC<UnlockBallotProps> = ({ onClick }) => {
   return (
-    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-rating-illustration bg-no-repeat shadow-lg">
+    <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-ballot bg-no-repeat shadow-lg">
       <div className="p-10 text-center">
         <Image
           src="/assets/images/ballot-success.svg"
