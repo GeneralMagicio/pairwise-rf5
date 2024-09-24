@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, EffectCallback, DependencyList } from 'react';
 
 export const truncate = (text: string, maxChar: number) => {
   if (text.length < maxChar) return text;
@@ -15,6 +15,22 @@ export const usePrevious = <T>(value: T): T | undefined => {
   });
   return ref.current;
 };
+
+export function useDidUpdateEffect(fn: EffectCallback, inputs: DependencyList) {
+  const isMountingRef = useRef(false);
+
+  useEffect(() => {
+    isMountingRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!isMountingRef.current) {
+      return fn();
+    } else {
+      isMountingRef.current = false;
+    }
+  }, inputs);
+}
 
 export function getBiggerNumber(a: number | undefined, b: number | undefined) {
   if (a === undefined && b === undefined) {

@@ -48,6 +48,15 @@ body {
   background: #F2F3F8;
 }
 
+html {
+  --scroll-behavior: smooth!important;
+  scroll-behavior: smooth!important;
+}
+
+* {
+  border: "1px red solid";
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
