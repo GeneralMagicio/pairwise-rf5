@@ -48,10 +48,10 @@ const SimpleInfoBox: FC<Props> = ({
   };
 
   return (
-    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2">
-      <div className="mb-2 flex items-center justify-between">
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
+      <div className={`flex items-center justify-between ${isExpanded ? 'mb-4' : ''}`}>
         <div className="flex items-center gap-2">
-          {showIcon && <span className="size-5">{ICONS_MAP[type]}</span>}
+          {ICONS_MAP[type] && showIcon && <span className="size-5">{ICONS_MAP[type]}</span>}
           {renderTitle()}
         </div>
         {description.length > 0 && (
@@ -64,7 +64,7 @@ const SimpleInfoBox: FC<Props> = ({
         )}
       </div>
       <section {...getCollapseProps()}>
-        <p className="mb-4 text-gray-600">{description}</p>
+        <p className="mb-2 text-gray-600">{description}</p>
       </section>
     </div>
   );

@@ -9,14 +9,15 @@ import { CommitIcon } from '@/public/assets/icon-components/Commit';
 import { ForkIcon } from '@/public/assets/icon-components/Fork';
 import { StarIcon } from '@/public/assets/icon-components/Star';
 import { OpenSourceIcon } from '@/public/assets/icon-components/OpenSource';
+import { QuestionMarkIcon } from '@/public/assets/icon-components/QuestionMark';
 
 import { ProjectMetadata } from '../utils/types';
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 interface Props {
-  repo: ArrayElement<Exclude<ProjectMetadata['github'], null>>
+  repo: ArrayElement<Exclude<ProjectMetadata['github'], null>>;
 }
 
 const GithubBox: FC<Props> = ({ repo }) => {
@@ -24,31 +25,37 @@ const GithubBox: FC<Props> = ({ repo }) => {
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 py-[12px] font-inter">
-      <div className="mb-2 flex items-center justify-between">
+      <div
+        className={`flex items-center justify-between ${
+          isExpanded ? 'mb-4' : ''
+        }`}
+      >
         <div className="flex items-center gap-2">
           <GithubIcon />
-          <a href={repo.url} className="break-all text-gray-700 hover:underline" target="_blank">
+          <a
+            href={repo.url}
+            className="break-all text-gray-700 hover:underline"
+            target="_blank"
+          >
             {repo.name || repo.url?.replace('https://' || 'http://', '')}
           </a>
-          <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-1 text-xs text-blue-foreground">
+          <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-0.5 text-xs text-blue-foreground">
             <OpenSourceIcon color="#3374DB" />
             <span> Open source </span>
           </div>
         </div>
         <button {...getToggleProps()} className="text-sm text-gray-600">
-          {isExpanded
-            ? (
-                <div className="flex items-center gap-2">
-                  <span> Hide metrics </span>
-                  <ArrowUpIcon />
-                </div>
-              )
-            : (
-                <div className="flex items-center gap-2">
-                  <span> View metrics </span>
-                  <ArrowDownIcon />
-                </div>
-              )}
+          {isExpanded ? (
+            <div className="flex items-center gap-2">
+              <span> Hide metrics </span>
+              <ArrowUpIcon />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span> View metrics </span>
+              <ArrowDownIcon />
+            </div>
+          )}
         </button>
       </div>
       <section {...getCollapseProps()}>
@@ -57,15 +64,23 @@ const GithubBox: FC<Props> = ({ repo }) => {
           <div className="mb-4 grid grid-cols-3 gap-2 font-inter text-sm font-normal leading-5">
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <TimeIcon />
-              <span className="text-sm">{`${Number(repo.metrics.age_of_project_years).toFixed(2) || 0} years old`}</span>
+              <span className="text-sm">{`${
+                Number(repo.metrics.age_of_project_years).toFixed(2) || 0
+              } years old`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <DevIcon />
-              <span className="text-sm">{`${Number(repo.metrics.num_contributors).toFixed(0) || 0} full time devs`}</span>
+              <span className="text-sm">{`${
+                Number(repo.metrics.num_contributors).toFixed(0) || 0
+              } full time devs`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <DevIcon />
-              <span className="text-sm">{`${Number(repo.metrics.num_contributors_last_6_months).toFixed(0) || 0} contributers last 6 months`}</span>
+              <span className="text-sm">{`${
+                Number(repo.metrics.num_contributors_last_6_months).toFixed(
+                  0
+                ) || 0
+              } contributers last 6 months`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <CommitIcon />
@@ -73,19 +88,27 @@ const GithubBox: FC<Props> = ({ repo }) => {
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <ForkIcon />
-              <span className="text-sm">{`${repo.metrics.num_forks || 0} forks`}</span>
+              <span className="text-sm">{`${
+                repo.metrics.num_forks || 0
+              } forks`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <ForkIcon />
-              <span className="text-sm">{`${repo.metrics.num_trusted_forks || 0} forks from top devs`}</span>
+              <span className="text-sm">{`${
+                repo.metrics.num_trusted_forks || 0
+              } forks from top devs`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <StarIcon />
-              <span className="text-sm">{`${repo.metrics.num_stars || 0} stars`}</span>
+              <span className="text-sm">{`${
+                repo.metrics.num_stars || 0
+              } stars`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <StarIcon />
-              <span className="text-sm">{`${repo.metrics.num_trusted_stars || 0} stars from top devs`}</span>
+              <span className="text-sm">{`${
+                repo.metrics.num_trusted_stars || 0
+              } stars from top devs`}</span>
             </div>
             <div className="flex items-center gap-2 rounded-md bg-gray-100 p-2">
               <OpenSourceIcon />
@@ -93,6 +116,10 @@ const GithubBox: FC<Props> = ({ repo }) => {
             </div>
           </div>
         )}
+        <div className="flex items-center gap-2">
+          <QuestionMarkIcon />
+          <p className="text-sm text-gray-600">About GitHub metrics</p>
+        </div>
       </section>
     </div>
   );

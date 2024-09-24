@@ -24,6 +24,8 @@ enum ProjectSection {
   GRANTS = 'grants',
 }
 
+const OP_MAINNET_CHAIN_ID = 10;
+
 interface CollapsibleProps {
   title: string;
   children: React.ReactNode;
@@ -68,7 +70,7 @@ const Section: FC<CollapsibleProps> = ({
     <>
       <hr className="border-t border-gray-200" />
       <div id={id} className="mb-4 pt-4">
-        <div className="flex items-center justify-between gap-4 p-4">
+        <div className="flex items-center justify-between gap-4 p-2">
           <button className="font-inter text-xl font-medium">{title}</button>
           <button
             {...getToggleProps({
@@ -313,10 +315,10 @@ export const ProjectCard: React.FC<Props> = ({
             <ProjectDescription description={project.description} />
             {project.socialLinks && (
               <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-slate-600">
-                {project.socialLinks.website?.map(item => (
+                {project.socialLinks.website?.map((item) => (
                   <ExternalLink key={item} address={item} type="website" />
                 ))}
-                {project.socialLinks.farcaster?.map(item => (
+                {project.socialLinks.farcaster?.map((item) => (
                   <ExternalLink key={item} address={item} type="warpcast" />
                 ))}
                 {project.socialLinks.twitter && (
@@ -336,10 +338,12 @@ export const ProjectCard: React.FC<Props> = ({
             {project.team?.length && (
               <div className="mb-6 w-full">
                 <Team
-                  team={(project.team || []).filter(el => 'pfp_url' in el).map(item => ({
-                    profileImg: item.pfp_url,
-                    urlLink: `https://warpcast.com/${item.username}`,
-                  }))}
+                  team={(project.team || [])
+                    .filter((el) => 'pfp_url' in el)
+                    .map((item) => ({
+                      profileImg: item.pfp_url,
+                      urlLink: `https://warpcast.com/${item.username}`,
+                    }))}
                 />
               </div>
             )}
@@ -354,10 +358,10 @@ export const ProjectCard: React.FC<Props> = ({
               title={ProjectSectionTitles[ProjectSection.REPOS]}
             >
               <div className="space-y-4">
-                {project.github?.map(repo => (
+                {project.github?.map((repo) => (
                   <GithubBox key={repo.url} repo={repo} />
                 ))}
-                {project.links?.map(contract => (
+                {project.links?.map((contract) => (
                   <SimpleInfoBox
                     key={contract.url}
                     description={contract.description}
@@ -365,14 +369,18 @@ export const ProjectCard: React.FC<Props> = ({
                     type="link"
                   />
                 ))}
-                {project.contracts?.map(contract => (
-                  <SimpleInfoBox
-                    key={contract.address}
-                    description=""
-                    title={contract.address}
-                    type="contract"
-                  />
-                ))}
+                {project.contracts
+                  ?.filter(
+                    (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
+                  )
+                  .map((contract) => (
+                    <SimpleInfoBox
+                      key={`${contract.chainId}_${contract.address}`}
+                      description=""
+                      title={contract.address}
+                      type="contract"
+                    />
+                  ))}
               </div>
             </Section>
             {project.testimonials?.length > 0 && (
@@ -386,13 +394,12 @@ export const ProjectCard: React.FC<Props> = ({
                 )}
                 title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
               >
-
-                      <SimpleInfoBox
-                        title={project.testimonials}
-                        description=""
-                        type="link"
-                        showIcon={false}
-                      />
+                <SimpleInfoBox
+                  title={project.testimonials}
+                  description=""
+                  type="link"
+                  showIcon={false}
+                />
               </Section>
             )}
             {project.impactStatement && (
@@ -436,9 +443,6 @@ export const ProjectCard: React.FC<Props> = ({
                 </div>
               </Section>
             )}
-            {/* <Section title="Project Support">
-              <p>{project.projectSupport}</p>
-            </Section> */}
             <Section
               id={`pricing-${name}`}
               setExpanded={hnadleExpanded(ProjectSection.PRICING)}
@@ -449,21 +453,15 @@ export const ProjectCard: React.FC<Props> = ({
               expanded={sectionExpanded[ProjectSection.PRICING]}
               title={ProjectSectionTitles[ProjectSection.PRICING]}
             >
-              <div className="space-y-2">
-                {/* <div className="rounded border bg-gray-50 p-4">
-                  <p className="font-medium">{project.pricingModel}</p>
-                </div> */}
-                {project.pricingModel && typeof project.pricingModel === 'object' && (
-                  <SimpleInfoBox
-                    title={project.pricingModel.type || ''}
-                    description={project.pricingModel.details || ''}
-                    type="pricing"
-                  />
-                )}
-                {/* <h3 className="font-semibold">Freemium</h3>
-            <p>{project.pricingModel.freemium}</p>
-            <h3 className="font-semibold mt-4">Pay-to-use</h3>
-            <p>{project.pricingModel.payToUse}</p> */}
+              <div className="space-y-2 capitalize">
+                {project.pricingModel &&
+                  typeof project.pricingModel === 'object' && (
+                    <SimpleInfoBox
+                      title={project.pricingModel.type || ''}
+                      description={project.pricingModel.details || ''}
+                      type="pricing"
+                    />
+                  )}
               </div>
             </Section>
             <Section
@@ -476,38 +474,37 @@ export const ProjectCard: React.FC<Props> = ({
               expanded={sectionExpanded[ProjectSection.GRANTS]}
               title={ProjectSectionTitles[ProjectSection.GRANTS]}
             >
-              <div className="space-y-2">
-                {project.grantsAndFunding.grants?.map((grant, index) => (
-                  <GrantBox
-                    key={`grant_${index}`}
-                    description={grant.details}
-                    link={grant.link}
-                    amount={grant.amount}
-                    date={grant.date}
-                    title={grant.grant || ''}
-                  />
-                ))}
-                {/* {project.grantsAndFunding.revenue?.map((grant, index) => (
-                  <GrantBox
-                    key={`grant_${index}`}
-                    description={grant.details}
-                    link={grant.link}
-                    amount={grant.amount}
-                    date={grant.date}
-                    title={grant.grant || ''}
-                  />
-                ))} */}
-                {project.grantsAndFunding.ventureFunding?.map(funding => (
-                  <GrantBox
-                    key={funding.details}
-                    description={funding.details}
-                    link={null}
-                    amount={funding.amount}
-                    date={null}
-                    title="Funding"
-                  />
-                ))}
-              </div>
+              {project.grantsAndFunding.grants?.length ||
+              project.grantsAndFunding.ventureFunding?.length ? (
+                <div className="space-y-2">
+                  {project.grantsAndFunding.grants?.map((grant, index) => (
+                    <GrantBox
+                      key={`grant_${index}`}
+                      description={grant.details}
+                      link={grant.link}
+                      amount={grant.amount}
+                      date={grant.date}
+                      title={grant.grant || ''}
+                    />
+                  ))}
+                  {project.grantsAndFunding.ventureFunding?.map((funding) => (
+                    <GrantBox
+                      key={funding.details}
+                      description={funding.details}
+                      link={null}
+                      amount={funding.amount}
+                      date={null}
+                      title="Funding"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
+                    None
+                  </div>
+                </div>
+              )}
             </Section>
           </div>
         </div>

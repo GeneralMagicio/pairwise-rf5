@@ -13,7 +13,7 @@ const QABox: FC<Props> = ({ answer, question }) => {
 
   return (
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
-      <div className="mb-2 flex items-center justify-between">
+      <div className={`flex items-center justify-between ${isExpanded ? 'mb-4' : ''}`}>
         <div className="flex items-center gap-2 font-semibold">
           {question}
         </div>
@@ -25,7 +25,7 @@ const QABox: FC<Props> = ({ answer, question }) => {
         </button>
       </div>
       <section {...getCollapseProps()}>
-        <p className="mb-4 text-gray-600">{answer}</p>
+        <p className="mb-2 text-gray-600">{answer}</p>
       </section>
     </div>
   );
