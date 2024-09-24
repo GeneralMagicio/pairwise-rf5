@@ -24,6 +24,8 @@ enum ProjectSection {
   GRANTS = 'grants',
 }
 
+const OP_MAINNET_CHAIN_ID = 10;
+
 interface CollapsibleProps {
   title: string;
   children: React.ReactNode;
@@ -367,14 +369,18 @@ export const ProjectCard: React.FC<Props> = ({
                     type="link"
                   />
                 ))}
-                {project.contracts?.map((contract) => (
-                  <SimpleInfoBox
-                    key={contract.address}
-                    description=""
-                    title={contract.address}
-                    type="contract"
-                  />
-                ))}
+                {project.contracts
+                  ?.filter(
+                    (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
+                  )
+                  .map((contract) => (
+                    <SimpleInfoBox
+                      key={`${contract.chainId}_${contract.address}`}
+                      description=""
+                      title={contract.address}
+                      type="contract"
+                    />
+                  ))}
               </div>
             </Section>
             {project.testimonials?.length > 0 && (

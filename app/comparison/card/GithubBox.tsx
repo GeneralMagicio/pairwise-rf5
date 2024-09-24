@@ -39,7 +39,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
           >
             {repo.name || repo.url?.replace('https://' || 'http://', '')}
           </a>
-          <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-1 text-xs text-blue-foreground">
+          <div className="flex items-center gap-1 rounded-2xl border bg-blue-background px-2 py-0.5 text-xs text-blue-foreground">
             <OpenSourceIcon color="#3374DB" />
             <span> Open source </span>
           </div>
