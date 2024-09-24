@@ -40,6 +40,7 @@ import LowRateModal from '../card/modals/LowRateModal';
 import PostRatingModal from '../card/modals/PostRatingModal';
 import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
+import StorageLabel from '@/app/lib/localStorage';
 
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
@@ -73,14 +74,8 @@ export default function Home() {
   const [ballotError, setBallotError] = useState(false);
   const [revertingBack, setRevertingBack] = useState(false);
   const [showLowRateModal, setShowLowRateModal] = useState(false);
-  const [showPostRatingModal, setShowPostRatingModal] = useState({
-    show: false,
-    disabeled: false,
-  });
-  const [showGoodRatingModal, setShowGoodRatingModal] = useState({
-    show: false,
-    disabeled: false,
-  });
+  const [showPostRatingModal, setShowPostRatingModal] = useState(false);
+  const [showGoodRatingModal, setShowGoodRatingModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null
   );
@@ -141,8 +136,6 @@ export default function Home() {
     console.log(data);
     setRating1(data.pairs[0][0].rating || 3);
     setRating2(data.pairs[0][1].rating || 3);
-    setShowGoodRatingModal({ show: false, disabeled: false });
-    setShowPostRatingModal({ show: false, disabeled: false });
   }, [data]);
 
   useEffect(() => {
@@ -165,7 +158,7 @@ export default function Home() {
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
-      setShowPostRatingModal({ ...showPostRatingModal, show: true });
+      setShowPostRatingModal(!getGetStarted().postRating);
     }
 
     // observe if first rated project is rated good >= 4
@@ -175,13 +168,13 @@ export default function Home() {
         rating1 !== initialRating1) ||
       (rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
     ) {
-      setShowGoodRatingModal({ ...showGoodRatingModal, show: true });
+      setShowGoodRatingModal(!getGetStarted().goodRating);
     }
   }, [rating1, rating2]);
 
   useEffect(() => {
     const getVisitKey = () => `has_visited_${chainId}_${address}`;
-    
+
     const checkFirstTimeVisit = () => {
       if (address && chainId) {
         const visitKey = getVisitKey();
@@ -189,21 +182,32 @@ export default function Home() {
         setIsInitialVisit(!hasVisited);
       }
     };
-  
+
     const markAsVisited = () => {
       if (address && chainId) {
         localStorage.setItem(getVisitKey(), 'true');
       }
+      updateGetStarted({ goodRating: true, postRating: true });
+      setShowGoodRatingModal(false);
+      setShowPostRatingModal(false);
       setIsInitialVisit(false);
     };
-  
+
     if (data?.votedPairs) {
       markAsVisited();
     } else {
       checkFirstTimeVisit();
+      //show the post rating modal if the user has already rated the projects
+      if (getGetStarted().postRating) {
+        setShowPostRatingModal(false);
+      }
+      //show the good rating modal if the user has already rated the projects
+      if (getGetStarted().goodRating) {
+        setShowGoodRatingModal(false);
+      }
     }
   }, [address, chainId, data?.votedPairs]);
-  
+
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -262,13 +266,7 @@ export default function Home() {
   };
 
   const setUserAsVisited = () => {
-    console.log('setting user as visited 1');
-    console.log({
-      address,
-      chainId,
-    });
     if (address && chainId) {
-      console.log('setting user as visited 2');
       const hasVisitedKey = `has_visited_${chainId}_${address}`;
       localStorage.setItem(hasVisitedKey, 'true');
     }
@@ -331,6 +329,50 @@ export default function Home() {
     setRevertingBack(false);
   };
 
+  function updateGetStarted({
+    goodRating,
+    lowRate,
+    postRating,
+  }: {
+    goodRating?: boolean;
+    lowRate?: boolean;
+    postRating?: boolean;
+  }) {
+    if (!address || !chainId) return;
+
+    const currentUserKey = `${chainId}_${address}`;
+    const storedData = JSON.parse(
+      localStorage.getItem(StorageLabel.GET_STARTED_DATA) || '{}'
+    );
+
+    const userData = storedData[currentUserKey] || {};
+
+    const updatedUserData = {
+      ...userData,
+      goodRating: goodRating || userData.goodRating,
+      lowRate: lowRate || userData.lowRate,
+      postRating: postRating || userData.postRating,
+    };
+
+    // Update the main data object
+    storedData[currentUserKey] = updatedUserData;
+
+    localStorage.setItem(
+      StorageLabel.GET_STARTED_DATA,
+      JSON.stringify(storedData)
+    );
+  }
+
+  function getGetStarted() {
+    if (!address || !chainId) return {};
+
+    const storedData = JSON.parse(
+      localStorage.getItem(StorageLabel.GET_STARTED_DATA) || '{}'
+    );
+
+    return storedData[`${chainId}_${address}`] || {};
+  }
+
   if (isLoading) return <Spinner />;
 
   if (!address || !chainId) return redirect('/landing');
@@ -348,8 +390,8 @@ export default function Home() {
           ballotError ||
           showLowRateModal ||
           revertingBack ||
-          (showPostRatingModal.show && !showPostRatingModal.disabeled) ||
-          (showGoodRatingModal.show && !showGoodRatingModal.disabeled)
+          showPostRatingModal ||
+          showGoodRatingModal
         }
         onClose={() => {}}
       >
@@ -381,18 +423,20 @@ export default function Home() {
             cancelSelection={() => setShowLowRateModal(false)}
           />
         )}
-        {showPostRatingModal.show && !showPostRatingModal.disabeled && (
+        {showPostRatingModal && (
           <PostRatingModal
-            confirm={() =>
-              setShowPostRatingModal({ show: false, disabeled: true })
-            }
+            confirm={() => {
+              updateGetStarted({ postRating: true });
+              setShowPostRatingModal(false);
+            }}
           />
         )}
-        {showGoodRatingModal.show && !showGoodRatingModal.disabeled && (
+        {showGoodRatingModal && (
           <GoodRatingModal
-            confirm={() =>
-              setShowGoodRatingModal({ show: false, disabeled: true })
-            }
+            confirm={() => {
+              updateGetStarted({ goodRating: true });
+              setShowGoodRatingModal(false);
+            }}
           />
         )}
       </Modal>
