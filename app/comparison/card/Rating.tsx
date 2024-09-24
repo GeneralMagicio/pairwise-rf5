@@ -42,16 +42,10 @@ export const Rating: FC<Props> = ({ value, disabled, onChange }) => {
   }, [hoverValue]);
 
   useEffect(() => {
-    setStarsColoring(getStarsColoring(value).activeFillColor);
-    setCurrentValue(value);
-  }, [ value]);
-
-  useEffect(() => {
-    if (disabled) {
-      setStarsColoring(getStarsColoring(0).activeFillColor);
-      setCurrentValue(0);
-    }
-  }, []);
+    const newValue = disabled ? 0 : value;
+    setStarsColoring(getStarsColoring(newValue).activeFillColor);
+    setCurrentValue(newValue);
+  }, [value, disabled]);
 
   return (
     <div className="flex items-center justify-between">
