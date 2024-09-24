@@ -40,7 +40,7 @@ const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
       <Image
         src="/assets/images/intro-page.svg"
         alt="Voting Intro"
-        className="absolute right-0 top-0"
+        className="absolute right-0 top-0 -z-50"
         width={1167}
         height={1167}
       />
