@@ -1,7 +1,7 @@
 import { JWTPayload } from '@/app/utils/wallet/types';
 
 export const convertCategoryNameToId = (category: JWTPayload['category']) => {
-  console.log('input cat name:', category);
+  console.log('input cat name::', category);
   switch (category) {
     case 'ETHEREUM_CORE_CONTRIBUTIONS':
       return 1;
