@@ -4,11 +4,15 @@ import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 import { PowerIcon } from '@/public/assets/icon-components/Power';
 
 interface Props {
-  wallet: string
-  onLogout: () => void
+  wallet: string;
+  onLogout: () => void;
 }
 
-export function shortenWalletAddress(address: string, startLength: number = 7, endLength: number = 7): string {
+export function shortenWalletAddress(
+  address: string,
+  startLength: number = 7,
+  endLength: number = 7
+): string {
   // Check if the address is valid (starts with '0x' and has 42 characters)
   if (!address.startsWith('0x') || address.length !== 42) {
     throw new Error('Invalid wallet address format');
@@ -29,29 +33,37 @@ export function shortenWalletAddress(address: string, startLength: number = 7, e
 
 const LogoutButton: FC<Pick<Props, 'onLogout'>> = ({ onLogout }) => {
   return (
-    <button onClick={onLogout} className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2">
+    <button
+      onClick={onLogout}
+      className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2"
+    >
       <PowerIcon />
       <span className="text-primary"> Log out </span>
     </button>
   );
 };
 
-export const ConnectedButton: FC<Props> = ({ wallet, onLogout }) => {
+const ConnectedButton: FC<Props> = ({ wallet, onLogout }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <button onClick={() => setOpen(!open)} className="relative flex h-fit w-44 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2">
-      <span className="text-sm text-gray-800">
-        {shortenWalletAddress(wallet)}
-      </span>
-      {open
-        ? <ArrowUpIcon />
-        : <ArrowDownIcon />}
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex h-fit w-44 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2"
+      >
+        <span className="text-sm text-gray-800">
+          {shortenWalletAddress(wallet)}
+        </span>
+        {open ? <ArrowUpIcon /> : <ArrowDownIcon />}
+      </button>
       {open && (
-        <div className="absolute -bottom-12 left-0 w-44 bg-white">
+        <div className="absolute left-0 w-44 bg-white shadow-md">
           <LogoutButton onLogout={onLogout} />
         </div>
       )}
-    </button>
+    </div>
   );
 };
+
+export { ConnectedButton };
