@@ -121,6 +121,14 @@ interface Props {
   key2: string;
 }
 
+const NoneBox: FC = () => (
+  <div className="space-y-2">
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
+      None
+    </div>
+  </div>
+);
+
 export const ProjectCard: React.FC<Props> = ({
   project,
   coi,
@@ -227,12 +235,9 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       )}
       <div
-        style={{
-          maskImage: 'linear-gradient(to bottom, white 85%, transparent 120%)',
-        }}
         className={`container relative mx-auto my-4
       h-[80vh] w-full rounded-xl border 
-      border-gray-200 bg-gray-50 px-4 pb-8 pt-4 shadow-md ${
+      border-gray-200 bg-gray-50 px-4 pb-8 pt-4 ${
         coi || coiLoading ? 'brightness-50' : ''
       }`}
       >
@@ -359,62 +364,74 @@ export const ProjectCard: React.FC<Props> = ({
               )}
               title={ProjectSectionTitles[ProjectSection.REPOS]}
             >
-              <div className="space-y-4">
-                {project.github?.map((repo) => (
-                  <GithubBox key={repo.url} repo={repo} />
-                ))}
-                {project.links?.map((contract) => (
-                  <SimpleInfoBox
-                    key={contract.url}
-                    description={contract.description}
-                    title={contract.url}
-                    type="link"
-                  />
-                ))}
-                {project.contracts
-                  ?.filter(
-                    (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
-                  )
-                  .map((contract) => (
+              {project.github?.length ||
+              project.links?.length ||
+              project.contracts?.some(
+                (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
+              ) ? (
+                <div className="space-y-4">
+                  {project.github?.map((repo) => (
+                    <GithubBox key={repo.url} repo={repo} />
+                  ))}
+
+                  {project.links?.map((link) => (
                     <SimpleInfoBox
-                      key={`${contract.chainId}_${contract.address}`}
-                      description=""
-                      title={contract.address}
-                      type="contract"
+                      key={link.url}
+                      description={link.description}
+                      title={link.url}
+                      type="link"
                     />
                   ))}
-              </div>
+
+                  {project.contracts
+                    ?.filter(
+                      (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
+                    )
+                    .map((contract) => (
+                      <SimpleInfoBox
+                        key={`${contract.chainId}_${contract.address}`}
+                        description=""
+                        title={contract.address}
+                        type="contract"
+                      />
+                    ))}
+                </div>
+              ) : (
+                <NoneBox />
+              )}
             </Section>
-            {project.testimonials?.length > 0 && (
-              <Section
-                id={`testimonials-${name}`}
-                setExpanded={hnadleExpanded(ProjectSection.TESTIMONIALS)}
-                expanded={sectionExpanded[ProjectSection.TESTIMONIALS]}
-                onClick={handleSectionClick(
-                  ProjectSection.TESTIMONIALS,
-                  !sectionExpanded[ProjectSection.TESTIMONIALS]
-                )}
-                title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
-              >
+            <Section
+              id={`testimonials-${name}`}
+              setExpanded={hnadleExpanded(ProjectSection.TESTIMONIALS)}
+              expanded={sectionExpanded[ProjectSection.TESTIMONIALS]}
+              onClick={handleSectionClick(
+                ProjectSection.TESTIMONIALS,
+                !sectionExpanded[ProjectSection.TESTIMONIALS]
+              )}
+              title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
+            >
+              {project.testimonials?.length ? (
                 <SimpleInfoBox
                   title={project.testimonials}
                   description=""
                   type="link"
                   showIcon={false}
                 />
-              </Section>
-            )}
-            {project.impactStatement && (
-              <Section
-                id={`impact-${name}`}
-                setExpanded={hnadleExpanded(ProjectSection.IMPACT)}
-                expanded={sectionExpanded[ProjectSection.IMPACT]}
-                onClick={handleSectionClick(
-                  ProjectSection.IMPACT,
-                  !sectionExpanded[ProjectSection.IMPACT]
-                )}
-                title={ProjectSectionTitles[ProjectSection.IMPACT]}
-              >
+              ) : (
+                <NoneBox />
+              )}
+            </Section>
+            <Section
+              id={`impact-${name}`}
+              setExpanded={hnadleExpanded(ProjectSection.IMPACT)}
+              expanded={sectionExpanded[ProjectSection.IMPACT]}
+              onClick={handleSectionClick(
+                ProjectSection.IMPACT,
+                !sectionExpanded[ProjectSection.IMPACT]
+              )}
+              title={ProjectSectionTitles[ProjectSection.IMPACT]}
+            >
+              {project.impactStatement ? (
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <p>
@@ -446,8 +463,10 @@ export const ProjectCard: React.FC<Props> = ({
                     )}
                   </div>
                 </div>
-              </Section>
-            )}
+              ) : (
+                <NoneBox />
+              )}
+            </Section>
             <Section
               id={`pricing-${name}`}
               setExpanded={hnadleExpanded(ProjectSection.PRICING)}
@@ -460,13 +479,15 @@ export const ProjectCard: React.FC<Props> = ({
             >
               <div className="space-y-2 capitalize">
                 {project.pricingModel &&
-                  typeof project.pricingModel === 'object' && (
-                    <SimpleInfoBox
-                      title={project.pricingModel.type || ''}
-                      description={project.pricingModel.details || ''}
-                      type="pricing"
-                    />
-                  )}
+                typeof project.pricingModel === 'object' ? (
+                  <SimpleInfoBox
+                    title={project.pricingModel.type || ''}
+                    description={project.pricingModel.details || ''}
+                    type="pricing"
+                  />
+                ) : (
+                  <NoneBox />
+                )}
               </div>
             </Section>
             <Section
@@ -504,11 +525,7 @@ export const ProjectCard: React.FC<Props> = ({
                   ))}
                 </div>
               ) : (
-                <div className="space-y-2">
-                  <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
-                    None
-                  </div>
-                </div>
+                <NoneBox />
               )}
             </Section>
           </div>
