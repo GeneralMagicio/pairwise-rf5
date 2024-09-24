@@ -1,9 +1,11 @@
+import { JWTPayload } from '@/app/utils/wallet/types';
+
 export type ProjectMetadata =
   {
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -79,7 +81,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -91,7 +93,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -186,7 +188,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -198,7 +200,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -272,7 +274,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -284,7 +286,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -376,7 +378,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -388,7 +390,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -463,7 +465,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -475,7 +477,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -547,7 +549,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -559,7 +561,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: null
     organization: null
     name: string
@@ -600,7 +602,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -693,7 +695,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -705,7 +707,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -777,7 +779,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -789,7 +791,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -859,7 +861,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -871,7 +873,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -959,7 +961,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -971,7 +973,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: null
     organization: null
     name: string
@@ -1006,7 +1008,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1085,7 +1087,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1097,7 +1099,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1163,7 +1165,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1175,7 +1177,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1248,7 +1250,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1260,7 +1262,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1357,7 +1359,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1369,7 +1371,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: null
     organization: null
     name: string
@@ -1404,7 +1406,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1499,7 +1501,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1511,7 +1513,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1605,7 +1607,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1617,7 +1619,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -1691,7 +1693,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1703,7 +1705,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -1798,7 +1800,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1810,7 +1812,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -1877,7 +1879,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1889,7 +1891,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -1955,7 +1957,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -1967,7 +1969,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: null
     organization: null
     name: string
@@ -2006,7 +2008,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -2100,7 +2102,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -2112,7 +2114,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -2193,7 +2195,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -2205,7 +2207,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: null
     name: string
@@ -2285,7 +2287,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -2297,7 +2299,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -2392,7 +2394,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -2404,7 +2406,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -2502,7 +2504,7 @@ export type ProjectMetadata =
       details: string
     }
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string
@@ -2514,7 +2516,7 @@ export type ProjectMetadata =
     id: string
     applicationId: string
     projectId: string
-    category: string
+    category: JWTPayload['category']
     applicationCategory: string
     organization: {
       name: string
@@ -2600,7 +2602,7 @@ export type ProjectMetadata =
     }
     pricingModel: string
     impactStatement: {
-      category: string
+      category: JWTPayload['category']
       subcategory: string[]
       statement: {
         answer: string

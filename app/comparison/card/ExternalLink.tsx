@@ -5,8 +5,8 @@ import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
 import { XIcon } from '@/public/assets/icon-components/XIcon';
 
 interface Props {
-  type: 'website' | 'warpcast' | 'x' | 'mirror'
-  address: string
+  type: 'website' | 'warpcast' | 'x' | 'mirror';
+  address: string;
 }
 
 const getIcon = (type: Props['type']) => {
@@ -28,8 +28,13 @@ export const ExternalLink: FC<Props> = ({ address, type }) => {
   return (
     <div className="flex items-center gap-1">
       {getIcon(type)}
-      <a target="_blank" rel="noopener noreferrer" href={address} className="break-all">
-        {type === 'website' ? address : address.includes('https://') ? address.split('https://')[1] : address}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={address}
+        className="break-all"
+      >
+        {type === 'website' ? address : address.replace(/^https?:\/\//, '')}
       </a>
     </div>
   );

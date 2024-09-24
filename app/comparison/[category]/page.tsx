@@ -18,7 +18,7 @@ import {
   getPairwisePairsForProject,
   useGetPairwisePairs,
 } from '../utils/data-fetching/pair';
-import { convertCategoryNameToId } from '../utils/helpers';
+import { convertCategoryNameToId , convertCategoryToLabel } from '../utils/helpers';
 import {
   useUpdateProjectUndo,
   useUpdateProjectVote,
@@ -41,15 +41,6 @@ import PostRatingModal from '../card/modals/PostRatingModal';
 import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
-
-const convertCategoryToLabel = (category: JWTPayload['category']) => {
-  const labels = {
-    ETHEREUM_CORE_CONTRIBUTIONS: 'Ethereum Core Contributors',
-    OP_STACK_RESEARCH_AND_DEVELOPMENT: 'OP Stack R&D',
-    OP_STACK_TOOLING: 'OP Stack Tooling',
-  };
-  return labels[category] || 'OP Stack';
-};
 
 export default function Home() {
   const { category } = useParams();

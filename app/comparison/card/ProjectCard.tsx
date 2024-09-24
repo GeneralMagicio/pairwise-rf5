@@ -15,6 +15,7 @@ import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
 import CoILoadingModal from './modals/CoILoading';
 import ProjectDescription from './ProjectDescription';
 import { StarsIcon } from '@/public/assets/icon-components/Stars';
+import { convertCategoryToLabel } from '../utils/helpers';
 
 enum ProjectSection {
   REPOS = 'repos',
@@ -417,7 +418,10 @@ export const ProjectCard: React.FC<Props> = ({
                   <div className="space-y-2">
                     <p>
                       <strong className="text-gray-800">Category:</strong>{' '}
-                      {project.impactStatement.category}
+                      {project.impactStatement.category &&
+                        convertCategoryToLabel(
+                          project.impactStatement.category
+                        )}
                     </p>
                     <p>
                       <strong className="text-gray-800">Subcategory:</strong>{' '}

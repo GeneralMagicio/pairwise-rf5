@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <div className="w-full">
-      <div className="flex flex-col-reverse items-center justify-between px-6 py-4 md:px-12 lg:flex-row lg:items-start lg:px-4">
+      <div className="flex flex-col-reverse items-center justify-between px-6 py-4 md:px-12 lg:flex-row lg:px-4">
         {!isFirstSelection && (
           <div className="flex items-center justify-between bg-white px-4 py-2">
             <div className="flex items-center">
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({
           <h2 className="text-center text-xl font-semibold">{question}</h2>
         </div>
         <div className="flex items-center">
-          <span className="mr-2 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">
+          <span className="mr-2 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-link">
             {category}
           </span>
           <ConnectButton />
