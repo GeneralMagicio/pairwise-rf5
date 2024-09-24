@@ -23,6 +23,7 @@ const config: Config = {
         blue: {
           foreground: '#3374DB',
           background: '#D6E4FF',
+          link: '#3374DB',
         },
         dark: {
           500: '#05060B',

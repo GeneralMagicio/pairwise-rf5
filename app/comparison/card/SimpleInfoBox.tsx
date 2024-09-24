@@ -33,7 +33,7 @@ const SimpleInfoBox: FC<Props> = ({
 
     const isContract = type === 'contract';
     const href = isContract ? `${OP_EXPLORER_URL}/address/${title}` : title;
-    const displayTitle = isContract ? title : title.split('https://')[1];
+    const displayTitle = isContract ? title : title.replace(/(https?:\/\/)|(https:)/, '');
 
     return (
       <a
