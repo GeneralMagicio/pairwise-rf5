@@ -42,6 +42,10 @@ import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
 
+const getSuccessBalootLSKey = (address: string) => {
+  return `has-unlocked-ballot-${address}`;
+};
+
 const convertCategoryToLabel = (category: JWTPayload['category']) => {
   const labels = {
     ETHEREUM_CORE_CONTRIBUTIONS: 'Ethereum Core Contributors',
@@ -139,9 +143,11 @@ export default function Home() {
   }, [data]);
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || !address) return;
     if (data.pairs.length === 0) {
-      setShowFinishBallot(true);
+      const value = localStorage.getItem(getSuccessBalootLSKey(address));
+      if (!value || !JSON.parse(value)) setShowFinishBallot(true);
+      else setShowSuccessBallot(true);
       if (!project1 || !project2) {
         setProject1(mockProject1);
         setProject2(mockProject2);
@@ -281,6 +287,7 @@ export default function Home() {
     try {
       const ballot = await getBallot(cid);
       await uploadBallot(ballot, address);
+      localStorage.setItem(getSuccessBalootLSKey(address), 'true');
       setShowSuccessBallot(true);
     } catch (e) {
       setBallotError(true);
