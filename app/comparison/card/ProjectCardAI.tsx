@@ -211,7 +211,7 @@ export const ProjectCardAI: React.FC<Props> = ({
 const SummaryBox : FC<{section: ProjectAiSummary[0]}> = ({section}) => {
 
   return (
-  <div className='list-item border-b-2 border-gray-200 pb-4'>
+  <div className='list-item border-t-2 border-gray-200 pt-4'>
     <h3 className='mb-2 text-lg font-bold'> {section.subHeader} </h3>
     <ul className=''>
     {section.points.map((point) => (

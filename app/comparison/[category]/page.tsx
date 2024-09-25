@@ -42,7 +42,7 @@ import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
 import { ProjectCardAI } from '../card/ProjectCardAI';
-import { mockDataAI } from '../card/mockDataAI';
+import { mockDataAI, mockDataAI2 } from '../card/mockDataAI';
 
 const getSuccessBalootLSKey = (address: string) => {
   return `has-unlocked-ballot-${address}`;
@@ -209,8 +209,10 @@ export default function Home() {
     }
   }, [address, chainId, data?.votedPairs]);
 
-  const toggleAiMode1 = () => setAiMode1(!aiMode1);
-  const toggleAiMode2 = () => setAiMode2(!aiMode2);
+  const toggleAiMode = () => {
+    setAiMode1(!aiMode1);
+    setAiMode2(!aiMode2);
+  };
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -459,7 +461,7 @@ export default function Home() {
             <ProjectCardAI
               key={project1.RPGF5Id}
               aiMode={aiMode1}
-              setAi={toggleAiMode1}
+              setAi={toggleAiMode}
               key1={project1.RPGF5Id}
               key2={project2.RPGF5Id}
               coiLoading={coiLoading1}
@@ -472,7 +474,7 @@ export default function Home() {
             : <ProjectCard
               key={project1.RPGF5Id}
               aiMode={aiMode1}
-              setAi={toggleAiMode1}
+              setAi={toggleAiMode}
               sectionExpanded={sectionExpanded1}
               setSectionExpanded={setSectionExpanded1}
               name="card1"
@@ -492,12 +494,12 @@ export default function Home() {
               <ProjectCardAI 
               key={project2.RPGF5Id}
               aiMode={aiMode2}
-              setAi={toggleAiMode2}
+              setAi={toggleAiMode}
               key1={project2.RPGF5Id}
               key2={project1.RPGF5Id}
               coiLoading={coiLoading2}
               coi={coi2}
-              summaryData={mockDataAI}
+              summaryData={mockDataAI2}
               onCoICancel={cancelCoI2}
               onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
               project={{ ...project2.metadata, ...project2 } as any}
@@ -506,7 +508,7 @@ export default function Home() {
             :<ProjectCard
               key={project2.RPGF5Id}
               aiMode={aiMode2}
-              setAi={toggleAiMode2}
+              setAi={toggleAiMode}
               sectionExpanded={sectionExpanded2}
               setSectionExpanded={setSectionExpanded2}
               name="card2"
