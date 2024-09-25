@@ -222,7 +222,7 @@ export const ProjectCard: React.FC<Props> = ({
   return (
     <div ref={divRef} className="relative">
       {coi && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <ConflictOfInterestModal
             onCancel={onCoICancel}
             onDeclareConflict={onCoIConfirm}
@@ -230,7 +230,7 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       )}
       {coiLoading && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <CoILoadingModal />
         </div>
       )}
@@ -267,7 +267,7 @@ export const ProjectCard: React.FC<Props> = ({
               ref={titleRef}
               className={`mb-4 mt-16 transition-all ${
                 isSticky
-                  ? 'sticky left-0 top-0 z-50 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
+                  ? 'sticky left-0 top-0 z-30 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
                   : ''
               }`}
             >
