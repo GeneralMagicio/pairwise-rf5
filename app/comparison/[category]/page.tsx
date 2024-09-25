@@ -212,6 +212,7 @@ export default function Home() {
   const toggleAiMode = () => {
     setAiMode1(!aiMode1);
     setAiMode2(!aiMode2);
+    setLastAction(undefined);
   };
 
   const dispatchAction =
