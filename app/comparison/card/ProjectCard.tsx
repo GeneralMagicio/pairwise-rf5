@@ -17,6 +17,7 @@ import ProjectDescription from './ProjectDescription';
 import { StarsIcon } from '@/public/assets/icon-components/Stars';
 import { convertCategoryToLabel } from '../utils/helpers';
 import { JWTPayload } from '@/app/utils/wallet/types';
+import styles from '@/app/styles/Project.module.css';
 
 enum ProjectSection {
   REPOS = 'repos',
@@ -283,7 +284,7 @@ export const ProjectCard: React.FC<Props> = ({
                   />
                 )}
                 <div className="flex flex-col gap-3">
-                  <h1 className="font-inter text-3xl font-semibold">
+                  <h1 className={`font-inter text-3xl font-semibold ${styles.oneLineClamp}`}>
                     {project.name}
                   </h1>
                   {project.organization && (

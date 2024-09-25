@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full z-40 bg-white">
+    <div className="relative z-40 w-full bg-white">
       <div className="flex flex-col-reverse items-center justify-between px-6 py-4 md:px-12 lg:flex-row lg:px-4">
         {!isFirstSelection && (
           <div className="flex items-center justify-between bg-white px-4 py-2">
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({
 
       <div
         className={`h-2 bg-red-100 ${
-          isBarFixed ? 'fixed top-0 left-0 w-full z-50' : ''
+          isBarFixed ? 'fixed left-0 top-0 z-50 w-full' : ''
         }`}
       >
         <div className="h-full bg-primary" style={{ width: `${progress}%` }}></div>
