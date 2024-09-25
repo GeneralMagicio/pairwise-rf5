@@ -41,6 +41,8 @@ import PostRatingModal from '../card/modals/PostRatingModal';
 import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
+import { ProjectCardAI } from '../card/ProjectCardAI';
+import { mockDataAI, mockDataAI2 } from '../card/mockDataAI';
 
 const getSuccessBalootLSKey = (address: string) => {
   return `has-unlocked-ballot-${address}`;
@@ -93,6 +95,8 @@ export default function Home() {
   const [temp, setTemp] = useState(0);
   const [coi1, setCoi1] = useState(false);
   const [coi2, setCoi2] = useState(false);
+  const [aiMode1, setAiMode1] = useState(false);
+  const [aiMode2, setAiMode2] = useState(false);
   const [isInitialVisit, setIsInitialVisit] = useState(true);
 
   const cid = convertCategoryNameToId(category as JWTPayload['category']);
@@ -205,6 +209,11 @@ export default function Home() {
     }
   }, [address, chainId, data?.votedPairs]);
 
+  const toggleAiMode = () => {
+    setAiMode1(!aiMode1);
+    setAiMode2(!aiMode2);
+    setLastAction(undefined);
+  };
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -450,8 +459,24 @@ export default function Home() {
       ) : (
         <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
           <div className="relative w-[49%]">
-            <ProjectCard
+            {aiMode1 ? 
+            <ProjectCardAI
               key={project1.RPGF5Id}
+              aiMode={aiMode1}
+              setAi={toggleAiMode}
+              key1={project1.RPGF5Id}
+              key2={project2.RPGF5Id}
+              coiLoading={coiLoading1}
+              summaryData={mockDataAI}
+              coi={coi1}
+              project={{ ...project1.metadata, ...project1 } as any}
+              onCoICancel={cancelCoI1}
+              onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+            />
+            : <ProjectCard
+              key={project1.RPGF5Id}
+              aiMode={aiMode1}
+              setAi={toggleAiMode}
               sectionExpanded={sectionExpanded1}
               setSectionExpanded={setSectionExpanded1}
               name="card1"
@@ -464,11 +489,28 @@ export default function Home() {
               project={{ ...project1.metadata, ...project1 } as any}
               onCoICancel={cancelCoI1}
               onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
-            />
+            />}
           </div>
           <div className="relative w-[49%]">
-            <ProjectCard
+            {aiMode2 ? 
+              <ProjectCardAI 
               key={project2.RPGF5Id}
+              aiMode={aiMode2}
+              setAi={toggleAiMode}
+              key1={project2.RPGF5Id}
+              key2={project1.RPGF5Id}
+              coiLoading={coiLoading2}
+              coi={coi2}
+              summaryData={mockDataAI2}
+              onCoICancel={cancelCoI2}
+              onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+              project={{ ...project2.metadata, ...project2 } as any}
+              />
+            
+            :<ProjectCard
+              key={project2.RPGF5Id}
+              aiMode={aiMode2}
+              setAi={toggleAiMode}
               sectionExpanded={sectionExpanded2}
               setSectionExpanded={setSectionExpanded2}
               name="card2"
@@ -481,7 +523,7 @@ export default function Home() {
               onCoICancel={cancelCoI2}
               onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
               project={{ ...project2.metadata, ...project2 } as any}
-            />
+            />}
           </div>
         </div>
       )}
