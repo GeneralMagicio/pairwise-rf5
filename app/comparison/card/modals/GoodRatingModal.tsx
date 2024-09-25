@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import Image from "next/image";
-import { StarIcon } from "@/public/assets/icon-components/Star";
+import React, { FC } from 'react';
+import Image from 'next/image';
+import { StarIcon } from '@/public/assets/icon-components/Star';
 
 interface IGoodRatingModalProps {
   confirm: () => void;
@@ -16,7 +16,7 @@ const StarRating: FC<IStarRatingProps> = ({ color, numRated }) => (
     {[...Array(5)].map((_, index) => (
       <StarIcon
         key={index}
-        color={index < numRated ? color : "#D0D5DD"}
+        color={index < numRated ? color : '#D0D5DD'}
         size={20}
       />
     ))}
@@ -24,11 +24,11 @@ const StarRating: FC<IStarRatingProps> = ({ color, numRated }) => (
 );
 
 const ratingOptions = [
-  { color: "#FF1D1D", numRated: 1, label: "No impact on the OP stack" },
-  { color: "#FF8C22", numRated: 2, label: "Low impact on the OP stack" },
-  { color: "#F8CE00", numRated: 3, label: "Medium impact on the OP stack" },
-  { color: "#46C34C", numRated: 4, label: "High impact on the OP stack" },
-  { color: "#479F78", numRated: 5, label: "Very High impact on the OP stack" },
+  { color: '#FF1D1D', numRated: 1, label: 'No impact on the OP stack' },
+  { color: '#FF8C22', numRated: 2, label: 'Low impact on the OP stack' },
+  { color: '#F8CE00', numRated: 3, label: 'Medium impact on the OP stack' },
+  { color: '#46C34C', numRated: 4, label: 'High impact on the OP stack' },
+  { color: '#479F78', numRated: 5, label: 'Very High impact on the OP stack' },
 ];
 
 const GoodRatingModal: FC<IGoodRatingModalProps> = ({ confirm }) => (
@@ -48,11 +48,11 @@ const GoodRatingModal: FC<IGoodRatingModalProps> = ({ confirm }) => (
       How would you rate the second project?
     </h2>
 
-    <div className="flex flex-col text-gray-400 text-sm mb-8 justify-center gap-6 font-normal font-inter px-2">
+    <div className="mb-8 flex flex-col justify-center gap-6 px-2 font-inter text-sm font-normal text-gray-400">
       {ratingOptions.map(({ color, numRated, label }, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 md:flex-row flex-col-reverse"
+          className="flex flex-col-reverse items-center gap-4 md:flex-row"
         >
           <StarRating color={color} numRated={numRated} />
           <label htmlFor="good">{label}</label>
