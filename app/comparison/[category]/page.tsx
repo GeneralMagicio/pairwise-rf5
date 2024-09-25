@@ -486,7 +486,7 @@ export default function Home() {
         </div>
       )}
 
-      <footer className="sticky bottom-0 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner z-50">
+      <footer className="sticky bottom-0 z-50 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
         <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
           <Rating
             value={rating1}

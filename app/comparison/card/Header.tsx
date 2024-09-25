@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({
   isFirstSelection,
 }) => {
   return (
-    <div className="sticky w-full bg-white z-40">
+    <div className="sticky z-40 w-full bg-white">
       <div className="flex flex-col-reverse items-center justify-between px-6 py-4 md:px-12 lg:flex-row lg:px-4">
         {!isFirstSelection && (
           <div className="flex items-center justify-between bg-white px-4 py-2">
