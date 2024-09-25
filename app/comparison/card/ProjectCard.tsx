@@ -152,15 +152,14 @@ export const ProjectCard: React.FC<Props> = ({
   const parentRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const OFFSET = 150;
-
   useEffect(() => {
     const parentElement = parentRef.current;
-
+    
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect();
-        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET);
+        const offset = parentRef.current.getBoundingClientRect()?.top;
+        setIsSticky(rect.top <= offset && rect.top >= -offset);
       }
     };
 
