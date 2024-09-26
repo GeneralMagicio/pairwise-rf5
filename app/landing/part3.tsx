@@ -3,8 +3,8 @@ import TextBlock from '../components/TextBlock';
 
 export const LandingPart3 = () => {
   return (
-    <div className="flex h-[calc(0.65*100vh)] min-h-[calc(0.85*760px)] w-full flex-col items-center justify-center gap-20 md:flex-row md:justify-between md:gap-40">
-      <div className="flex max-w-[700px] flex-col gap-2 font-inter text-4xl font-bold sl:text-2xl">
+    <div className="flex h-[calc(0.65*100vh)] min-h-[calc(0.85*760px)] w-full flex-col items-center justify-center gap-20 md:flex-row md:justify-between md:gap-0">
+      <div className="flex max-w-[560px] flex-col gap-2 font-inter text-4xl font-bold sl:text-2xl">
         <TextBlock
           mainText="After completion your results will be landed back outside of Pairwise to edit your"
           highlightText="Ballot"
@@ -19,8 +19,8 @@ export const LandingPart3 = () => {
           }}
         />
       </div>
-      <div className="relative h-[450px] w-full md:h-[620px]">
-        <Image src="assets/images/landing-p3.svg" alt="landing part 2" fill />
+      <div className="relative flex h-[450px] w-full md:h-[620px] justify-end">
+        <Image src="assets/images/landing-p3.svg" alt="landing part 2" width={700} height={620} />
       </div>
     </div>
   );
