@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useAccount, useSignMessage } from 'wagmi';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login';
 import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login';
 import { JWTPayload } from './types';
@@ -30,6 +30,8 @@ interface AuthContextType {
   setIsNewUser: (bool: boolean) => void
   loggedToAgora: 'initial' | 'error' | JWTPayload
   setLoggedToAgora: (value: AuthContextType['loggedToAgora']) => void
+  loginAddress: {value: `0x${string}` | undefined, confirmed: boolean},
+  setLoginAddress: (value: AuthContextType['loginAddress']) => void,
 }
 
 const AuthContext = React.createContext<AuthContextType>({
@@ -41,6 +43,8 @@ const AuthContext = React.createContext<AuthContextType>({
   setLoggedToPw: () => {},
   setLoggedToAgora: () => {},
   setIsNewUser: () => {},
+  loginAddress: {value: undefined, confirmed: true},
+  setLoginAddress: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -54,6 +58,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [isNewUser, setIsNewUser] = useState(false);
 
+  const [loginAddress, setLoginAddress] = useState<AuthContextType['loginAddress']>({confirmed: true, value: undefined});
+
   return (
     <AuthContext.Provider
       value={{
@@ -65,6 +71,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoggedToPw,
         isNewUser,
         setIsNewUser,
+        loginAddress,
+        setLoginAddress
       }}
     >
       {children}
@@ -82,28 +90,47 @@ export const useAuth = () => {
     loginInProgress,
     setLoggedToAgora,
     setLoginInProgress,
+    loginAddress,
+    setLoginAddress,
     // setShowBhModal,
   } = useContext(AuthContext);
 
   // const [loginFlowDangling, setLoginFlowDangling] = useState(false)
-  const { address, chainId } = useAccount();
-  const prevAddress = usePrevious(address);
+  const { address: connectedAddress, chainId } = useAccount();
+  const prevAddress = usePrevious(connectedAddress);
   const { signMessageAsync } = useSignMessage();
   const [temp, setTemp] = useState(0);
   const router = useRouter();
+  const path = usePathname();
 
-  const signOut = async () => {
+  const signOut = async (redirectToLanding: boolean = true) => {
     signOutFromAgora();
     logoutFromPwBackend();
     setLoggedToAgora('initial');
+    setLoginAddress({value: undefined, confirmed: true});
     setLoggedToPw(LogginToPwBackendState.Initial);
     setIsNewUser(false);
-    router.push('/landing');
+    if (redirectToLanding) router.push('/landing');
   };
 
   useEffect(() => {
-    if (prevAddress && address !== prevAddress) signOut();
-  }, [address, prevAddress]);
+    const loggedInAddress = localStorage.getItem('loggedInAddress');
+    if (loggedInAddress) setLoginAddress({value: loggedInAddress as `0x${string}`, confirmed: true});
+  }, []);
+
+  useEffect(() => {
+    if (!prevAddress && !loginAddress.value) {
+      setLoginAddress({value: connectedAddress, confirmed: true});
+    }
+    else if (prevAddress && connectedAddress !== prevAddress && !path.includes('comparison')) {
+      console.log('In here?');
+      signOut();
+    } 
+    else if (prevAddress && connectedAddress !== prevAddress && path.includes('comparison')) {
+      console.log('No in here?');
+      setLoginAddress({...loginAddress, confirmed: false});
+    } 
+  }, [connectedAddress, prevAddress, path]);
 
   const redirectToComparisonPage = useCallback(() => {
     if (typeof loggedToAgora !== 'object') return;
@@ -113,8 +140,10 @@ export const useAuth = () => {
 
   const checkLoginFlow = useCallback(async () => {
     console.log('Running the check login flow');
+    const address = loginAddress.value;
     if (loginInProgress) return;
     if (!address || !chainId) return;
+    // setLoginAddress({value: connectedAddress, confirmed: false})
     try {
       console.log('Checking pw token if exists?');
       const validToken = await isLoggedIn();
@@ -165,7 +194,7 @@ export const useAuth = () => {
     }
 
     setLoginInProgress(false);
-  }, [address, temp]);
+  }, [loginAddress.value, temp, chainId]);
 
   useEffect(() => {
     if (typeof loggedToAgora === 'object') {
@@ -209,6 +238,8 @@ export const useAuth = () => {
     loggedToAgora,
     loginInProgress,
     signOut,
+    loginAddress,
+    setLoginAddress,
     redirectToComparisonPage,
     // setShowBhModal,
     checkLoginFlow,
