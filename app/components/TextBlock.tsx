@@ -1,5 +1,5 @@
-import { FC } from "react";
-import Image from "next/image";
+import { FC } from 'react';
+import Image from 'next/image';
 
 const TextBlock: FC<{
   mainText: string;
@@ -14,8 +14,8 @@ const TextBlock: FC<{
     scale?: number;
   };
 }> = ({ mainText, highlightText, description, highlightImage }) => (
-  <p className="w-4/5 text-start text-3xl font-bold text-dark-500 sm:w-[35%]] xl:text-4xl">
-    {mainText}{" "}
+  <p className="sm:w-[35%]] w-4/5 text-start text-3xl font-bold text-dark-500 xl:text-4xl">
+    {mainText}{' '}
     <span className="relative inline-block">
       <Image
         src={highlightImage.src}
@@ -26,11 +26,11 @@ const TextBlock: FC<{
         style={{
           transform: highlightImage.scale
             ? `scale(${highlightImage.scale})`
-            : "scale(1)",
+            : 'scale(1)',
         }}
       />
       <span className="text-primary">{highlightText}</span>
-    </span>{" "}
+    </span>{' '}
     {description}
   </p>
 );
