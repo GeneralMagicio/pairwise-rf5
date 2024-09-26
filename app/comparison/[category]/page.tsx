@@ -134,6 +134,10 @@ export default function Home() {
   }, [data]);
 
   useEffect(() => {
+    setLastAction(undefined);
+  }, [project1, project2]);
+
+  useEffect(() => {
     if (!data || !data.pairs?.length) return;
     console.log(data);
     setRating1(data.pairs[0][0].rating || 3);
