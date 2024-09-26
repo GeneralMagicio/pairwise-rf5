@@ -6,9 +6,9 @@ const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
   setUserAsVisited,
 }) => {
   return (
-    <div className="relative flex h-[86vh] w-full items-center justify-end gap-8 px-8 py-2">
-      <div className="left-0 mt-10 flex size-full flex-col items-start justify-center sm:mt-0">
-        <div className="ml-0 flex flex-col justify-center gap-16 sm:ml-[20px] lg:ml-[100px] xl:ml-[200px]">
+    <div className="relative flex h-[86vh] w-full items-center justify-end gap-8 px-8 py-2 lg:flex-row flex-col-reverse lg:gap-0 lg:px-0 lg:py-0">
+      <div className="left-0 mt-10 flex size-full flex-col items-start md:justify-center justify-end md:mb-0 mb-10 sm:mt-0">
+        <div className="ml-0 flex flex-col justify-center gap-16 sm:ml-[20px] lg:ml-[100px] xl:ml-[200px] lg:w-[35%] md:w-[50%] sm:w-[60%] w-[80%]">
           <TextBlock
             mainText="Use the"
             highlightText="Stars"
@@ -52,7 +52,7 @@ const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
 const ActionButton: FC<{ onClick: () => void, text: string }> = ({ onClick, text }) => (
   <button
     onClick={onClick}
-    className="mt-10 w-full rounded-lg bg-primary px-8 py-3 text-xl font-bold text-white sm:w-[42%]"
+    className="mt-10 w-full rounded-lg bg-primary px-8 py-3 text-xl font-bold text-white sm:w-[70%]"
   >
     {text}
   </button>
