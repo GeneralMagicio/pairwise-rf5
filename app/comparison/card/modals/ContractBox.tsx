@@ -1,8 +1,8 @@
-import { useCollapse } from "react-collapsed";
-import { base, fraxtal, mode, optimism, zora } from "viem/chains";
-import Image from "next/image";
-import { ArrowDownIcon } from "@/public/assets/icon-components/ArrowDown";
-import { ArrowUpIcon } from "@/public/assets/icon-components/ArrowUp";
+import { useCollapse } from 'react-collapsed';
+import { base, fraxtal, mode, optimism, zora } from 'viem/chains';
+import Image from 'next/image';
+import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
+import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 
 interface IContractBoxProps {
   address: string;
@@ -23,11 +23,11 @@ export const ContractBox = ({
   const { name, blockExplorers } = chain ?? {};
   const { url } = blockExplorers?.default ?? {};
   const icon = `https://icons.llamao.fi/icons/chains/rsz_${
-    name === "Mode Mainnet" ? "mode" : name?.toLowerCase()
+    name === 'Mode Mainnet' ? 'mode' : name?.toLowerCase()
   }.jpg`;
 
   const renderTitle = () => {
-    const title = address || "Contract";
+    const title = address || 'Contract';
 
     return (
       <a
@@ -57,7 +57,7 @@ export const ContractBox = ({
     <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div
         className={`flex items-center justify-between ${
-          isExpanded ? "mb-4" : ""
+          isExpanded ? 'mb-4' : ''
         }`}
       >
         <div className="flex items-center gap-2">
