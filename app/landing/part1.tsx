@@ -3,7 +3,7 @@ import TextBlock from '../components/TextBlock';
 
 export const LandingPart1 = () => {
   return (
-    <div className="flex h-[calc(0.90*100vh)] min-h-[768px] flex-col justify-center gap-40 md:flex-row md:justify-between md:gap-0">
+    <div className="flex lg:h-[calc(0.65*100vh)] md:h-[calc(0.40*100vh)] h-[calc(0.90*100vh)] lg:min-h-[calc(0.65*100vh)] md:min-h-[calc(0.40*100vh)] min-h-[768px] flex-col justify-center gap-20 md:flex-row md:justify-between md:gap-0">
       <div className="flex max-w-[400px] flex-col justify-center font-inter text-4xl font-bold md:max-w-[500px] sl:text-3xl">
         <TextBlock
           mainText="Use the"
