@@ -14,9 +14,9 @@ import { useAuth } from './AuthProvider';
 
 export const ConnectButton = () => {
   const { open } = useWeb3Modal();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { disconnectAsync } = useDisconnect();
-  const { signOut } = useAuth();
+  const { signOut, loginAddress } = useAuth();
 
   const logout = async () => {
     await disconnectAsync();
@@ -44,8 +44,8 @@ export const ConnectButton = () => {
   //   func()
   // }, [isConnected, address, chainId, signMessageAsync])
 
-  if (isConnected && address) return (
-    <ConnectedButton onLogout={logout} wallet={address} />
+  if (isConnected && loginAddress.value) return (
+    <ConnectedButton onLogout={logout} wallet={loginAddress.value} />
   );
 
   return (
