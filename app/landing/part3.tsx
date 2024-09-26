@@ -19,7 +19,7 @@ export const LandingPart3 = () => {
           }}
         />
       </div>
-      <div className="relative h-[450px] w-full md:size-[620px]">
+      <div className="relative h-[450px] w-full md:h-[620px]">
         <Image src="assets/images/landing-p3.svg" alt="landing part 2" fill />
       </div>
     </div>
