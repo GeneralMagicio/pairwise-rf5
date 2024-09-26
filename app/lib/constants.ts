@@ -1,7 +1,15 @@
-export const straColor = {
-  1: '#FFD700',
-  2: '#C0C0C0',
-  3: '#CD7F32',
-  4: '#FFA500',
-  5: '#FF0000',
+export const starColor = {
+  1: '#FF1D1D',
+  2: '#FF8C22',
+  3: '#F8CE00',
+  4: '#46C34C',
+  5: '#479F78',
+};
+
+export const starHoverColor = {
+  1: '#FF9999',
+  2: '#FFB570',
+  3: '#FFE870',
+  4: '#B2E6B4',
+  5: '#479F7899',
 };

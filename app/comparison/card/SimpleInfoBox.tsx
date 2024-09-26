@@ -1,21 +1,17 @@
 import React, { FC } from 'react';
 import { useCollapse } from 'react-collapsed';
 import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
-import { OPIcon } from '@/public/assets/icon-components/OP';
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 
 interface Props {
   title: string;
   description: string;
-  type: 'contract' | 'link' | 'pricing';
+  type: 'link' | 'pricing';
   showIcon?: boolean;
 }
 
-const OP_EXPLORER_URL = 'https://optimistic.etherscan.io/';
-
 const ICONS_MAP: Record<Props['type'], React.ReactNode> = {
-  contract: <OPIcon />,
   link: <WebsiteIcon height={20} width={20} />,
   pricing: null,
 };
@@ -31,9 +27,8 @@ const SimpleInfoBox: FC<Props> = ({
   const renderTitle = () => {
     if (type === 'pricing') return title;
 
-    const isContract = type === 'contract';
-    const href = isContract ? `${OP_EXPLORER_URL}/address/${title}` : title;
-    const displayTitle = isContract ? title : title.replace(/(https?:\/\/)|(https:)/, '');
+    const href = title;
+    const displayTitle = title.replace(/(https?:\/\/)|(https:)/, '');
 
     return (
       <a
