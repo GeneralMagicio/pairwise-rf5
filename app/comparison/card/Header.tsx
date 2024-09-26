@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ConnectButton } from '@/app/utils/wallet/Connect';
 
 interface HeaderProps {
-  progress: number
-  category: string
-  question: string
-  isFirstSelection?: boolean
+  progress: number;
+  category: string;
+  question: string;
+  isFirstSelection?: boolean;
 }
 
 const OPCharacter: React.FC = () => (
@@ -25,8 +25,26 @@ const Header: React.FC<HeaderProps> = ({
   question,
   isFirstSelection,
 }) => {
+  const [isBarFixed, setIsBarFixed] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsBarFixed(true);
+      } else {
+        setIsBarFixed(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="sticky z-40 w-full bg-white">
+    <div className="relative z-40 w-full bg-white">
       <div className="flex flex-col-reverse items-center justify-between px-6 py-4 md:px-12 lg:flex-row lg:px-4">
         {!isFirstSelection && (
           <div className="flex items-center justify-between bg-white px-4 py-2">
@@ -49,12 +67,12 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div className="h-2 bg-red-100">
-        <div
-          className="h-full bg-primary"
-          style={{ width: `${progress}%` }}
-        >
-        </div>
+      <div
+        className={`h-2 bg-red-100 ${
+          isBarFixed ? 'fixed left-0 top-0 z-50 w-full' : ''
+        }`}
+      >
+        <div className="h-full bg-primary" style={{ width: `${progress}%` }}></div>
       </div>
     </div>
   );

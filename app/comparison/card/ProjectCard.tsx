@@ -17,6 +17,7 @@ import ProjectDescription from './ProjectDescription';
 import { StarsIcon } from '@/public/assets/icon-components/Stars';
 import { convertCategoryToLabel } from '../utils/helpers';
 import { JWTPayload } from '@/app/utils/wallet/types';
+import styles from '@/app/styles/Project.module.css';
 
 enum ProjectSection {
   REPOS = 'repos',
@@ -154,15 +155,14 @@ export const ProjectCard: React.FC<Props> = ({
   const parentRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const OFFSET = 150;
-
   useEffect(() => {
     const parentElement = parentRef.current;
-
+    
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect();
-        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET);
+        const offset = parentRef.current.getBoundingClientRect()?.top;
+        setIsSticky(rect.top <= offset && rect.top >= -offset);
       }
     };
 
@@ -221,7 +221,7 @@ export const ProjectCard: React.FC<Props> = ({
   return (
     <div ref={divRef} className="relative">
       {coi && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <ConflictOfInterestModal
             onCancel={onCoICancel}
             onDeclareConflict={onCoIConfirm}
@@ -229,7 +229,7 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       )}
       {coiLoading && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <CoILoadingModal />
         </div>
       )}
@@ -266,7 +266,7 @@ export const ProjectCard: React.FC<Props> = ({
               ref={titleRef}
               className={`mb-4 mt-16 transition-all ${
                 isSticky
-                  ? 'sticky left-0 top-0 z-50 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
+                  ? 'sticky left-0 top-0 z-30 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
                   : ''
               }`}
             >
@@ -282,7 +282,7 @@ export const ProjectCard: React.FC<Props> = ({
                   />
                 )}
                 <div className="flex flex-col gap-3">
-                  <h1 className="font-inter text-3xl font-semibold">
+                  <h1 className={`font-inter text-3xl font-semibold ${styles.oneLineClamp}`}>
                     {project.name}
                   </h1>
                   {project.organization && (
