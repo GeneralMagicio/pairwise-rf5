@@ -195,9 +195,6 @@ export default function Home() {
       if (address && chainId) {
         localStorage.setItem(getVisitKey(), 'true');
       }
-      updateGetStarted({ goodRating: true, postRating: true });
-      setShowGoodRatingModal(false);
-      setShowPostRatingModal(false);
       setIsInitialVisit(false);
     };
 
