@@ -18,6 +18,7 @@ import { StarsIcon } from '@/public/assets/icon-components/Stars';
 import { convertCategoryToLabel } from '../utils/helpers';
 import { JWTPayload } from '@/app/utils/wallet/types';
 import styles from '@/app/styles/Project.module.css';
+import { ContractBox } from './modals/ContractBox';
 
 enum ProjectSection {
   REPOS = 'repos',
@@ -26,8 +27,6 @@ enum ProjectSection {
   PRICING = 'pricing',
   GRANTS = 'grants',
 }
-
-const OP_MAINNET_CHAIN_ID = 10;
 
 interface CollapsibleProps {
   title: string;
@@ -157,7 +156,7 @@ export const ProjectCard: React.FC<Props> = ({
 
   useEffect(() => {
     const parentElement = parentRef.current;
-    
+
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect();
@@ -282,7 +281,9 @@ export const ProjectCard: React.FC<Props> = ({
                   />
                 )}
                 <div className="flex flex-col gap-3">
-                  <h1 className={`font-inter text-3xl font-semibold ${styles.oneLineClamp}`}>
+                  <h1
+                    className={`font-inter text-3xl font-semibold ${styles.oneLineClamp}`}
+                  >
                     {project.name}
                   </h1>
                   {project.organization && (
@@ -365,9 +366,7 @@ export const ProjectCard: React.FC<Props> = ({
             >
               {project.github?.length ||
               project.links?.length ||
-              project.contracts?.some(
-                (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
-              ) ? (
+              project.contracts?.length ? (
                 <div className="space-y-4">
                   {project.github?.map((repo) => (
                     <GithubBox key={repo.url} repo={repo} />
@@ -382,18 +381,14 @@ export const ProjectCard: React.FC<Props> = ({
                     />
                   ))}
 
-                  {project.contracts
-                    ?.filter(
-                      (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
-                    )
-                    .map((contract) => (
-                      <SimpleInfoBox
-                        key={`${contract.chainId}_${contract.address}`}
-                        description=""
-                        title={contract.address}
-                        type="contract"
-                      />
-                    ))}
+                  {project.contracts?.map(({ address, chainId }) => (
+                    <ContractBox
+                      key={`${chainId}_${address}`}
+                      description=""
+                      address={address}
+                      chainId={chainId}
+                    />
+                  ))}
                 </div>
               ) : (
                 <NoneBox />

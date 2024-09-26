@@ -19,7 +19,7 @@ export const LandingPart3 = () => {
           }}
         />
       </div>
-      <div className="relative flex h-[450px] w-full md:h-[620px] justify-end">
+      <div className="relative flex h-[450px] w-full justify-end md:h-[620px]">
         <Image src="assets/images/landing-p3.svg" alt="landing part 2" width={700} height={620} />
       </div>
     </div>
