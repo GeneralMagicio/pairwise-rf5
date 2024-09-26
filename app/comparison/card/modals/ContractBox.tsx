@@ -31,7 +31,7 @@ export const ContractBox = ({
 
     return (
       <a
-        href={url}
+        href={`${url}/address/${address}`}
         target="_blank"
         rel="noopener noreferrer"
         className="break-all text-gray-700 hover:underline"
