@@ -2641,6 +2641,11 @@ export interface IProject {
   type: 'collection' | 'project'
 }
 
+export type ProjectAiSummary = {
+  subHeader: string;
+  points: string[];
+}[]
+
 export type CollectionProgressStatus =
   | 'Attested'
   | 'Finished'

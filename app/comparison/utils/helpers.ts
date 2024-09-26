@@ -9,7 +9,7 @@ export const convertCategoryNameToId = (category: JWTPayload['category']) => {
     case 'OP_STACK_RESEARCH_AND_DEVELOPMENT':
       return 3;
     default:
-      throw new Error('Invalid category name', category);
+      throw new Error(`Invalid category name: ${category}`);
   }
 };
 

@@ -120,6 +120,8 @@ interface Props {
   setSectionExpanded: (value: Props['sectionExpanded']) => void;
   key1: string;
   key2: string;
+  aiMode: boolean;
+  setAi: () => void;
 }
 
 const NoneBox: FC = () => (
@@ -143,8 +145,9 @@ export const ProjectCard: React.FC<Props> = ({
   setSectionExpanded,
   key1,
   key2,
+  aiMode,
+  setAi,
 }) => {
-  const [aiMode, setAiMode] = useState(false);
   const [render, setRender] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -205,10 +208,6 @@ export const ProjectCard: React.FC<Props> = ({
     if (divRef.current) {
       divRef.current.scrollTop = 0;
     }
-  };
-
-  const handleChange = () => {
-    setAiMode(!aiMode);
   };
 
   const handleSectionClick = (id: ProjectSection, expanded: boolean) => () => {
@@ -313,7 +312,7 @@ export const ProjectCard: React.FC<Props> = ({
                 width={50}
                 checkedIcon={false}
                 uncheckedIcon={false}
-                onChange={handleChange}
+                onChange={setAi}
                 checked={aiMode}
               />
               <p className="font-medium"> TLDR </p>

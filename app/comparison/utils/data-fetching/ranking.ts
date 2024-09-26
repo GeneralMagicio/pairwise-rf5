@@ -1,23 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
 import { axiosInstance } from '@/app/utils/axiosInstance';
-import { IProject } from '../types';
 
 export interface IProjectsRankingResponse {
-  ranking: IProject[]
+  ranking: {  rank: number
+    star: number
+    name: string
+    share: number
+  }[]
   hasRanking: boolean
   isFinished: boolean
   progress: string
   name: string
   share: number
   id: number
+
 }
 
 export const getProjectsRankingByCategoryId = async (
   cid: number,
-): Promise<AxiosResponse<IProjectsRankingResponse>> => {
-  return axiosInstance.get(`flow/ranking?cid=${cid}
-`);
+): Promise<IProjectsRankingResponse> => {
+  return (await axiosInstance.get(`flow/ranking?cid=${cid}
+`)).data;
 };
 
 export const useProjectsRankingByCategoryId = (cid: number) => {
