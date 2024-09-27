@@ -446,7 +446,7 @@ export const ProjectCard: React.FC<Props> = ({
                     </p>
                   </div>
                   <div className="space-y-2">
-                    {project.impactStatement.statement?.map(
+                    {project.impactStatement.statement.create.map(
                       ({ question, answer }) => (
                         <QABox
                           key={question}
