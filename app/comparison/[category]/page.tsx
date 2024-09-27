@@ -317,6 +317,8 @@ export default function Home() {
   };
 
   const handleVote = async (chosenId: number) => {
+    setCoiLoading1(true);
+    setCoiLoading2(true);
     await vote({
       data: {
         project1Id: project1!.id,
@@ -326,6 +328,8 @@ export default function Home() {
         pickedId: chosenId,
       },
     });
+    setCoiLoading1(false);
+    setCoiLoading2(false);
   };
 
   const handleUndo = async () => {
@@ -459,71 +463,74 @@ export default function Home() {
       ) : (
         <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
           <div className="relative w-[49%]">
-            {aiMode1 ? 
-            <ProjectCardAI
-              key={project1.RPGF5Id}
-              aiMode={aiMode1}
-              setAi={toggleAiMode}
-              key1={project1.RPGF5Id}
-              key2={project2.RPGF5Id}
-              coiLoading={coiLoading1}
-              summaryData={mockDataAI}
-              coi={coi1}
-              project={{ ...project1.metadata, ...project1 } as any}
-              onCoICancel={cancelCoI1}
-              onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
-            />
-            : <ProjectCard
-              key={project1.RPGF5Id}
-              aiMode={aiMode1}
-              setAi={toggleAiMode}
-              sectionExpanded={sectionExpanded1}
-              setSectionExpanded={setSectionExpanded1}
-              name="card1"
-              action={lastAction}
-              dispatchAction={dispatchAction('card1')}
-              key1={project1.RPGF5Id}
-              key2={project2.RPGF5Id}
-              coiLoading={coiLoading1}
-              coi={coi1}
-              project={{ ...project1.metadata, ...project1 } as any}
-              onCoICancel={cancelCoI1}
-              onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
-            />}
+            {aiMode1 ? (
+              <ProjectCardAI
+                key={project1.RPGF5Id}
+                aiMode={aiMode1}
+                setAi={toggleAiMode}
+                key1={project1.RPGF5Id}
+                key2={project2.RPGF5Id}
+                coiLoading={coiLoading1}
+                summaryData={mockDataAI}
+                coi={coi1}
+                project={{ ...project1.metadata, ...project1 } as any}
+                onCoICancel={cancelCoI1}
+                onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+              />
+            ) : (
+              <ProjectCard
+                key={project1.RPGF5Id}
+                aiMode={aiMode1}
+                setAi={toggleAiMode}
+                sectionExpanded={sectionExpanded1}
+                setSectionExpanded={setSectionExpanded1}
+                name="card1"
+                action={lastAction}
+                dispatchAction={dispatchAction('card1')}
+                key1={project1.RPGF5Id}
+                key2={project2.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi1}
+                project={{ ...project1.metadata, ...project1 } as any}
+                onCoICancel={cancelCoI1}
+                onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+              />
+            )}
           </div>
           <div className="relative w-[49%]">
-            {aiMode2 ? 
-              <ProjectCardAI 
-              key={project2.RPGF5Id}
-              aiMode={aiMode2}
-              setAi={toggleAiMode}
-              key1={project2.RPGF5Id}
-              key2={project1.RPGF5Id}
-              coiLoading={coiLoading2}
-              coi={coi2}
-              summaryData={mockDataAI2}
-              onCoICancel={cancelCoI2}
-              onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
-              project={{ ...project2.metadata, ...project2 } as any}
+            {aiMode2 ? (
+              <ProjectCardAI
+                key={project2.RPGF5Id}
+                aiMode={aiMode2}
+                setAi={toggleAiMode}
+                key1={project2.RPGF5Id}
+                key2={project1.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi2}
+                summaryData={mockDataAI2}
+                onCoICancel={cancelCoI2}
+                onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+                project={{ ...project2.metadata, ...project2 } as any}
               />
-            
-            :<ProjectCard
-              key={project2.RPGF5Id}
-              aiMode={aiMode2}
-              setAi={toggleAiMode}
-              sectionExpanded={sectionExpanded2}
-              setSectionExpanded={setSectionExpanded2}
-              name="card2"
-              action={lastAction}
-              dispatchAction={dispatchAction('card2')}
-              key1={project2.RPGF5Id}
-              key2={project1.RPGF5Id}
-              coiLoading={coiLoading2}
-              coi={coi2}
-              onCoICancel={cancelCoI2}
-              onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
-              project={{ ...project2.metadata, ...project2 } as any}
-            />}
+            ) : (
+              <ProjectCard
+                key={project2.RPGF5Id}
+                aiMode={aiMode2}
+                setAi={toggleAiMode}
+                sectionExpanded={sectionExpanded2}
+                setSectionExpanded={setSectionExpanded2}
+                name="card2"
+                action={lastAction}
+                dispatchAction={dispatchAction('card2')}
+                key1={project2.RPGF5Id}
+                key2={project1.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi2}
+                onCoICancel={cancelCoI2}
+                onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+                project={{ ...project2.metadata, ...project2 } as any}
+              />
+            )}
           </div>
         </div>
       )}
