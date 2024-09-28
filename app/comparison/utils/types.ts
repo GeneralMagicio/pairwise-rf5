@@ -1238,6 +1238,7 @@ export interface IProject {
   id: number
   rating: number | null
   name: string
+  aiSummary: ProjectAiSummary
   pollId: number
   url: string | null
   description: string

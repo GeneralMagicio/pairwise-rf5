@@ -45,7 +45,6 @@ import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
 import { ProjectCardAI } from '../card/ProjectCardAI';
-import { mockDataAI, mockDataAI2 } from '../card/mockDataAI';
 
 const getSuccessBalootLSKey = (address: string) => {
   return `has-unlocked-ballot-${address}`;
@@ -475,7 +474,7 @@ export default function Home() {
                 key1={project1.RPGF5Id}
                 key2={project2.RPGF5Id}
                 coiLoading={coiLoading1}
-                summaryData={mockDataAI}
+                summaryData={project1.aiSummary}
                 coi={coi1}
                 project={{ ...project1.metadata, ...project1 } as any}
                 onCoICancel={cancelCoI1}
@@ -511,7 +510,7 @@ export default function Home() {
                 key2={project1.RPGF5Id}
                 coiLoading={coiLoading2}
                 coi={coi2}
-                summaryData={mockDataAI2}
+                summaryData={project2.aiSummary}
                 onCoICancel={cancelCoI2}
                 onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
                 project={{ ...project2.metadata, ...project2 } as any}
