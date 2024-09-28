@@ -10,7 +10,7 @@ import React, {
 import { useAccount, useSignMessage } from 'wagmi';
 import { usePathname, useRouter } from 'next/navigation';
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login';
-import { isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login';
+import { getMessageAndSignature, isLoggedInToAgora, loginToAgora, signOutFromAgora } from './agora-login';
 import { JWTPayload } from './types';
 import { axiosInstance } from '../axiosInstance';
 import { usePrevious } from '../methods';
@@ -123,11 +123,9 @@ export const useAuth = () => {
       setLoginAddress({value: connectedAddress, confirmed: true});
     }
     else if (prevAddress && connectedAddress !== prevAddress && !path.includes('comparison')) {
-      console.log('In here?');
       signOut();
     } 
     else if (prevAddress && connectedAddress !== prevAddress && path.includes('comparison')) {
-      console.log('No in here?');
       setLoginAddress({...loginAddress, confirmed: false});
     } 
   }, [connectedAddress, prevAddress, path]);
@@ -144,6 +142,29 @@ export const useAuth = () => {
     if (loginInProgress) return;
     if (!address || !chainId) return;
     // setLoginAddress({value: connectedAddress, confirmed: false})
+    let message;
+    let signature;
+
+    try {
+      console.log('chking agora exp');
+      const loggedInToAgora = isLoggedInToAgora();
+      if (loggedInToAgora) setLoggedToAgora(loggedInToAgora);
+      else {
+        const {message: val1, signature: val2} = await getMessageAndSignature(address, chainId, signMessageAsync);
+        message = val1;
+        signature = val2;
+        console.log('loggin to agora');
+        setLoginInProgress(true);
+        const res = await loginToAgora(message, signature);
+        setLoggedToAgora(res);
+      }
+    }
+    catch (e) {
+      console.log('agora err');
+      setLoggedToAgora('error');
+      return;
+    }
+
     try {
       console.log('Checking pw token if exists?');
       const validToken = await isLoggedIn();
@@ -152,12 +173,18 @@ export const useAuth = () => {
         setLoggedToPw(LogginToPwBackendState.LoggedIn);
       }
       else {
+        if (!message || !signature) {
+          const {message: val1, signature: val2} = await getMessageAndSignature(address, chainId, signMessageAsync);
+          message = val1;
+          signature = val2;
+        }
         setLoginInProgress(true);
         console.log('Logging to pw');
         const res = await loginToPwBackend(
           chainId,
           address,
-          signMessageAsync,
+          message,
+          signature
         );
         if (res.isNewUser) {
           setIsNewUser(true);
@@ -171,24 +198,6 @@ export const useAuth = () => {
       setLoginInProgress(false);
       return;
     }
-    // By now you're logged-in to PW. Now do Agora...
-
-    try {
-      if (!LogginToPwBackendState.LoggedIn) return;
-      console.log('chking agora exp');
-      const loggedInToAgora = isLoggedInToAgora();
-      if (loggedInToAgora) setLoggedToAgora(loggedInToAgora);
-      else {
-        console.log('loggin to agora');
-        setLoginInProgress(true);
-        const res = await loginToAgora(address, chainId, signMessageAsync);
-        setLoggedToAgora(res);
-      }
-    }
-    catch (e) {
-      console.log('agora err');
-      setLoggedToAgora('error');
-    }
     finally {
       setLoginInProgress(false);
     }
@@ -197,12 +206,10 @@ export const useAuth = () => {
   }, [loginAddress.value, temp, chainId]);
 
   useEffect(() => {
-    if (typeof loggedToAgora === 'object') {
-      if (loggedToAgora.isBadgeholder === true) {
-        redirectToComparisonPage();
-      }
+    if (loggedToPw === LogginToPwBackendState.LoggedIn && typeof loggedToAgora === 'object' && loggedToAgora.isBadgeholder === true) {
+      redirectToComparisonPage();
     }
-  }, [loggedToAgora, redirectToComparisonPage]);
+  }, [loggedToAgora, loggedToPw, redirectToComparisonPage]);
 
   // Set up axios interceptors
   useEffect(() => {
