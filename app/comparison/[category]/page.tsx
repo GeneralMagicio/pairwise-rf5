@@ -57,8 +57,8 @@ export default function Home() {
   const { checkLoginFlow } = useAuth();
   const { address, chainId } = useAccount();
 
-  const [rating1, setRating1] = useState<number>(3);
-  const [rating2, setRating2] = useState<number>(3);
+  const [rating1, setRating1] = useState<number>(0);
+  const [rating2, setRating2] = useState<number>(0);
   const [project1, setProject1] = useState<IProject>();
   const [project2, setProject2] = useState<IProject>();
   const [coiLoading1, setCoiLoading1] = useState(false);
@@ -138,9 +138,8 @@ export default function Home() {
 
   useEffect(() => {
     if (!data || !data.pairs?.length) return;
-    console.log(data);
-    setRating1(data.pairs[0][0].rating || 3);
-    setRating2(data.pairs[0][1].rating || 3);
+    setRating1(data.pairs[0][0].rating || 0);
+    setRating2(data.pairs[0][1].rating || 0);
   }, [data]);
 
   useEffect(() => {
@@ -160,8 +159,8 @@ export default function Home() {
   }, [data, temp]);
 
   useEffect(() => {
-    const initialRating1 = data?.pairs[0][0].rating || 3;
-    const initialRating2 = data?.pairs[0][1].rating || 3;
+    const initialRating1 = data?.pairs[0][0].rating || 0;
+    const initialRating2 = data?.pairs[0][1].rating || 0;
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
@@ -307,6 +306,8 @@ export default function Home() {
     ) =>
       chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB));
 
+    if (!rating1 && !rating2) return false;
+
     if (
       isLowRatedProjectSelected(project1!.id, rating1, rating2) ||
       isLowRatedProjectSelected(project2!.id, rating2, rating1)
@@ -326,8 +327,8 @@ export default function Home() {
       data: {
         project1Id: project1!.id,
         project2Id: project2!.id,
-        project1Stars: rating1,
-        project2Stars: rating2,
+        project1Stars: rating1 || 3,
+        project2Stars: rating2 || 3,
         pickedId: chosenId,
       },
     });
