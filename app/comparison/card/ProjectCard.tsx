@@ -316,7 +316,7 @@ export const ProjectCard: React.FC<Props> = ({
                 onChange={setAi}
                 checked={aiMode}
               />
-              <p className="font-medium"> TLDR </p>
+              <p className="font-medium"> AI Summary </p>
               <StarsIcon />
             </div>
             <ProjectDescription description={project.description} />
@@ -446,7 +446,7 @@ export const ProjectCard: React.FC<Props> = ({
                     </p>
                   </div>
                   <div className="space-y-2">
-                    {project.impactStatement.statement.create.map(
+                    {project.impactStatement.statement?.create?.map(
                       ({ question, answer }) => (
                         <QABox
                           key={question}
