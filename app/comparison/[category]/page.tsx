@@ -159,10 +159,8 @@ export default function Home() {
   }, [data, temp]);
 
   useEffect(() => {
-    const initialRating1 = data?.pairs[0][0].rating || 0;
-    const initialRating2 = data?.pairs[0][1].rating || 0;
-
-    if (rating1 === null || rating2 === null) return;
+    const initialRating1 = data?.pairs[0][0].rating ?? null;
+    const initialRating2 = data?.pairs[0][1].rating || null;
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
@@ -171,10 +169,10 @@ export default function Home() {
 
     // observe if first rated project is rated good >= 4
     if (
-      (rating1 >= 4 &&
+      (rating1 && rating1 >= 4 &&
         rating2 === initialRating2 &&
         rating1 !== initialRating1) ||
-      (rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
+      (rating2 && rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
     ) {
       setShowGoodRatingModal(!getGetStarted().goodRating);
     }
@@ -218,6 +216,16 @@ export default function Home() {
     setAiMode2(!aiMode2);
     setLastAction(undefined);
   };
+
+  const isAnyModalOpen = () =>
+    showFinishBallot ||
+    showSuccessBallot ||
+    ballotLoading ||
+    ballotError ||
+    showLowRateModal ||
+    revertingBack ||
+    showPostRatingModal ||
+    showGoodRatingModal;
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -547,23 +555,23 @@ export default function Home() {
             <Rating
               value={rating1 || 0}
               onChange={setRating1}
-              disabled={isInitialVisit || coiLoading1}
+              disabled={coiLoading1 || isAnyModalOpen()}
             />
             <VoteButton
               onClick={() =>
                 !checkLowRatedProjectSelected(project1.id) &&
                 handleVote(project1.id)
               }
-              disabled={isInitialVisit || coiLoading1}
+              disabled={coiLoading1 || isAnyModalOpen()}
             />
             <ConflictButton
               onClick={showCoI1}
-              disabled={isInitialVisit || coiLoading1}
+              disabled={coiLoading1 || isAnyModalOpen()}
             />
           </div>
           <div className="absolute z-[1]">
             <UndoButton
-              disabled={isInitialVisit || data?.votedPairs === 0}
+              disabled={data?.votedPairs === 0 || isAnyModalOpen()}
               onClick={handleUndo}
             />
           </div>
@@ -571,18 +579,18 @@ export default function Home() {
             <Rating
               value={rating2 || 0}
               onChange={setRating2}
-              disabled={isInitialVisit || coiLoading2}
+              disabled={coiLoading2 || isAnyModalOpen()}
             />
             <VoteButton
               onClick={() =>
                 !checkLowRatedProjectSelected(project2.id) &&
                 handleVote(project2.id)
               }
-              disabled={isInitialVisit || coiLoading2}
+              disabled={coiLoading2 || isAnyModalOpen()}
             />
             <ConflictButton
               onClick={showCoI2}
-              disabled={isInitialVisit || coiLoading2}
+              disabled={coiLoading2 || isAnyModalOpen()}
             />
           </div>
         </footer>
