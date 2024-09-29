@@ -57,8 +57,8 @@ export default function Home() {
   const { checkLoginFlow } = useAuth();
   const { address, chainId } = useAccount();
 
-  const [rating1, setRating1] = useState<number>(0);
-  const [rating2, setRating2] = useState<number>(0);
+  const [rating1, setRating1] = useState<number | null>(null);
+  const [rating2, setRating2] = useState<number | null>(null);
   const [project1, setProject1] = useState<IProject>();
   const [project2, setProject2] = useState<IProject>();
   const [coiLoading1, setCoiLoading1] = useState(false);
@@ -138,8 +138,8 @@ export default function Home() {
 
   useEffect(() => {
     if (!data || !data.pairs?.length) return;
-    setRating1(data.pairs[0][0].rating || 0);
-    setRating2(data.pairs[0][1].rating || 0);
+    setRating1(data.pairs[0][0].rating ?? null);
+    setRating2(data.pairs[0][1].rating ?? null);
   }, [data]);
 
   useEffect(() => {
@@ -161,6 +161,8 @@ export default function Home() {
   useEffect(() => {
     const initialRating1 = data?.pairs[0][0].rating || 0;
     const initialRating2 = data?.pairs[0][1].rating || 0;
+
+    if (rating1 === null || rating2 === null) return;
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
@@ -327,8 +329,8 @@ export default function Home() {
       data: {
         project1Id: project1!.id,
         project2Id: project2!.id,
-        project1Stars: rating1 || 3,
-        project2Stars: rating2 || 3,
+        project1Stars: rating1 ?? null,
+        project2Stars: rating2 ?? null,
         pickedId: chosenId,
       },
     });
@@ -543,7 +545,7 @@ export default function Home() {
         <footer className="sticky bottom-0 z-50 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
-              value={rating1}
+              value={rating1 || 0}
               onChange={setRating1}
               disabled={isInitialVisit || coiLoading1}
             />
@@ -567,7 +569,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
             <Rating
-              value={rating2}
+              value={rating2 || 0}
               onChange={setRating2}
               disabled={isInitialVisit || coiLoading2}
             />
