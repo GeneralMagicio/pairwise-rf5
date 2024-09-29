@@ -35,7 +35,6 @@ export const ContractBox = ({
         target="_blank"
         rel="noopener noreferrer"
         className="break-all text-gray-700 hover:underline"
-        onClick={(e) => e.stopPropagation()}
       >
         {title}
       </a>
@@ -54,35 +53,29 @@ export const ContractBox = ({
     );
   };
 
-  const shouldCollapse = description.length > 0;
-
   return (
-    <div
-      {...(shouldCollapse && getToggleProps())}
-      className={`max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 ${
-        shouldCollapse ? 'cursor-pointer' : ''
-      }`}
-    >
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
       <div
         className={`flex items-center justify-between ${
-          isExpanded && shouldCollapse ? 'mb-4' : ''
+          isExpanded ? 'mb-4' : ''
         }`}
       >
         <div className="flex items-center gap-2">
           {renderIcon()}
           {renderTitle()}
         </div>
-        {shouldCollapse && (
-          <button className="text-sm text-gray-600 hover:underline">
+        {description && (
+          <button
+            {...getToggleProps()}
+            className="text-sm text-gray-600 hover:underline"
+          >
             {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </button>
         )}
       </div>
-      {shouldCollapse && (
-        <section {...getCollapseProps()}>
-          <p className="mb-2 text-gray-600">{description}</p>
-        </section>
-      )}
+      <section {...getCollapseProps()}>
+        <p className="mb-2 text-gray-600">{description}</p>
+      </section>
     </div>
   );
 };

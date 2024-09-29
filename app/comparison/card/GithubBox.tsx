@@ -23,12 +23,8 @@ interface Props {
 const GithubBox: FC<Props> = ({ repo }) => {
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
-
   return (
-    <div
-      {...getToggleProps()}
-      className="max-w-full cursor-pointer rounded-lg border border-gray-200 bg-gray-50 p-2 py-[12px] font-inter"
-    >
+    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 py-[12px] font-inter">
       <div
         className={`flex items-center justify-between ${
           isExpanded ? 'mb-4' : ''
@@ -40,7 +36,6 @@ const GithubBox: FC<Props> = ({ repo }) => {
             href={repo.url}
             className="break-all text-gray-700 hover:underline"
             target="_blank"
-            onClick={(e) => e.stopPropagation()}
           >
             {repo.name || repo.url?.replace('https://' || 'http://', '')}
           </a>
@@ -49,7 +44,7 @@ const GithubBox: FC<Props> = ({ repo }) => {
             <span> Open source </span>
           </div>
         </div>
-        <button className="text-sm text-gray-600">
+        <button {...getToggleProps()} className="text-sm text-gray-600">
           {isExpanded ? (
             <div className="flex items-center gap-2">
               <span> Hide metrics </span>
