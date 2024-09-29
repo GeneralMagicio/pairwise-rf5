@@ -14,7 +14,7 @@ const TextBlock: FC<{
     scale?: number;
   };
 }> = ({ mainText, highlightText, description, highlightImage }) => (
-  <p className="sm:w-[35%]] w-full text-start text-3xl font-bold text-dark-500 xl:text-4xl xl:leading-[3rem]">
+  <p className="sm:w-[35%]] w-full text-start text-3xl font-bold text-dark-500 xl:text-4xl">
     {mainText}{' '}
     <span className="relative inline-block">
       <Image
