@@ -401,7 +401,7 @@ export default function Home() {
 
   if (isLoading) return <Spinner />;
 
-  if (!address || !chainId) return redirect('/landing');
+  if (!address || !chainId) return redirect('/');
 
   if (!project1 || !project2 || !data) return <div>No data</div>;
 
