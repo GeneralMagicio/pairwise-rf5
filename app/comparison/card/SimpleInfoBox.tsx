@@ -36,31 +36,47 @@ const SimpleInfoBox: FC<Props> = ({
         target="_blank"
         className="break-all text-gray-700 hover:underline"
         rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
       >
         {displayTitle}
       </a>
     );
   };
 
+  const shouldCollapse = description.length > 0;
+
   return (
-    <div className="max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2">
-      <div className={`flex items-center justify-between ${isExpanded ? 'mb-4' : ''}`}>
+    <div
+      className={`max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 ${
+        shouldCollapse ? 'cursor-pointer' : ''
+      }`}
+      {...(shouldCollapse &&
+        getToggleProps())}
+    >
+      <div
+        className={`flex items-center justify-between ${
+          isExpanded && shouldCollapse ? 'mb-4' : ''
+        }`}
+      >
         <div className="flex items-center gap-2">
-          {ICONS_MAP[type] && showIcon && <span className="size-5">{ICONS_MAP[type]}</span>}
+          {ICONS_MAP[type] && showIcon && (
+            <span className="size-5">{ICONS_MAP[type]}</span>
+          )}
           {renderTitle()}
         </div>
-        {description.length > 0 && (
+        {shouldCollapse && (
           <button
-            {...getToggleProps()}
             className="text-sm text-gray-600 hover:underline"
           >
             {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </button>
         )}
       </div>
-      <section {...getCollapseProps()}>
-        <p className="mb-2 text-gray-600">{description}</p>
-      </section>
+      {shouldCollapse && (
+        <section {...getCollapseProps()}>
+          <p className="mb-2 text-gray-600">{description}</p>
+        </section>
+      )}
     </div>
   );
 };
