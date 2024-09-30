@@ -171,7 +171,7 @@ export const ProjectCardAI: React.FC<Props> = ({
                 onChange={setAi}
                 checked={aiMode}
               />
-              <p className="font-medium"> TLDR </p>
+              <p className="font-medium"> AI Summary </p>
               <StarsIcon />
             </div>
             {project.socialLinks && (
