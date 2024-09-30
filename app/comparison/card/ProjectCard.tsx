@@ -495,7 +495,7 @@ export const ProjectCard: React.FC<Props> = ({
               title={ProjectSectionTitles[ProjectSection.GRANTS]}
             >
               {project.grantsAndFunding.grants?.length ||
-              project.grantsAndFunding.ventureFunding?.length ? (
+              project.grantsAndFunding.investments?.length ? (
                 <div className="space-y-2">
                   {project.grantsAndFunding.grants?.map((grant, index) => (
                     <GrantBox
@@ -507,7 +507,7 @@ export const ProjectCard: React.FC<Props> = ({
                       title={grant.grant || ''}
                     />
                   ))}
-                  {project.grantsAndFunding.ventureFunding?.map((funding) => (
+                  {project.grantsAndFunding.investments?.map((funding) => (
                     <GrantBox
                       key={funding.details}
                       description={funding.details}
