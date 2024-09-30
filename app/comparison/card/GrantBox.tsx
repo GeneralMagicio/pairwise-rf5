@@ -58,10 +58,10 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
           )}
 
           {amount && (
-            amount.includes("$") ||
-            amount.includes("USD") ||
-            amount.includes("usd") ||
-            amount.includes("dollars") ? (
+            amount.includes('$') ||
+            amount.includes('USD') ||
+            amount.includes('usd') ||
+            amount.includes('dollars') ? (
               <span className="flex items-center gap-2 text-sm">
                 <USDIcon />
                 {formatAmount(amount)}
