@@ -433,7 +433,7 @@ export default function Home() {
         {showSuccessBallot && (
           <BallotSuccessModal
             onClick={() => {
-              router.push('https://develop-op-voting.up.railway.app/ballot');
+              router.push(`${process.env.NEXT_PUBLIC_OPTIMISM_URL}/ballot`);
             }}
           />
         )}
