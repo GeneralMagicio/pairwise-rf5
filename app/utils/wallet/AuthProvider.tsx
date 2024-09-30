@@ -110,7 +110,7 @@ export const useAuth = () => {
     setLoginAddress({value: undefined, confirmed: true});
     setLoggedToPw(LogginToPwBackendState.Initial);
     setIsNewUser(false);
-    if (redirectToLanding) router.push('/landing');
+    if (redirectToLanding) router.push('/');
   };
 
   useEffect(() => {

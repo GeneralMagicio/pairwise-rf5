@@ -21,6 +21,7 @@ import {
 import {
   convertCategoryNameToId,
   convertCategoryToLabel,
+  getCategoryCount,
 } from '../utils/helpers';
 import {
   useUpdateProjectUndo,
@@ -411,7 +412,7 @@ export default function Home() {
 
   if (isLoading) return <Spinner />;
 
-  if (!address || !chainId) return redirect('/landing');
+  if (!address || !chainId) return redirect('/');
 
   if (!project1 || !project2 || !data) return <div>No data</div>;
 
@@ -436,14 +437,14 @@ export default function Home() {
             category={convertCategoryToLabel(
               category as JWTPayload['category']
             )}
-            projectCount={35}
+            projectCount={getCategoryCount(category as JWTPayload['category'])}
             onUnlock={handleUnlockBallot}
           />
         )}
         {showSuccessBallot && (
           <BallotSuccessModal
             onClick={() => {
-              router.push('https://develop-op-voting.up.railway.app/ballot');
+              router.push(`${process.env.NEXT_PUBLIC_OPTIMISM_URL}/ballot`);
             }}
           />
         )}
