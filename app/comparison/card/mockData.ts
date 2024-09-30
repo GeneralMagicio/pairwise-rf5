@@ -116,7 +116,6 @@ export const mockProject1: IProject = {
     ],
     contracts: [],
     grantsAndFunding: {
-      ventureFunding: [],
       grants: [
         {
           grant: 'retroFunding',
@@ -334,7 +333,6 @@ export const mockProject2: IProject = {
     ],
     contracts: [],
     grantsAndFunding: {
-      ventureFunding: [],
       grants: [],
       revenue: null,
       investment: [],
