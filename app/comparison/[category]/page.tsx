@@ -21,6 +21,7 @@ import {
 import {
   convertCategoryNameToId,
   convertCategoryToLabel,
+  getCategoryCount,
 } from '../utils/helpers';
 import {
   useUpdateProjectUndo,
@@ -169,10 +170,14 @@ export default function Home() {
 
     // observe if first rated project is rated good >= 4
     if (
-      (rating1 && rating1 >= 4 &&
+      (rating1 &&
+        rating1 >= 4 &&
         rating2 === initialRating2 &&
         rating1 !== initialRating1) ||
-      (rating2 && rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
+      (rating2 &&
+        rating2 >= 4 &&
+        rating1 === initialRating1 &&
+        rating2 !== initialRating2)
     ) {
       setShowGoodRatingModal(!getGetStarted().goodRating);
     }
@@ -342,6 +347,11 @@ export default function Home() {
         pickedId: chosenId,
       },
     });
+
+    if (getGetStarted().goodRating && !getGetStarted().postRating) {
+      updateGetStarted({ postRating: true });
+    }
+
     setCoiLoading1(false);
     setCoiLoading2(false);
   };
@@ -426,7 +436,7 @@ export default function Home() {
             category={convertCategoryToLabel(
               category as JWTPayload['category']
             )}
-            projectCount={35}
+            projectCount={getCategoryCount(category as JWTPayload['category'])}
             onUnlock={handleUnlockBallot}
           />
         )}
