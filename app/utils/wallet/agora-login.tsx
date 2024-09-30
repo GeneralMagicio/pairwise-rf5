@@ -7,7 +7,7 @@ import { axiosInstance } from '../axiosInstance';
 
 // TODO: this should probably be an environment variable
 // const BASE_URL = `https://vote.optimism.io`
-const BASE_URL = 'https://pairwise-cors.liara.run/https://vote.optimism.io';
+const BASE_URL = 'https://vote.optimism.io';
 const API_PREFIX = '/api/v1';
 const LOCAL_STORAGE_JWT_KEY = 'agora-siwe-jwt';
 export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum';
@@ -27,8 +27,13 @@ export const AGORA_SIGN_IN = 'Sign in to Agora with Ethereum';
 //   return process.env.NEXT_PUBLIC_SIWE_ENABLED === 'true'
 // }
 
-export const loginToAgora = async (address: `0x${string}`, chainId: number, signFunc: ({ message }: { message: string }) => Promise<string>,
-) => {
+export const loginToAgora = async (message: string, signature: `0x${string}`) => {
+  const isVerified = await verifyMessage({ message, signature });
+
+  return isVerified;
+};
+
+export const getMessageAndSignature = async (address: `0x${string}`, chainId: number, signFunc: ({ message }: { message: string }) => Promise<`0x${string}`>) => {
   const nonce = await getNonce();
   const message = await createMessage({
     address,
@@ -38,9 +43,7 @@ export const loginToAgora = async (address: `0x${string}`, chainId: number, sign
 
   const signature = await signFunc({ message });
 
-  const isVerified = await verifyMessage({ message, signature });
-
-  return isVerified;
+  return {message, signature};
 };
 
 const getNonce = async () => {

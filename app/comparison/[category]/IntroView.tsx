@@ -1,13 +1,14 @@
 import { Dispatch, FC } from 'react';
 import Image from 'next/image';
+import TextBlock from '../../components/TextBlock';
 
 const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
   setUserAsVisited,
 }) => {
   return (
-    <div className="relative flex h-[86vh] w-full items-center justify-end gap-8 px-8 py-2">
-      <div className="left-0 mt-10 flex size-full flex-col items-start justify-center sm:mt-0">
-        <div className="ml-0 flex flex-col justify-center gap-16 sm:ml-[20px] lg:ml-[100px] xl:ml-[200px]">
+    <div className="relative flex h-[86vh] w-full flex-col-reverse items-center justify-end gap-8 px-8 py-2 lg:flex-row lg:gap-0 lg:p-0">
+      <div className="left-0 my-10 flex size-full flex-col items-start justify-end sm:mt-0 md:mb-0 md:justify-center">
+        <div className="ml-0 flex w-4/5 flex-col justify-center gap-16 sm:ml-[20px] sm:w-3/5 md:w-[50%] lg:ml-[100px] lg:w-[35%] xl:ml-[200px]">
           <TextBlock
             mainText="Use the"
             highlightText="Stars"
@@ -48,42 +49,10 @@ const IntroView: FC<{ setUserAsVisited: Dispatch<void> }> = ({
   );
 };
 
-const TextBlock: FC<{
-  mainText: string
-  highlightText: string
-  description: string
-  highlightImage: {
-    src: string
-    alt: string
-    styles: string
-    width: number
-    height: number
-    scale?: number
-  }
-}> = ({ mainText, highlightText, description, highlightImage }) => (
-  <p className="w-4/5 text-start text-3xl font-bold text-dark-500 sm:w-[35%] md:w-[55%] xl:text-4xl">
-    {mainText}
-    {' '}
-    <span className="relative inline-block">
-      <Image
-        src={highlightImage.src}
-        alt={highlightImage.alt}
-        className={highlightImage.styles}
-        width={highlightImage.width}
-        height={highlightImage.height}
-        style={{ transform: highlightImage.scale ? `scale(${highlightImage.scale})` : 'scale(1)' }}
-      />
-      <span className="text-primary">{highlightText}</span>
-    </span>
-    {' '}
-    {description}
-  </p>
-);
-
 const ActionButton: FC<{ onClick: () => void, text: string }> = ({ onClick, text }) => (
   <button
     onClick={onClick}
-    className="mt-10 w-full rounded-lg bg-primary px-8 py-3 text-xl font-bold text-white sm:w-[42%]"
+    className="mt-10 w-full rounded-lg bg-primary px-8 py-3 text-xl font-bold text-white sm:w-[70%]"
   >
     {text}
   </button>

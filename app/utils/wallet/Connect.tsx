@@ -5,7 +5,7 @@ import React from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { CoinbaseIcon } from '@/public/assets/icon-components/CoinbaseIcon';
 import { MetaMaskIcon } from '@/public/assets/icon-components/MetaMaskIcon';
-import { WalletIcon } from '@/public/assets/icon-components/Wallet';
+import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRight';
 import { WalletConnectIcon } from '@/public/assets/icon-components/WalletConnectIcon';
 import { ZerionIcon } from '@/public/assets/icon-components/ZerionIcon';
 import { ConnectedButton } from './ConnectedButton';
@@ -14,9 +14,9 @@ import { useAuth } from './AuthProvider';
 
 export const ConnectButton = () => {
   const { open } = useWeb3Modal();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { disconnectAsync } = useDisconnect();
-  const { signOut } = useAuth();
+  const { signOut, loginAddress } = useAuth();
 
   const logout = async () => {
     await disconnectAsync();
@@ -44,14 +44,14 @@ export const ConnectButton = () => {
   //   func()
   // }, [isConnected, address, chainId, signMessageAsync])
 
-  if (isConnected && address) return (
-    <ConnectedButton onLogout={logout} wallet={address} />
+  if (isConnected && loginAddress.value) return (
+    <ConnectedButton onLogout={logout} wallet={loginAddress.value} />
   );
 
   return (
-    <button onClick={handleOpen} className="flex h-max items-center rounded-full bg-primary px-8 py-3 font-semibold text-white shadow-md transition duration-300 hover:bg-red-600">
-      <WalletIcon />
+    <button onClick={handleOpen} className="flex h-max items-center gap-2 rounded-full bg-primary px-4 py-1.5 font-semibold text-white shadow-md transition duration-300 hover:bg-red-600 sm:px-6 sm:py-2 md:px-8 md:py-3">
       <span className="ml-2">Connect</span>
+      <ArrowRightIcon />
     </button>
   );
 };

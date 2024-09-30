@@ -1,4 +1,3 @@
-import { SignMessageMutateAsync } from 'wagmi/query';
 import { axiosInstance } from '../axiosInstance';
 
 export const isLoggedIn = async () => {
@@ -15,17 +14,13 @@ export const isLoggedIn = async () => {
 export const loginToPwBackend = async (
   chainId: number,
   address: string,
-  signFunction: SignMessageMutateAsync<unknown>,
+  message: string,
+  signature: `0x${string}`,
 ) => {
-  console.log('In the log to pw function');
   // const nonce = await fetchNonce()
   // const nonce = generateRandomString(16
 
-  const message = 'Signing in to Pairwise servers? ' + Date.now();
-
-  // const message = AGORA_SIGN_IN
-
-  const signature = await signFunction({ message });
+  // const message = 'Sign in to Agora with Ethereum';
 
   // Verify signature
   const { data } = await axiosInstance.post<{ token: string, isNewUser: boolean }>(

@@ -1,45 +1,56 @@
-import React, { FC } from 'react';
 import { useCollapse } from 'react-collapsed';
-import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
+import { base, fraxtal, mode, optimism, zora } from 'viem/chains';
+import Image from 'next/image';
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 
-interface Props {
-  title: string;
+interface IContractBoxProps {
+  address: string;
+  chainId: number;
   description: string;
-  type: 'link' | 'pricing';
-  showIcon?: boolean;
 }
 
-const ICONS_MAP: Record<Props['type'], React.ReactNode> = {
-  link: <WebsiteIcon height={20} width={20} />,
-  pricing: null,
-};
-
-const SimpleInfoBox: FC<Props> = ({
+export const ContractBox = ({
+  address,
+  chainId,
   description,
-  title,
-  type,
-  showIcon = true,
-}) => {
-  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
+}: IContractBoxProps) => {
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse();
+
+  const chain = [optimism, base, mode, zora, fraxtal].find(
+    (c) => c.id === Number(chainId)
+  );
+  const { name, blockExplorers } = chain ?? {};
+  const { url } = blockExplorers?.default ?? {};
+  const icon = `https://icons.llamao.fi/icons/chains/rsz_${
+    name === 'Mode Mainnet' ? 'mode' : name?.toLowerCase()
+  }.jpg`;
 
   const renderTitle = () => {
-    if (type === 'pricing') return title;
-
-    const href = title;
-    const displayTitle = title.replace(/(https?:\/\/)|(https:)/, '');
+    const title = address || 'Contract';
 
     return (
       <a
-        href={href}
+        href={`${url}/address/${address}`}
         target="_blank"
-        className="break-all text-gray-700 hover:underline"
         rel="noopener noreferrer"
+        className="break-all text-gray-700 hover:underline"
         onClick={(e) => e.stopPropagation()}
       >
-        {displayTitle}
+        {title}
       </a>
+    );
+  };
+
+  const renderIcon = () => {
+    return (
+      <Image
+        src={icon}
+        alt={name || chainId.toString()}
+        width={20}
+        height={20}
+        className="rounded-full"
+      />
     );
   };
 
@@ -47,11 +58,10 @@ const SimpleInfoBox: FC<Props> = ({
 
   return (
     <div
+      {...(shouldCollapse && getToggleProps())}
       className={`max-w-full rounded-lg border border-gray-200 bg-gray-50 p-2 ${
         shouldCollapse ? 'cursor-pointer' : ''
       }`}
-      {...(shouldCollapse &&
-        getToggleProps())}
     >
       <div
         className={`flex items-center justify-between ${
@@ -59,15 +69,11 @@ const SimpleInfoBox: FC<Props> = ({
         }`}
       >
         <div className="flex items-center gap-2">
-          {ICONS_MAP[type] && showIcon && (
-            <span className="size-5">{ICONS_MAP[type]}</span>
-          )}
+          {renderIcon()}
           {renderTitle()}
         </div>
         {shouldCollapse && (
-          <button
-            className="text-sm text-gray-600 hover:underline"
-          >
+          <button className="text-sm text-gray-600 hover:underline">
             {isExpanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </button>
         )}
@@ -80,5 +86,3 @@ const SimpleInfoBox: FC<Props> = ({
     </div>
   );
 };
-
-export default SimpleInfoBox;

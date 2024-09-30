@@ -21,8 +21,8 @@ export function formatAmount(amount: string) {
   if (num === undefined || num === null) {
     return undefined;
   }
-  if (typeof num !== 'number') {
-    return num;
+  if (isNaN(num) || typeof num !== 'number') {
+    return amount;
   }
 
   if (num >= 1000000) {
@@ -59,19 +59,19 @@ const GrantBox: FC<Props> = ({ title, link, amount, date, description }) => {
             </a>
           )}
 
-          {amount.includes('op')
+          {amount.includes('$') || amount.includes('USD') || amount.includes('usd') || amount.includes('dollars')
             ? (
-                <span className="flex items-center gap-2 text-sm">
-                  <OPIcon />
-                  {formatAmount(amount)}
-                </span>
-              )
+              <span className="flex items-center gap-2 text-sm">
+                <USDIcon />
+                {formatAmount(amount)}
+              </span>
+            )
             : (
-                <span className="flex items-center gap-2 text-sm">
-                  <USDIcon />
-                  {formatAmount(amount)}
-                </span>
-              )}
+              <span className="flex items-center gap-2 text-sm">
+                <OPIcon />
+                {formatAmount(amount)}
+              </span>
+            )}
           {date && (
             <span className="flex items-center gap-2 text-sm">
               <TimeIcon />

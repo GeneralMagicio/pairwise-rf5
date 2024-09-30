@@ -65,6 +65,29 @@ export const mockProject1: IProject = {
     ],
     github: [
       {
+        id: '',
+        type: '',
+        verified: false,
+        openSource: true,
+        containsContracts: false,
+        createdAt: '',
+        updatedAt: '',
+        projectId: '',
+        metrics: {
+          artifact_url: '',
+          trust_rank_for_repo_in_category: '19.0',
+          num_contributors: '35.0',
+          num_trusted_contributors: '2.0',
+          num_contributors_last_6_months: '19.0',
+          num_stars: '227',
+          num_trusted_stars: '13.0',
+          trust_weighted_stars: '0.0107888958114171',
+          num_forks: '46',
+          num_trusted_forks: '2.0',
+          trust_weighted_forks: '0.0011979582433935',
+          age_of_project_years: '2.0',
+          license: 'AGPL-3.0',
+        },
         url: 'https://github.com/ChainSafe/lodestar',
         name: 'Lodestar',
         description: 'TypeScript Implementation of Ethereum Consensus',
@@ -122,7 +145,8 @@ export const mockProject1: IProject = {
         'Infrastructure to test and deploy chains',
         'Research which informs Ethereum core development',
       ],
-      statement: [
+      statement: {
+        create:  [
         {
           answer:
               'Lodestar provides ongoing research, development and implementation of core infrastructure relied upon by OP Stack for consensus on Layer 1. Most notably, EIP-4844 (Shard Blob Transactions) has allowed for scaling Ethereum to allow L2s such as OP to utilize blob transactions instead of calldata for efficiencies in cost for utilizing Ethereum settlement. By contributing to the Typescript implementation, testing infrastructure and maintaining other libraries required for its success (such as nodeJS bindings for c-kzg), we were able to deliver this feature for the benefit of OP. In addition, EIPs such as EIP-4788 allows for embedding L1 beacon block roots into Layer 2 to reduce trust assumptions relating to Ethereum\'s consensus state. ',
@@ -136,7 +160,7 @@ export const mockProject1: IProject = {
               'How would it impact the OP Stack if your project ceased to exist?',
         },
       ],
-    },
+    }},
     testimonials: 'https://www.metricsgarden.xyz/projects/Lodestar',
 
   },
@@ -272,10 +296,19 @@ export const mockProject2: IProject = {
     ],
     github: [
       {
+        id: '',
+        type: '',
+        verified: false,
+        openSource: true,
+        containsContracts: false,
+        createdAt: '',
+        updatedAt: '',
+        projectId: '',
         url: 'https://github.com/ethereum/hevm',
         name: 'hevm',
         description: 'hevm source code',
         metrics: {
+          artifact_url: '',
           trust_rank_for_repo_in_category: '19.0',
           num_contributors: '35.0',
           num_trusted_contributors: '2.0',
@@ -310,7 +343,9 @@ export const mockProject2: IProject = {
     impactStatement: {
       category: 'ETHEREUM_CORE_CONTRIBUTIONS',
       subcategory: ['Ethereum client implementations'],
-      statement: [
+      statement: {
+        create: 
+        [
         {
           answer:
             'The application of formal methods is widely recognized as one of the most effective techniques for ensuring correctness in software development. Symbolic execution is generally considered a best practice within smart contract development, as well as in traditional high assurance domains.\n\nhevm is a cutting edge symbolic execution engine for the EVM. Its library interface allows developers to build and experiment with new symbolic analysis tooling. It can be used to analyze programs deployed to any EVM based blockchain.\n\nhevm has been under active development since 2017. Since October 2023 we have made the following improvements:\n\n- Significant performance optimizations\n- Improved ux and documentation\n- A fully symbolic model for addresses\n- An abstract gas model\n- Support for the Cancun hardfork (WIP)\n- Expanded support for testing specific features ("cheat-codes")\n\nThese improvements make hevm faster, easier to use, and expand the range of programs that can be analyzed.',
@@ -323,7 +358,7 @@ export const mockProject2: IProject = {
           question:
             'How would it impact the OP Stack if your project ceased to exist?',
         },
-      ],
+      ]},
     },
     testimonials: 'https://www.metricsgarden.xyz/projects/hevm',
   },

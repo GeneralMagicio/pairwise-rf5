@@ -17,6 +17,8 @@ import ProjectDescription from './ProjectDescription';
 import { StarsIcon } from '@/public/assets/icon-components/Stars';
 import { convertCategoryToLabel } from '../utils/helpers';
 import { JWTPayload } from '@/app/utils/wallet/types';
+import styles from '@/app/styles/Project.module.css';
+import { ContractBox } from './modals/ContractBox';
 
 enum ProjectSection {
   REPOS = 'repos',
@@ -25,8 +27,6 @@ enum ProjectSection {
   PRICING = 'pricing',
   GRANTS = 'grants',
 }
-
-const OP_MAINNET_CHAIN_ID = 10;
 
 interface CollapsibleProps {
   title: string;
@@ -119,6 +119,8 @@ interface Props {
   setSectionExpanded: (value: Props['sectionExpanded']) => void;
   key1: string;
   key2: string;
+  aiMode: boolean;
+  setAi: () => void;
 }
 
 const NoneBox: FC = () => (
@@ -142,8 +144,9 @@ export const ProjectCard: React.FC<Props> = ({
   setSectionExpanded,
   key1,
   key2,
+  aiMode,
+  setAi,
 }) => {
-  const [aiMode, setAiMode] = useState(false);
   const [render, setRender] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -151,15 +154,14 @@ export const ProjectCard: React.FC<Props> = ({
   const parentRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const OFFSET = 150;
-
   useEffect(() => {
     const parentElement = parentRef.current;
 
     const handleScroll = () => {
       if (parentRef.current && titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect();
-        setIsSticky(rect.top <= OFFSET && rect.top >= -OFFSET);
+        const offset = parentRef.current.getBoundingClientRect()?.top;
+        setIsSticky(rect.top <= offset && rect.top >= -offset);
       }
     };
 
@@ -207,10 +209,6 @@ export const ProjectCard: React.FC<Props> = ({
     }
   };
 
-  const handleChange = () => {
-    setAiMode(!aiMode);
-  };
-
   const handleSectionClick = (id: ProjectSection, expanded: boolean) => () => {
     dispatchAction(id, expanded);
   };
@@ -222,7 +220,7 @@ export const ProjectCard: React.FC<Props> = ({
   return (
     <div ref={divRef} className="relative">
       {coi && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <ConflictOfInterestModal
             onCancel={onCoICancel}
             onDeclareConflict={onCoIConfirm}
@@ -230,7 +228,7 @@ export const ProjectCard: React.FC<Props> = ({
         </div>
       )}
       {coiLoading && (
-        <div className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
           <CoILoadingModal />
         </div>
       )}
@@ -267,7 +265,7 @@ export const ProjectCard: React.FC<Props> = ({
               ref={titleRef}
               className={`mb-4 mt-16 transition-all ${
                 isSticky
-                  ? 'sticky left-0 top-0 z-50 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
+                  ? 'sticky left-0 top-0 z-30 w-full rounded-lg border border-gray-200 bg-gray-100 p-4 shadow-md'
                   : ''
               }`}
             >
@@ -283,7 +281,9 @@ export const ProjectCard: React.FC<Props> = ({
                   />
                 )}
                 <div className="flex flex-col gap-3">
-                  <h1 className="font-inter text-3xl font-semibold">
+                  <h1
+                    className={`font-inter text-3xl font-semibold ${styles.oneLineClamp}`}
+                  >
                     {project.name}
                   </h1>
                   {project.organization && (
@@ -313,10 +313,10 @@ export const ProjectCard: React.FC<Props> = ({
                 width={50}
                 checkedIcon={false}
                 uncheckedIcon={false}
-                onChange={handleChange}
+                onChange={setAi}
                 checked={aiMode}
               />
-              <p className="font-medium"> TLDR </p>
+              <p className="font-medium"> AI Summary </p>
               <StarsIcon />
             </div>
             <ProjectDescription description={project.description} />
@@ -366,9 +366,7 @@ export const ProjectCard: React.FC<Props> = ({
             >
               {project.github?.length ||
               project.links?.length ||
-              project.contracts?.some(
-                (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
-              ) ? (
+              project.contracts?.length ? (
                 <div className="space-y-4">
                   {project.github?.map((repo) => (
                     <GithubBox key={repo.url} repo={repo} />
@@ -383,18 +381,14 @@ export const ProjectCard: React.FC<Props> = ({
                     />
                   ))}
 
-                  {project.contracts
-                    ?.filter(
-                      (contract) => contract.chainId === OP_MAINNET_CHAIN_ID
-                    )
-                    .map((contract) => (
-                      <SimpleInfoBox
-                        key={`${contract.chainId}_${contract.address}`}
-                        description=""
-                        title={contract.address}
-                        type="contract"
-                      />
-                    ))}
+                  {project.contracts?.map(({ address, chainId }) => (
+                    <ContractBox
+                      key={`${chainId}_${address}`}
+                      description=""
+                      address={address}
+                      chainId={chainId}
+                    />
+                  ))}
                 </div>
               ) : (
                 <NoneBox />
@@ -452,7 +446,7 @@ export const ProjectCard: React.FC<Props> = ({
                     </p>
                   </div>
                   <div className="space-y-2">
-                    {project.impactStatement.statement?.map(
+                    {project.impactStatement.statement?.create?.map(
                       ({ question, answer }) => (
                         <QABox
                           key={question}

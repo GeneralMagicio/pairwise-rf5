@@ -18,7 +18,10 @@ import {
   getPairwisePairsForProject,
   useGetPairwisePairs,
 } from '../utils/data-fetching/pair';
-import { convertCategoryNameToId , convertCategoryToLabel } from '../utils/helpers';
+import {
+  convertCategoryNameToId,
+  convertCategoryToLabel,
+} from '../utils/helpers';
 import {
   useUpdateProjectUndo,
   useUpdateProjectVote,
@@ -41,6 +44,7 @@ import PostRatingModal from '../card/modals/PostRatingModal';
 import GoodRatingModal from '../card/modals/GoodRatingModal';
 import RevertLoadingModal from '../card/modals/RevertLoadingModal';
 import StorageLabel from '@/app/lib/localStorage';
+import { ProjectCardAI } from '../card/ProjectCardAI';
 
 const getSuccessBalootLSKey = (address: string) => {
   return `has-unlocked-ballot-${address}`;
@@ -53,8 +57,8 @@ export default function Home() {
   const { checkLoginFlow } = useAuth();
   const { address, chainId } = useAccount();
 
-  const [rating1, setRating1] = useState<number>(3);
-  const [rating2, setRating2] = useState<number>(3);
+  const [rating1, setRating1] = useState<number | null>(null);
+  const [rating2, setRating2] = useState<number | null>(null);
   const [project1, setProject1] = useState<IProject>();
   const [project2, setProject2] = useState<IProject>();
   const [coiLoading1, setCoiLoading1] = useState(false);
@@ -93,6 +97,8 @@ export default function Home() {
   const [temp, setTemp] = useState(0);
   const [coi1, setCoi1] = useState(false);
   const [coi2, setCoi2] = useState(false);
+  const [aiMode1, setAiMode1] = useState(false);
+  const [aiMode2, setAiMode2] = useState(false);
   const [isInitialVisit, setIsInitialVisit] = useState(true);
 
   const cid = convertCategoryNameToId(category as JWTPayload['category']);
@@ -127,10 +133,13 @@ export default function Home() {
   }, [data]);
 
   useEffect(() => {
+    setLastAction(undefined);
+  }, [project1, project2]);
+
+  useEffect(() => {
     if (!data || !data.pairs?.length) return;
-    console.log(data);
-    setRating1(data.pairs[0][0].rating || 3);
-    setRating2(data.pairs[0][1].rating || 3);
+    setRating1(data.pairs[0][0].rating ?? null);
+    setRating2(data.pairs[0][1].rating ?? null);
   }, [data]);
 
   useEffect(() => {
@@ -150,8 +159,8 @@ export default function Home() {
   }, [data, temp]);
 
   useEffect(() => {
-    const initialRating1 = data?.pairs[0][0].rating || 3;
-    const initialRating2 = data?.pairs[0][1].rating || 3;
+    const initialRating1 = data?.pairs[0][0].rating ?? null;
+    const initialRating2 = data?.pairs[0][1].rating || null;
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {
@@ -160,10 +169,10 @@ export default function Home() {
 
     // observe if first rated project is rated good >= 4
     if (
-      (rating1 >= 4 &&
+      (rating1 && rating1 >= 4 &&
         rating2 === initialRating2 &&
         rating1 !== initialRating1) ||
-      (rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
+      (rating2 && rating2 >= 4 && rating1 === initialRating1 && rating2 !== initialRating2)
     ) {
       setShowGoodRatingModal(!getGetStarted().goodRating);
     }
@@ -184,9 +193,6 @@ export default function Home() {
       if (address && chainId) {
         localStorage.setItem(getVisitKey(), 'true');
       }
-      updateGetStarted({ goodRating: true, postRating: true });
-      setShowGoodRatingModal(false);
-      setShowPostRatingModal(false);
       setIsInitialVisit(false);
     };
 
@@ -205,6 +211,21 @@ export default function Home() {
     }
   }, [address, chainId, data?.votedPairs]);
 
+  const toggleAiMode = () => {
+    setAiMode1(!aiMode1);
+    setAiMode2(!aiMode2);
+    setLastAction(undefined);
+  };
+
+  const isAnyModalOpen = () =>
+    showFinishBallot ||
+    showSuccessBallot ||
+    ballotLoading ||
+    ballotError ||
+    showLowRateModal ||
+    revertingBack ||
+    showPostRatingModal ||
+    showGoodRatingModal;
 
   const dispatchAction =
     (initiator: AutoScrollAction['initiator']) =>
@@ -295,6 +316,8 @@ export default function Home() {
     ) =>
       chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB));
 
+    if (!rating1 || !rating2) return false;
+
     if (
       isLowRatedProjectSelected(project1!.id, rating1, rating2) ||
       isLowRatedProjectSelected(project2!.id, rating2, rating1)
@@ -308,15 +331,19 @@ export default function Home() {
   };
 
   const handleVote = async (chosenId: number) => {
+    setCoiLoading1(true);
+    setCoiLoading2(true);
     await vote({
       data: {
         project1Id: project1!.id,
         project2Id: project2!.id,
-        project1Stars: rating1,
-        project2Stars: rating2,
+        project1Stars: rating1 ?? null,
+        project2Stars: rating2 ?? null,
         pickedId: chosenId,
       },
     });
+    setCoiLoading1(false);
+    setCoiLoading2(false);
   };
 
   const handleUndo = async () => {
@@ -374,7 +401,7 @@ export default function Home() {
 
   if (isLoading) return <Spinner />;
 
-  if (!address || !chainId) return redirect('/landing');
+  if (!address || !chainId) return redirect('/');
 
   if (!project1 || !project2 || !data) return <div>No data</div>;
 
@@ -450,83 +477,124 @@ export default function Home() {
       ) : (
         <div className="relative flex w-full items-center justify-between gap-8 px-8 py-2">
           <div className="relative w-[49%]">
-            <ProjectCard
-              key={project1.RPGF5Id}
-              sectionExpanded={sectionExpanded1}
-              setSectionExpanded={setSectionExpanded1}
-              name="card1"
-              action={lastAction}
-              dispatchAction={dispatchAction('card1')}
-              key1={project1.RPGF5Id}
-              key2={project2.RPGF5Id}
-              coiLoading={coiLoading1}
-              coi={coi1}
-              project={{ ...project1.metadata, ...project1 } as any}
-              onCoICancel={cancelCoI1}
-              onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
-            />
+            {aiMode1 ? (
+              <ProjectCardAI
+                key={project1.RPGF5Id}
+                aiMode={aiMode1}
+                setAi={toggleAiMode}
+                key1={project1.RPGF5Id}
+                key2={project2.RPGF5Id}
+                coiLoading={coiLoading1}
+                summaryData={project1.aiSummary}
+                coi={coi1}
+                project={{ ...project1.metadata, ...project1 } as any}
+                onCoICancel={cancelCoI1}
+                onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+              />
+            ) : (
+              <ProjectCard
+                key={project1.RPGF5Id}
+                aiMode={aiMode1}
+                setAi={toggleAiMode}
+                sectionExpanded={sectionExpanded1}
+                setSectionExpanded={setSectionExpanded1}
+                name="card1"
+                action={lastAction}
+                dispatchAction={dispatchAction('card1')}
+                key1={project1.RPGF5Id}
+                key2={project2.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi1}
+                project={{ ...project1.metadata, ...project1 } as any}
+                onCoICancel={cancelCoI1}
+                onCoIConfirm={() => confirmCoI1(project1.id, project2.id)}
+              />
+            )}
           </div>
           <div className="relative w-[49%]">
-            <ProjectCard
-              key={project2.RPGF5Id}
-              sectionExpanded={sectionExpanded2}
-              setSectionExpanded={setSectionExpanded2}
-              name="card2"
-              action={lastAction}
-              dispatchAction={dispatchAction('card2')}
-              key1={project2.RPGF5Id}
-              key2={project1.RPGF5Id}
-              coiLoading={coiLoading2}
-              coi={coi2}
-              onCoICancel={cancelCoI2}
-              onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
-              project={{ ...project2.metadata, ...project2 } as any}
-            />
+            {aiMode2 ? (
+              <ProjectCardAI
+                key={project2.RPGF5Id}
+                aiMode={aiMode2}
+                setAi={toggleAiMode}
+                key1={project2.RPGF5Id}
+                key2={project1.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi2}
+                summaryData={project2.aiSummary}
+                onCoICancel={cancelCoI2}
+                onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+                project={{ ...project2.metadata, ...project2 } as any}
+              />
+            ) : (
+              <ProjectCard
+                key={project2.RPGF5Id}
+                aiMode={aiMode2}
+                setAi={toggleAiMode}
+                sectionExpanded={sectionExpanded2}
+                setSectionExpanded={setSectionExpanded2}
+                name="card2"
+                action={lastAction}
+                dispatchAction={dispatchAction('card2')}
+                key1={project2.RPGF5Id}
+                key2={project1.RPGF5Id}
+                coiLoading={coiLoading2}
+                coi={coi2}
+                onCoICancel={cancelCoI2}
+                onCoIConfirm={() => confirmCoI2(project1.id, project2.id)}
+                project={{ ...project2.metadata, ...project2 } as any}
+              />
+            )}
           </div>
         </div>
       )}
 
-      <footer className="sticky bottom-0 z-50 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
-        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
-          <Rating
-            value={rating1}
-            onChange={setRating1}
-            disabled={isInitialVisit || coiLoading1}
-          />
-          <VoteButton
-            onClick={() =>
-              !checkLowRatedProjectSelected(project1.id) &&
-              handleVote(project1.id)
-            }
-            disabled={isInitialVisit || coiLoading1}
-          />
-          <ConflictButton
-            onClick={showCoI1}
-            disabled={isInitialVisit || coiLoading1}
-          />
-        </div>
-        <div className="absolute z-[1]">
-          <UndoButton disabled={isInitialVisit || data?.votedPairs === 0} onClick={handleUndo} />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
-          <Rating
-            value={rating2}
-            onChange={setRating2}
-            disabled={isInitialVisit || coiLoading2}
-          />
-          <VoteButton
-            onClick={() =>
-              !checkLowRatedProjectSelected(project2.id) &&
-              handleVote(project2.id)
-            }
-            disabled={isInitialVisit || coiLoading2}
-          />
-          <ConflictButton
-            onClick={showCoI2}
-            disabled={isInitialVisit || coiLoading2}
-          />
-        </div>
-      </footer>
+      {!isInitialVisit && (
+        <footer className="sticky bottom-0 z-50 flex w-full items-center justify-around gap-4 bg-white py-8 shadow-inner">
+          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+            <Rating
+              value={rating1 || 0}
+              onChange={setRating1}
+              disabled={coiLoading1 || isAnyModalOpen()}
+            />
+            <VoteButton
+              onClick={() =>
+                !checkLowRatedProjectSelected(project1.id) &&
+                handleVote(project1.id)
+              }
+              disabled={coiLoading1 || isAnyModalOpen()}
+            />
+            <ConflictButton
+              onClick={showCoI1}
+              disabled={coiLoading1 || isAnyModalOpen()}
+            />
+          </div>
+          <div className="absolute z-[1]">
+            <UndoButton
+              disabled={data?.votedPairs === 0 || isAnyModalOpen()}
+              onClick={handleUndo}
+            />
+          </div>
+          <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:gap-8">
+            <Rating
+              value={rating2 || 0}
+              onChange={setRating2}
+              disabled={coiLoading2 || isAnyModalOpen()}
+            />
+            <VoteButton
+              onClick={() =>
+                !checkLowRatedProjectSelected(project2.id) &&
+                handleVote(project2.id)
+              }
+              disabled={coiLoading2 || isAnyModalOpen()}
+            />
+            <ConflictButton
+              onClick={showCoI2}
+              disabled={coiLoading2 || isAnyModalOpen()}
+            />
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
