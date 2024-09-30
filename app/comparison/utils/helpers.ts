@@ -21,3 +21,12 @@ export const convertCategoryToLabel = (category: JWTPayload['category']) => {
   };
   return labels[category] || 'OP Stack';
 };
+
+export const getCategoryCount = (category: JWTPayload['category']) => {
+  const labels = {
+    ETHEREUM_CORE_CONTRIBUTIONS: 30,
+    OP_STACK_RESEARCH_AND_DEVELOPMENT: 29,
+    OP_STACK_TOOLING: 20,
+  };
+  return category in labels ? labels[category] : 30;
+};
