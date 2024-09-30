@@ -248,6 +248,7 @@ export default function Home() {
     try {
       const pair = await getPairwisePairsForProject(cid, id2);
       setProject1(pair.pairs[0].find((project) => project.id !== id2)!);
+      setRating1(pair.pairs[0].find((project) => project.id === id2)!.rating);
     } catch (e) {
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', cid],
@@ -271,7 +272,7 @@ export default function Home() {
     try {
       const pair = await getPairwisePairsForProject(cid, id1);
       setProject2(pair.pairs[0].find((project) => project.id !== id1)!);
-      setCoi2(false);
+      setRating2(pair.pairs[0].find((project) => project.id === id1)!.rating);
     } catch (e) {
       queryClient.refetchQueries({
         queryKey: ['pairwise-pairs', cid],
