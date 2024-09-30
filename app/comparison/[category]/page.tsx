@@ -316,7 +316,7 @@ export default function Home() {
     ) =>
       chosenId === selectedId && (!ratingA || (ratingB && ratingA < ratingB));
 
-    if (!rating1 && !rating2) return false;
+    if (!rating1 || !rating2) return false;
 
     if (
       isLowRatedProjectSelected(project1!.id, rating1, rating2) ||
