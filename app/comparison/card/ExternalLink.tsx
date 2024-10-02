@@ -1,23 +1,27 @@
-import { FC } from 'react';
-import { MirrorIcon } from '@/public/assets/icon-components/MirrorIcon';
-import { WarpcastIcon } from '@/public/assets/icon-components/WarpcaseIcon';
-import { WebsiteIcon } from '@/public/assets/icon-components/WebsiteIcon';
-import { XIcon } from '@/public/assets/icon-components/XIcon';
+import { FC } from "react";
+import { MirrorIcon } from "@/public/assets/icon-components/MirrorIcon";
+import { WarpcastIcon } from "@/public/assets/icon-components/WarpcaseIcon";
+import { WebsiteIcon } from "@/public/assets/icon-components/WebsiteIcon";
+import { XIcon } from "@/public/assets/icon-components/XIcon";
 
 interface Props {
-  type: 'website' | 'warpcast' | 'x' | 'mirror';
+  type: "website" | "warpcast" | "x" | "mirror";
   address: string;
 }
 
-const getIcon = (type: Props['type']) => {
+const ensureHttpsPrefix = (url: string): string => {
+  return url.startsWith("http") ? url : `https://${url}`;
+};
+
+const getIcon = (type: Props["type"]) => {
   switch (type) {
-    case 'mirror':
+    case "mirror":
       return <MirrorIcon />;
-    case 'warpcast':
+    case "warpcast":
       return <WarpcastIcon />;
-    case 'website':
+    case "website":
       return <WebsiteIcon />;
-    case 'x':
+    case "x":
       return <XIcon />;
     default:
       return <WebsiteIcon />;
@@ -31,10 +35,10 @@ export const ExternalLink: FC<Props> = ({ address, type }) => {
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href={address}
+        href={ensureHttpsPrefix(address)}
         className="break-all"
       >
-        {type === 'website' ? address : address.replace(/^https?:\/\//, '')}
+        {type === "website" ? address : address.replace(/^https?:\/\//, "")}
       </a>
     </div>
   );
