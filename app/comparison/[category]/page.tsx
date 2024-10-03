@@ -34,7 +34,7 @@ import { IProject } from '../utils/types';
 import FinishBallot from '../ballot/modals/FinishBallotModal';
 import BallotSuccessModal from '../ballot/modals/BallotSuccessModal';
 import BallotLoading from '../ballot/modals/BallotLoading';
-import { getBallot } from '../ballot/useGetBallot';
+import { ballotSuccessPost, getBallot } from '../ballot/useGetBallot';
 import { uploadBallot } from '@/app/utils/wallet/agora-login';
 import BallotError from '../ballot/modals/BallotError';
 import { mockProject1, mockProject2 } from '../card/mockData';
@@ -304,6 +304,7 @@ export default function Home() {
     try {
       const ballot = await getBallot(cid);
       await uploadBallot(ballot, address);
+      await ballotSuccessPost();
       localStorage.setItem(getSuccessBalootLSKey(address), 'true');
       setShowSuccessBallot(true);
     } catch (e) {
