@@ -1,7 +1,7 @@
 import Axios, { InternalAxiosRequestConfig } from 'axios';
 
-// export const API_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://pairwise.melodicdays.shop/';
-export const API_URL = 'https://rpgf5-staging-be.pairwise.vote/';
+export const API_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://pairwise.melodicdays.shop/';
+// export const API_URL = 'https://rpgf5-staging-be.pairwise.vote/';
 // export const API_URL = 'http://localhost:7070';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
