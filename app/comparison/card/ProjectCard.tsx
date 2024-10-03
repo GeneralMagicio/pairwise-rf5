@@ -404,9 +404,9 @@ export const ProjectCard: React.FC<Props> = ({
               )}
               title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
             >
-              {project.testimonials?.length ? (
+              {project.testimonials ? (
                 <SimpleInfoBox
-                  title={project.testimonials}
+                  title={`https://www.metricsgarden.xyz/projects/${project.projectId}/contributions/${project.projectId}`}
                   description=""
                   type="link"
                   showIcon={false}
