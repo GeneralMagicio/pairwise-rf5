@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+Please check out our Licence [here](https://github.com/GeneralMagicio/pairwise-rpgf5?tab=MIT-1-ov-file).
+
 ## Getting Started
 
 First, run the development server:
