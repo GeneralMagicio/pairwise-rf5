@@ -404,15 +404,14 @@ export const ProjectCard: React.FC<Props> = ({
               )}
               title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
             >
-              {project.testimonials?.length ? (
+              <SimpleInfoBox title={`https://devouch.xyz/project/rf/${project.projectId}`} description='' type='link' showIcon={false} />
+              {project.testimonials?.length && (
                 <SimpleInfoBox
                   title={project.testimonials}
                   description=""
                   type="link"
                   showIcon={false}
                 />
-              ) : (
-                <NoneBox />
               )}
             </Section>
             <Section
