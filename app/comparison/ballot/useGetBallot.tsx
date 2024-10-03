@@ -16,6 +16,12 @@ export const getBallot = async (
   return data;
 };
 
+export const ballotSuccessPost = async () => {
+  const { data } = await axiosInstance.post('/flow/ballot/success');
+  return data;
+};
+
+
 export const useGetBallot = (cid: number) => {
   return useQuery({
     queryKey: ['ballot', cid],
