@@ -9,6 +9,10 @@ interface Props {
   address: string;
 }
 
+const ensureHttpsPrefix = (url: string): string => {
+  return url.startsWith('http') ? url : `https://${url}`;
+};
+
 const getIcon = (type: Props['type']) => {
   switch (type) {
     case 'mirror':
@@ -31,7 +35,7 @@ export const ExternalLink: FC<Props> = ({ address, type }) => {
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href={address}
+        href={ensureHttpsPrefix(address)}
         className="break-all"
       >
         {type === 'website' ? address : address.replace(/^https?:\/\//, '')}
