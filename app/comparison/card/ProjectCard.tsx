@@ -404,15 +404,22 @@ export const ProjectCard: React.FC<Props> = ({
               )}
               title={ProjectSectionTitles[ProjectSection.TESTIMONIALS]}
             >
-              <SimpleInfoBox title={`https://devouch.xyz/project/rf/${project.projectId}`} description='' type='link' showIcon={false} />
-              {project.testimonials?.length && (
+              <div className="space-y-4">
                 <SimpleInfoBox
-                  title={project.testimonials}
+                  title={`https://devouch.xyz/project/rf/${project.projectId}`}
                   description=""
                   type="link"
                   showIcon={false}
                 />
-              )}
+                {project.testimonials?.length && (
+                  <SimpleInfoBox
+                    title={`https://www.metricsgarden.xyz/projects/${project.projectId}/contributions/${project.projectId}`}
+                    description=""
+                    type="link"
+                    showIcon={false}
+                  />
+                )}
+              </div>
             </Section>
             <Section
               id={`impact-${name}`}
