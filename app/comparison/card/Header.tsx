@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ConnectButton } from '@/app/utils/wallet/Connect';
 
+const PAIRWISE_REPPORT_URL =
+  'https://github.com/GeneralMagicio/pairwise-rpgf5/issues/new?assignees=MoeNick&labels=&projects=&template=report-an-issue.md&title=%5BFeedback%5D+';
+
 interface HeaderProps {
   progress: number;
   category: string;
@@ -59,11 +62,19 @@ const Header: React.FC<HeaderProps> = ({
         <div className={`py-2 ${isFirstSelection ? 'px-0' : 'px-4'}`}>
           <h2 className="text-center text-xl font-semibold">{question}</h2>
         </div>
-        <div className="flex items-center">
-          <span className="mr-2 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-link">
+        <div className="flex items-center gap-4">
+          <span className="rounded-full bg-blue-100 px-3 py-1 text-center text-sm text-blue-link">
             {category}
           </span>
           <ConnectButton />
+          <button
+            className="rounded-lg border border-gray-200 p-2 text-sm"
+            onClick={() =>
+              window.open(PAIRWISE_REPPORT_URL + question, '_blank')
+            }
+          >
+            Repport an issue
+          </button>
         </div>
       </div>
 
@@ -72,7 +83,10 @@ const Header: React.FC<HeaderProps> = ({
           isBarFixed ? 'fixed left-0 top-0 z-50 w-full' : ''
         }`}
       >
-        <div className="h-full bg-primary" style={{ width: `${progress}%` }}></div>
+        <div
+          className="h-full bg-primary"
+          style={{ width: `${progress}%` }}
+        ></div>
       </div>
     </div>
   );
