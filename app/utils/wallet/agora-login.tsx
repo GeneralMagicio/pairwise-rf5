@@ -86,7 +86,7 @@ export const isLoggedInToAgora = async (address: string): Promise<JWTPayload | f
     const parsed: VerifyResponse = JSON.parse(agoraJwt || '');
     const decoded: JWTPayload = decodeJwt(parsed.access_token);
   
-    const { data } = await axiosInstance.get(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}`, {
+    await axiosInstance.get(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}`, {
         headers: {
           'Authorization': `Bearer ${parsed.access_token}`,
           'Content-Type': 'application/json',
