@@ -60,6 +60,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [loginAddress, setLoginAddress] = useState<AuthContextType['loginAddress']>({confirmed: true, value: undefined});
 
+  useAuth();
+
   return (
     <AuthContext.Provider
       value={{

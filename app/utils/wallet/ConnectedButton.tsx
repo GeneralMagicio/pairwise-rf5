@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { ArrowDownIcon } from '@/public/assets/icon-components/ArrowDown';
 import { ArrowUpIcon } from '@/public/assets/icon-components/ArrowUp';
 import { PowerIcon } from '@/public/assets/icon-components/Power';
-import { LogginToPwBackendState, useAuth } from './AuthProvider';
 
 interface Props {
   wallet: string;
@@ -46,30 +45,6 @@ const LogoutButton: FC<Pick<Props, 'onLogout'>> = ({ onLogout }) => {
 
 const ConnectedButton: FC<Props> = ({ wallet, onLogout }) => {
   const [open, setOpen] = useState(false);
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const {loggedToPw, loggedToAgora, doLoginFlow} = useAuth();
-
-  const handleSignIn = async () => {
-    setButtonClicked(true);
-    await doLoginFlow();
-    setButtonClicked(false);
-  };
-
-  if (loggedToPw === LogginToPwBackendState.Error || loggedToAgora === 'error') {
-    return (
-      <div className="relative">
-        <button
-          onClick={handleSignIn}
-          className="flex h-fit w-44 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white py-2"
-        >
-          <span className="text-primary">
-            {!buttonClicked ? 'Sign in' : 'Sign in...'}
-          </span>
-        </button>
-      </div>
-    );
-  }
-
 
   return (
     <div className="relative">
