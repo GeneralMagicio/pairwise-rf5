@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-
-import { useAuth } from '@/app/utils/wallet/AuthProvider';
 import { JWTPayload } from '@/app/utils/wallet/types';
 import { AutoScrollAction, ProjectCard } from '../card/ProjectCard';
 import ConflictButton from '../card/CoIButton';
@@ -55,7 +53,6 @@ export default function Home() {
   const { category } = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { checkLoginFlow } = useAuth();
   const { address, chainId } = useAccount();
 
   const [rating1, setRating1] = useState<number | null>(null);
@@ -119,10 +116,6 @@ export default function Home() {
       setBypassPrevProgress(true);
     },
   });
-
-  useEffect(() => {
-    checkLoginFlow();
-  }, [checkLoginFlow]);
 
   useEffect(() => {
     if (bypassPrevProgress && data) {

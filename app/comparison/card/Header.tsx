@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({
               window.open(PAIRWISE_REPPORT_URL + question, '_blank')
             }
           >
-            Repport an issue
+            Report an issue
           </button>
         </div>
       </div>

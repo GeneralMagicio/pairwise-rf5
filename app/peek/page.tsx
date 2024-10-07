@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useProjectsRankingByCategoryId } from '../comparison/utils/data-fetching/ranking';
 import { convertCategoryNameToId } from '../comparison/utils/helpers';
 import Spinner from '../components/Spinner';
@@ -9,11 +8,7 @@ import { useAuth } from '../utils/wallet/AuthProvider';
 
 const Peek = () => {
 
-  const {loggedToAgora, checkLoginFlow} = useAuth();
-
-  useEffect(() => {
-    checkLoginFlow();
-  }, [checkLoginFlow]);
+  const {loggedToAgora} = useAuth();
 
   console.log(loggedToAgora);
   

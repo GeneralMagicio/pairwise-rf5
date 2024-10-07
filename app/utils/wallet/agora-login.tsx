@@ -80,19 +80,19 @@ const verifyMessage = async ({ message, signature }: { message: string, signatur
   return payload;
 };
 
-export const isLoggedInToAgora = (): JWTPayload | false => {
+export const isLoggedInToAgora = async (address: string): Promise<JWTPayload | false> => {
   try {
-    // return JWT from local storage
-    const session = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
-    if (!session) {
-      return false;
-    }
-    const parsedObj: VerifyResponse = JSON.parse(session);
-    // decode JWT to get session info
-    const decoded: JWTPayload = decodeJwt(parsedObj.access_token);
-
-    if (Date.now() < (decoded.exp * 1000)) return decoded;
-    else return false;
+    const agoraJwt = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
+    const parsed: VerifyResponse = JSON.parse(agoraJwt || '');
+    const decoded: JWTPayload = decodeJwt(parsed.access_token);
+  
+    const { data } = await axiosInstance.get(`${BASE_URL}${API_PREFIX}/retrofunding/rounds/5/ballots/${address}`, {
+        headers: {
+          'Authorization': `Bearer ${parsed.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    return decoded;
   }
   catch (e) {
     return false;

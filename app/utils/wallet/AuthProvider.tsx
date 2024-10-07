@@ -99,7 +99,7 @@ export const useAuth = () => {
   const { address: connectedAddress, chainId } = useAccount();
   const prevAddress = usePrevious(connectedAddress);
   const { signMessageAsync } = useSignMessage();
-  const [temp, setTemp] = useState(0);
+
   const router = useRouter();
   const path = usePathname();
 
@@ -107,7 +107,6 @@ export const useAuth = () => {
     signOutFromAgora();
     logoutFromPwBackend();
     setLoggedToAgora('initial');
-    setLoginAddress({value: undefined, confirmed: true});
     setLoggedToPw(LogginToPwBackendState.Initial);
     setIsNewUser(false);
     if (redirectToLanding) router.push('/');
@@ -119,7 +118,7 @@ export const useAuth = () => {
   }, []);
 
   useEffect(() => {
-    if (!prevAddress && !loginAddress.value) {
+    if (!prevAddress && !loginAddress.value && connectedAddress) {
       setLoginAddress({value: connectedAddress, confirmed: true});
     }
     else if (prevAddress && connectedAddress !== prevAddress && !path.includes('comparison')) {
@@ -131,23 +130,41 @@ export const useAuth = () => {
   }, [connectedAddress, prevAddress, path]);
 
   const redirectToComparisonPage = useCallback(() => {
-    if (typeof loggedToAgora !== 'object') return;
+    if (typeof loggedToAgora !== 'object' || loggedToPw !== LogginToPwBackendState.LoggedIn) return;
     const category = loggedToAgora.category;
     router.push(`/comparison/${category}`);
-  }, [loggedToAgora]);
+  }, [loggedToAgora, loggedToPw, router]);
 
-  const checkLoginFlow = useCallback(async () => {
+  const checkLoggedInToPwAndAgora = useCallback(async () => {
+
+    if (!loginAddress.value) return;
+
+    const loggedInToAgora = await isLoggedInToAgora(loginAddress.value);
+    if (loggedInToAgora) setLoggedToAgora(loggedInToAgora);
+    else setLoggedToAgora('error');
+
+    const validToken = await isLoggedIn();
+    if (validToken) {
+      setLoggedToPw(LogginToPwBackendState.LoggedIn);
+    } else setLoggedToPw(LogginToPwBackendState.Error);
+
+  }, [loginAddress.value]);
+
+  useEffect(() => {
+    checkLoggedInToPwAndAgora();
+  }, [checkLoggedInToPwAndAgora]);
+
+  const doLoginFlow = useCallback(async () => {
     console.log('Running the check login flow');
     const address = loginAddress.value;
-    if (loginInProgress) return;
-    if (!address || !chainId) return;
+    if (loginInProgress || !address || !chainId) return;
     // setLoginAddress({value: connectedAddress, confirmed: false})
     let message;
     let signature;
 
     try {
       console.log('chking agora exp');
-      const loggedInToAgora = isLoggedInToAgora();
+      const loggedInToAgora = await isLoggedInToAgora(address);
       if (loggedInToAgora) setLoggedToAgora(loggedInToAgora);
       else {
         const {message: val1, signature: val2} = await getMessageAndSignature(address, chainId, signMessageAsync);
@@ -162,6 +179,7 @@ export const useAuth = () => {
     catch (e) {
       console.log('agora err');
       setLoggedToAgora('error');
+      setLoginInProgress(false);
       return;
     }
 
@@ -195,15 +213,13 @@ export const useAuth = () => {
     catch (e) {
       console.log('pw error', e);
       setLoggedToPw(LogginToPwBackendState.Error);
-      setLoginInProgress(false);
       return;
     }
     finally {
       setLoginInProgress(false);
     }
 
-    setLoginInProgress(false);
-  }, [loginAddress.value, temp, chainId]);
+  }, [loginAddress.value, chainId]);
 
   useEffect(() => {
     if (loggedToPw === LogginToPwBackendState.LoggedIn && typeof loggedToAgora === 'object' && loggedToAgora.isBadgeholder === true) {
@@ -217,10 +233,9 @@ export const useAuth = () => {
       function (response) {
         return response;
       },
-      function (error) {
+      async function (error) {
         if (error.response && error.response.status === 401) {
           signOut();
-          setTemp(temp + 1);
         }
         return Promise.reject(error);
       },
@@ -230,7 +245,7 @@ export const useAuth = () => {
       // Remove the interceptor when the component unmounts
       axiosInstance.interceptors.response.eject(interceptor);
     };
-  }, [temp]);
+  }, []);
 
   // useEffect(() => {
   //   if (address) {
@@ -249,6 +264,6 @@ export const useAuth = () => {
     setLoginAddress,
     redirectToComparisonPage,
     // setShowBhModal,
-    checkLoginFlow,
+    doLoginFlow,
   };
 };
