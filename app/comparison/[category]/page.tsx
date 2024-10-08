@@ -153,8 +153,8 @@ export default function Home() {
   }, [data, temp]);
 
   useEffect(() => {
-    const initialRating1 = data?.pairs[0][0].rating ?? null;
-    const initialRating2 = data?.pairs[0][1].rating || null;
+    const initialRating1 = data?.pairs[0] && data?.pairs[0].length > 0 ? data.pairs[0][0].rating : null;
+    const initialRating2 = data?.pairs[0] && data?.pairs[0].length > 0 ? data.pairs[0][1].rating : null;
 
     // observe if user rated both projects
     if (rating1 !== initialRating1 && rating2 !== initialRating2) {

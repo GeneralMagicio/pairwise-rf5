@@ -13,7 +13,7 @@ const SignInWithWallet: React.FC<SignInWithWalletProps> = () => {
         Please sign in message on your wallet to authenticate the connected address
       </p>
       <button
-        onClick={doLoginFlow}
+        onClick={() => doLoginFlow()}
         className="w-full rounded-md bg-primary px-4 py-2 font-semibold text-white transition duration-300 ease-in-out hover:bg-red-600"
       >
         Sign in

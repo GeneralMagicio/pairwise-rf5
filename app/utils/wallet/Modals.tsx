@@ -24,9 +24,9 @@ export default function Modals() {
     setLoginAddress({...loginAddress, confirmed: true});
   };
 
-  const handleNewWalletSignIn = () => {
+  const handleNewWalletSignIn = async () => {
+    await signOut();
     setLoginAddress({value: address, confirmed: true});
-    signOut(false);
     doLoginFlow();
   };
 

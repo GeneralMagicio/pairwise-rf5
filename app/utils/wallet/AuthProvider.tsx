@@ -109,6 +109,7 @@ export const useAuth = () => {
     signOutFromAgora();
     logoutFromPwBackend();
     setLoggedToAgora('initial');
+    setLoginAddress({value: undefined, confirmed: true});
     setLoggedToPw(LogginToPwBackendState.Initial);
     setIsNewUser(false);
     if (redirectToLanding) router.push('/');
@@ -156,9 +157,9 @@ export const useAuth = () => {
     checkLoggedInToPwAndAgora();
   }, [checkLoggedInToPwAndAgora]);
 
-  const doLoginFlow = useCallback(async () => {
+  const doLoginFlow = useCallback(async (addressParam?: `0x${string}`) => {
     console.log('Running the check login flow');
-    const address = loginAddress.value;
+    const address = addressParam ?? connectedAddress 
     if (loginInProgress || !address || !chainId) return;
     // setLoginAddress({value: connectedAddress, confirmed: false})
     let message;
@@ -221,7 +222,7 @@ export const useAuth = () => {
       setLoginInProgress(false);
     }
 
-  }, [loginAddress.value, chainId]);
+  }, [chainId, connectedAddress]);
 
   useEffect(() => {
     if (loggedToPw === LogginToPwBackendState.LoggedIn && typeof loggedToAgora === 'object' && loggedToAgora.isBadgeholder === true) {
