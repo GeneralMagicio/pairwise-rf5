@@ -38,7 +38,7 @@ export const loginToPwBackend = async (
   return data;
 };
 
-export const logoutFromPwBackend = async () => {
+export const logoutFromPwBackend = () => {
   try {
     window.localStorage.removeItem('auth');
     window.localStorage.removeItem('loggedInAddress');

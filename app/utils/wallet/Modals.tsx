@@ -13,21 +13,21 @@ import NewWalletModal from './modals/NewWalletModal';
 export default function Modals() {
   const path = usePathname();
   const {address} = useAccount();
-  const { loggedToAgora, loggedToPw, loginInProgress, loginAddress, setLoginAddress, checkLoginFlow, signOut } = useAuth();
+  const { loggedToAgora, loggedToPw, loginInProgress, loginAddress, setLoginAddress, doLoginFlow, signOut } = useAuth();
 
   const notBhOpen = typeof loggedToAgora === 'object'
-    && loggedToAgora.isBadgeholder === false && !path.includes('comparison');
+    && loggedToPw === LogginToPwBackendState.LoggedIn && loggedToAgora.isBadgeholder === false && !path.includes('comparison');
 
-  const signInModalOpen = loggedToAgora === 'error' || loggedToPw === LogginToPwBackendState.Error;
+  const signInModalOpen = (address ?? false) && (loggedToAgora === 'error' || loggedToPw === LogginToPwBackendState.Error);
 
   const handleNewWalletCancel = () => {
     setLoginAddress({...loginAddress, confirmed: true});
   };
 
-  const handleNewWalletSignIn = () => {
+  const handleNewWalletSignIn = async () => {
+    await signOut();
     setLoginAddress({value: address, confirmed: true});
-    signOut(false);
-    checkLoginFlow();
+    doLoginFlow();
   };
 
   return (
