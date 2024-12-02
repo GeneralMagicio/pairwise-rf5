@@ -116,6 +116,6 @@ export const uploadBallot = async (
   return data;
 };
 
-export const signOutFromAgora = () => {
-  localStorage.removeItem(LOCAL_STORAGE_JWT_KEY);
-};
+// export const signOutFromAgora = () => {
+//   localStorage.removeItem(LOCAL_STORAGE_JWT_KEY);
+// };

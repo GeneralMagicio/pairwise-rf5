@@ -14,8 +14,6 @@ export const isLoggedIn = async () => {
 export const loginToPwBackend = async (
   chainId: number,
   address: string,
-  message: string,
-  signature: `0x${string}`,
 ) => {
   // const nonce = await fetchNonce()
   // const nonce = generateRandomString(16
@@ -26,7 +24,7 @@ export const loginToPwBackend = async (
   const { data } = await axiosInstance.post<{ token: string, isNewUser: boolean }>(
     '/auth/login',
     {
-      ...{ message, signature: `${signature}`, address, chainId },
+      ...{ address, chainId },
     },
   );
 
