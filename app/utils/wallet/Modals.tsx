@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
+// import { usePathname } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Modal from '../Modal';
 // import ConnectLoading from './modals/ConnectLoading';
@@ -11,23 +11,24 @@ import { LogginToPwBackendState, useAuth } from './AuthProvider';
 // import NewWalletModal from './modals/NewWalletModal';
 
 export default function Modals() {
-  const path = usePathname();
+  // const path = usePathname();
   const {address, isConnected} = useAccount();
-  const { loggedToPw, loginInProgress, loginAddress, setLoginAddress, doLoginFlow, signOut } = useAuth();
+  const { loggedToPw } = useAuth();
+  // const { loggedToPw, loginAddress, setLoginAddress, doLoginFlow, signOut } = useAuth();
 
-  const notBhOpen = loggedToPw === LogginToPwBackendState.LoggedIn && !path.includes('comparison');
+  // const notBhOpen = loggedToPw === LogginToPwBackendState.LoggedIn && !path.includes('comparison');
 
   const signInModalOpen = (address ?? false) && isConnected && loggedToPw !== LogginToPwBackendState.LoggedIn;
 
-  const handleNewWalletCancel = () => {
-    setLoginAddress({...loginAddress, confirmed: true});
-  };
+  // const handleNewWalletCancel = () => {
+  //   setLoginAddress({...loginAddress, confirmed: true});
+  // };
 
-  const handleNewWalletSignIn = async () => {
-    await signOut();
-    setLoginAddress({value: address, confirmed: true});
-    doLoginFlow();
-  };
+  // const handleNewWalletSignIn = async () => {
+  //   await signOut();
+  //   setLoginAddress({value: address, confirmed: true});
+  //   doLoginFlow();
+  // };
 
   return (
     <>

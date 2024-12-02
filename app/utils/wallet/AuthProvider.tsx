@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { usePathname, useRouter } from 'next/navigation';
 import { isLoggedIn, loginToPwBackend, logoutFromPwBackend } from './pw-login';
 // import { getMessageAndSignature } from './agora-login';
@@ -107,7 +107,7 @@ export const useAuth = () => {
   // const [loginFlowDangling, setLoginFlowDangling] = useState(false)
   const { address: connectedAddress, chainId } = useAccount();
   const prevAddress = usePrevious(connectedAddress);
-  const { signMessageAsync } = useSignMessage();
+  // const { signMessageAsync } = useSignMessage();
 
   const router = useRouter();
   const path = usePathname();
