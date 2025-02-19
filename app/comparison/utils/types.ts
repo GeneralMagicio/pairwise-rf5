@@ -1341,3 +1341,27 @@ export type CollectionProgressStatus =
   | 'Filtered'
   | 'Filtering'
   | 'Pending'
+
+export enum CollectionProgressStatusEnum {
+    Attested = 'Attested',
+    Finished = 'Finished',
+    WIPThreshold = 'WIP - Threshold',
+    WIP = 'WIP',
+    Filtered = 'Filtered',
+    Filtering = 'Filtering',
+    Pending = 'Pending',
+    // Delegated = 'Delegated',
+}
+  
+
+  export interface IProjectRanking {
+    project: IProject
+    projectId: number
+    rank: number
+    star: number
+    name: string
+    share: number
+    locked: boolean
+    coi: boolean
+  }
+  
