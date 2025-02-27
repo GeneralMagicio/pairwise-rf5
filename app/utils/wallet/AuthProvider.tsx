@@ -201,7 +201,7 @@ export const useAuth = () => {
   }, [chainId, connectedAddress]);
 
   useEffect(() => {
-    if (loggedToPw === LogginToPwBackendState.LoggedIn) {
+    if (loggedToPw === LogginToPwBackendState.LoggedIn && path === '/') {
       redirectToComparisonPage(loginAddress.value || '5');
     }
   }, [loggedToPw, redirectToComparisonPage]);

@@ -6,7 +6,7 @@ const PAIRWISE_REPPORT_URL =
   'https://github.com/GeneralMagicio/pairwise-rpgf5/issues/new?assignees=MoeNick&labels=&projects=&template=report-an-issue.md&title=%5BFeedback%5D+';
 
 interface HeaderProps {
-  progress: number;
+  progress?: number;
   category: string;
   question: string;
   isFirstSelection?: boolean;
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div
+      {progress !== undefined && typeof progress === 'number' ? <div
         className={`h-2 bg-red-100 ${
           isBarFixed ? 'fixed left-0 top-0 z-50 w-full' : ''
         }`}
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
           className="h-full bg-primary"
           style={{ width: `${progress}%` }}
         ></div>
-      </div>
+      </div> : null}
     </div>
   );
 };

@@ -1,11 +1,7 @@
 import { FC } from 'react';
+import { TIconProps } from './types';
 
-type TIconProps = {
-  size?: number
-  color?: string
-};
-
-export const ArrowRightIcon: FC<TIconProps> = ({ size = 20, color = 'white' }) => {
+export const CheckIcon: FC<TIconProps> = ({ size = 20, color = '#079455' }) => {
   return (
     <svg
       width={size}
@@ -15,7 +11,7 @@ export const ArrowRightIcon: FC<TIconProps> = ({ size = 20, color = 'white' }) =
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M4.16675 9.99984H15.8334M15.8334 9.99984L10.0001 4.1665M15.8334 9.99984L10.0001 15.8332"
+        d="M16.6663 5L7.49967 14.1667L3.33301 10"
         stroke={color}
         strokeWidth="1.66667"
         strokeLinecap="round"
