@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 // import { optimismSepolia } from 'thirdweb/chains';
 import { type Address } from 'viem';
 import { getWalletClient } from '@wagmi/core';
-import { providers } from 'ethers';
+import { BrowserProvider, JsonRpcSigner } from 'ethers'; // CHANGED: Updated import from ethers
 import { useWalletClient } from 'wagmi';
 import { axiosInstance } from '@/app/utils/axiosInstance';
-import type { JsonRpcSigner } from '@ethersproject/providers';
+// REMOVED: Removed import { JsonRpcSigner } from '@ethersproject/providers'
 
 
 export type EASConfig = {
@@ -27,15 +27,16 @@ export function generateRandomString(length: number): string {
 
 export function walletClientToSigner(walletClient: ReturnType<typeof getWalletClient>) {
   const { account, chain, transport } = walletClient;
-  const network = {
+  
+  // CHANGED: Updated provider creation for ethers v6
+  const provider = new BrowserProvider(transport as any, {
     chainId: chain.id,
     name: chain.name,
     ensAddress: chain.contracts?.ensRegistry?.address,
-  };
-  const provider = new providers.Web3Provider(transport as any, network);
-  const signer = provider.getSigner(account.address);
-
-  return signer;
+  });
+  
+  // CHANGED: Updated signer handling for ethers v6
+  return provider.getSigner(account.address);
 }
 
 export function useSigner() {
@@ -46,9 +47,13 @@ export function useSigner() {
     async function getSigner() {
       if (!walletClient) return;
 
-      const tmpSigner = walletClientToSigner(walletClient);
-
-      setSigner(tmpSigner);
+      try {
+        // CHANGED: Need to await signer in ethers v6
+        const tmpSigner = await walletClientToSigner(walletClient);
+        setSigner(tmpSigner);
+      } catch (error) {
+        console.error('Error getting signer:', error);
+      }
     }
 
     void getSigner();

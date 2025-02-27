@@ -4,13 +4,13 @@ import React from 'react';
 interface UnlockBallotProps {
   projectCount: number;
   category: string;
-  onUnlock: () => void;
+  onRanking: () => void;
 }
 
 const FinishBallot: React.FC<UnlockBallotProps> = ({
   projectCount,
   category,
-  onUnlock,
+  onRanking,
 }) => {
   return (
     <div className="mx-auto w-[96] overflow-hidden rounded-lg bg-white bg-ballot bg-no-repeat shadow-lg">
@@ -24,7 +24,7 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({
         />
         <h2 className="mb-4 text-xl font-medium text-dark-500">
           {
-            'Nice work! You\'re ready to unlock your ballot and distribute rewards'
+            'Nice work! You\'re ready to see your ranking and distribute rewards'
           }
         </h2>
         <p className="mb-6 text-gray-400">
@@ -35,10 +35,10 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({
           category.`}
         </p>
         <button
-          onClick={onUnlock}
+          onClick={onRanking}
           className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-white transition duration-300 ease-in-out hover:bg-red-600"
         >
-          <svg
+          {/* <svg
             className="mr-2 size-5"
             fill="none"
             stroke="currentColor"
@@ -51,8 +51,8 @@ const FinishBallot: React.FC<UnlockBallotProps> = ({
               strokeWidth={2}
               d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
             />
-          </svg>
-          Unlock Ballot
+          </svg> */}
+          See Ranking
         </button>
       </div>
     </div>

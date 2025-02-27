@@ -13,9 +13,9 @@ import {
   categoryIdTitleMap,
   formatBudget,
 } from '../../comparison/utils/helpers';
-import { Checkbox } from '@/app/utils/Checkbox';
-import { LockIcon } from '@/public/assets/icon-components/Lock';
-import { UnlockIcon } from '@/public/assets/icon-components/Unlock';
+// import { Checkbox } from '@/app/utils/Checkbox';
+// import { LockIcon } from '@/public/assets/icon-components/Lock';
+// import { UnlockIcon } from '@/public/assets/icon-components/Unlock';
 import NotFoundComponent from '@/app/components/404';
 import {
   useProjectsRankingByCategoryId,
@@ -303,15 +303,15 @@ const RankingPage = () => {
 
     if (!projects) return;
 
-    const rankingArray = projects.map(project => ({
-      id: project.projectId,
-      share: project.share,
-    }));
+    // const rankingArray = projects.map(project => ({
+    //   id: project.projectId,
+    //   share: project.share,
+    // }));
 
-    await updateProjectRanking({
-      cid: category,
-      ranking: rankingArray,
-    });
+    // await updateProjectRanking({
+    //   cid: category,
+    //   ranking: rankingArray,
+    // });
 
     if (!account || !ranking || !signer || !account.address) {
       console.error('Requirements not met for attestations', { account, ranking, signer });
@@ -416,6 +416,8 @@ const RankingPage = () => {
     setNonCoIProjects(projects.filter(project => !project.coi));
   }, [projects]);
 
+  console.log('cat,', category);
+
   if (!category) return <NotFoundComponent />;
 
   return (
@@ -469,7 +471,7 @@ const RankingPage = () => {
           selectedCategoryId={category}
         />
       </Modal> */}
-      <Header category='Ranking' progress={1} question='Ranking' />
+      <Header category='Ranking' question='Ranking'  />
       <div className="flex flex-col justify-between gap-4 px-6 py-16 lg:px-20 xl:px-52 2xl:px-72">
         <p className="mb-4 text-2xl font-semibold text-gray-700">
           Edit your votes
@@ -500,7 +502,7 @@ const RankingPage = () => {
             </div>
           </div>
           {/* <SearchBar search={search} setSearch={setSearch} /> */}
-          <div className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 lg:px-8">
+          {/* <div className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 lg:px-8">
             <div className="flex items-center gap-4">
               <div className="flex items-center justify-center gap-2">
                 <Checkbox
@@ -563,22 +565,12 @@ const RankingPage = () => {
                 items locked
               </p>
             </div>
-          </div>
+          </div> */}
           {isLoading
             ? (
                 <Spinner />
               )
-            : ranking
-            && ranking.progress !== CollectionProgressStatusEnum.Finished
-            && ranking.progress !== CollectionProgressStatusEnum.Attested
-              ? (
-                  <div className="flex h-64 items-center justify-center">
-                    <p className="text-gray-400">
-                      You need to finish with the comparison before you can vote
-                    </p>
-                  </div>
-                )
-              : projects?.length
+            : projects?.length
                 ? (
                     <div className="w-full overflow-x-auto">
                       <table className="w-full min-w-full">

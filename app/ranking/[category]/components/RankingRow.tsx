@@ -2,9 +2,6 @@ import { FC } from 'react';
 import Image from 'next/image';
 import { NumericFormat } from 'react-number-format';
 import { IProjectRanking } from '@/app/comparison/utils/types';
-import { Checkbox } from '@/app/utils/Checkbox';
-import { LockIcon } from '@/public/assets/icon-components/Lock';
-import { UnlockIcon } from '@/public/assets/icon-components/Unlock';
 import styles from '@/app/styles/Project.module.css';
 import { formatBudget } from '@/app/comparison/utils/helpers';
 import { COI } from '@/public/assets/icon-components/COI';
@@ -43,13 +40,13 @@ const RankingRow: FC<IRankingRowProps> = ({
         locked && 'bg-gray-100'
       }`}
     >
-      <td className="pb-8 pl-1 pt-4 lg:pl-4">
+      {/* <td className="pb-8 pl-1 pt-4 lg:pl-4">
         <Checkbox
           checked={selected && !coi}
           onChange={() => onSelect(project.projectId)}
           disabled={coi}
         />
-      </td>
+      </td> */}
       <td className="flex grow flex-row pb-8 pl-1 pt-4 lg:pl-4">
         <Image
           src={project.project.image || '/assets/images/placeholder.png'}
@@ -105,13 +102,13 @@ const RankingRow: FC<IRankingRowProps> = ({
               }`}
               placeholder="0.00%"
               isAllowed={values => handleAllowdValue(values)}
-              disabled={locked || coi}
+              disabled={true}
             />
             <span className={`absolute ${coi ? 'text-op-neutral-300' : 'text-gray-400'} bottom-0 left-1/2 -translate-x-1/2 translate-y-full text-xs `}>
               {formatBudget(budget)}
             </span>
           </div>
-          <button
+          {/* <button
             className={`flex size-9 items-center justify-center rounded-md border p-2
               ${coi ? 'opacity-20' : 'opacity-100'}
         ${
@@ -120,7 +117,7 @@ const RankingRow: FC<IRankingRowProps> = ({
             onClick={() => onLock(project.projectId)}
           >
             {locked ? <LockIcon color="#fff" /> : <UnlockIcon />}
-          </button>
+          </button> */}
         </div>
       </td>
     </tr>

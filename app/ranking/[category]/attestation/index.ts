@@ -1,7 +1,6 @@
 import { EAS, SchemaRegistry, SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { Signer } from 'ethers';
 // import { activeChain } from '@/app/lib/constants';
-import { axiosInstance } from '@/app/utils/axiosInstance';
 import { EASNetworks, SCHEMA_UID, activeChainId, convertRankingToAttestationFormat, generateRandomString, getPrevAttestationIds } from '../utils';
 
 export enum AttestationState {
@@ -259,17 +258,17 @@ export const attest = async ({ ranking, signer, address, setAttestationState, se
 
     const attestationLink = `${easConfig.explorer}/attestation/view/${newAttestationUID}`;
 
-    await axiosInstance.post('/flow/report-attest', {
-      collectionId: ranking.id,
-      attestationId: attestationLink,
-    });
+    // await axiosInstance.post('/flow/report-attest', {
+    //   collectionId: ranking.id,
+    //   attestationId: attestationLink,
+    // });
 
     setAttestationLink(attestationLink);
-    if (isBudget == true) {
+    // if (isBudget == true) {
       setAttestationState(AttestationState.Success);
       return;
-    }
-    setAttestationState(AttestationState.FarcasterDelegate);
+    // }
+    // setAttestationState(AttestationState.FarcasterDelegate);
   }
   catch (e) {
     console.error('error on sending tx:', e);

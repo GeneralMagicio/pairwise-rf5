@@ -17,6 +17,7 @@ import {
   useGetPairwisePairs,
 } from '../utils/data-fetching/pair';
 import {
+  categoryIdSlugMap,
   convertCategoryNameToId,
   convertCategoryToLabel,
   getCategoryCount,
@@ -99,7 +100,9 @@ export default function Home() {
   const [aiMode2, setAiMode2] = useState(false);
   const [isInitialVisit, setIsInitialVisit] = useState(true);
 
+  console.log('Category is', category);
   const cid = convertCategoryNameToId(category as JWTPayload['category']);
+  console.log('cat to id:', cid);
   const { data, isLoading } = useGetPairwisePairs(cid);
   const prevProgress = usePrevious(progress);
 
@@ -308,6 +311,10 @@ export default function Home() {
     }
   };
 
+  const handleSeeRanking = () => {
+    router.push(`/ranking/${categoryIdSlugMap.get(cid)}`);
+  };
+
   const checkLowRatedProjectSelected = (chosenId: number): boolean => {
     const isLowRatedProjectSelected = (
       selectedId: number,
@@ -432,7 +439,7 @@ export default function Home() {
               category as JWTPayload['category']
             )}
             projectCount={getCategoryCount(category as JWTPayload['category'])}
-            onUnlock={handleUnlockBallot}
+            onRanking={handleSeeRanking}
           />
         )}
         {showSuccessBallot && (
