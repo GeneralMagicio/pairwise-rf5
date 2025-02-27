@@ -10,7 +10,7 @@ interface Props {
 }
 
 const AttestationSuccessModal: React.FC<Props> = ({ link, onClose }) => {
-  const [hideAttestation, setHideAttestation] = useState(false);
+  const [hideAttestation, _setHideAttestation] = useState(false);
   // const posthog = usePostHog();
 
   // useEffect(() => {

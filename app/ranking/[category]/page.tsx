@@ -76,13 +76,13 @@ const RankingPage = () => {
   const [projects, setProjects] = useState<IProjectRanking[] | null>(null);
   const [totalShareError, setTotalShareError] = useState<string | null>(null);
   const [lockedItems, setLockedItems] = useState<number[]>([]);
-  const [isLocked, setIsLocked] = useState(false);
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  // const [isLocked, setIsLocked] = useState(false);
+  // const [isUnlocked, setIsUnlocked] = useState(false);
   const [allocationBudget, setAllocationBudget] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nonCoIProjects, setNonCoIProjects] = useState<IProjectRanking[]>([]);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [closingDesibled, setClosingDesibled] = useState(false);
+  // const [showLoginModal, setShowLoginModal] = useState(false);
+  // const [closingDesibled, setClosingDesibled] = useState(false);
 
   const { data: categoryRankings, isLoading: rankingLoading }
     = useCategoryRankings();
@@ -94,18 +94,18 @@ const RankingPage = () => {
 
   // const { isBadgeholder } = getJWTData();
 
-  const handleBulkSelection = () => {
-    if (!nonCoIProjects) return;
+  // const handleBulkSelection = () => {
+  //   if (!nonCoIProjects) return;
 
-    setTotalShareError(null);
+  //   setTotalShareError(null);
 
-    if (checkedItems.length === nonCoIProjects.length) {
-      setCheckedItems([]);
-    }
-    else {
-      setCheckedItems(nonCoIProjects.map(project => project.projectId));
-    }
-  };
+  //   if (checkedItems.length === nonCoIProjects.length) {
+  //     setCheckedItems([]);
+  //   }
+  //   else {
+  //     setCheckedItems(nonCoIProjects.map(project => project.projectId));
+  //   }
+  // };
 
   const handleVote = useCallback(
     debounce((id: number, share: number) => {
@@ -250,39 +250,39 @@ const RankingPage = () => {
   //   );
   // };
 
-  const lockSelection = () => {
-    if (!nonCoIProjects) return;
+  // const lockSelection = () => {
+  //   if (!nonCoIProjects) return;
 
-    if (
-      checkedItems.length > nonCoIProjects?.length - 2
-      || lockedItems.length >= nonCoIProjects?.length - 2
-    ) {
-      setTotalShareError('At least two projects must be unlocked');
-      window.scrollTo(0, document.body.scrollHeight);
-      return;
-    }
+  //   if (
+  //     checkedItems.length > nonCoIProjects?.length - 2
+  //     || lockedItems.length >= nonCoIProjects?.length - 2
+  //   ) {
+  //     setTotalShareError('At least two projects must be unlocked');
+  //     window.scrollTo(0, document.body.scrollHeight);
+  //     return;
+  //   }
 
-    const lockedProjects = checkedItems.filter(
-      checkedId => !lockedItems.includes(checkedId)
-    );
-    // posthog.capture('Lock selection');
+  //   const lockedProjects = checkedItems.filter(
+  //     checkedId => !lockedItems.includes(checkedId)
+  //   );
+  //   // posthog.capture('Lock selection');
 
-    setLockedItems([...lockedItems, ...lockedProjects]);
-    setCheckedItems([]);
-  };
+  //   setLockedItems([...lockedItems, ...lockedProjects]);
+  //   setCheckedItems([]);
+  // };
 
-  const unlockSelection = () => {
-    if (!projects) return;
+  // const unlockSelection = () => {
+  //   if (!projects) return;
 
-    const unlockedProjects = checkedItems.filter(checkedId =>
-      lockedItems.includes(checkedId)
-    );
+  //   const unlockedProjects = checkedItems.filter(checkedId =>
+  //     lockedItems.includes(checkedId)
+  //   );
 
-    setLockedItems(
-      lockedItems.filter(lockedId => !unlockedProjects.includes(lockedId))
-    );
-    setCheckedItems([]);
-  };
+  //   setLockedItems(
+  //     lockedItems.filter(lockedId => !unlockedProjects.includes(lockedId))
+  //   );
+  //   setCheckedItems([]);
+  // };
 
   const selectItem = (id: number) => {
     if (checkedItems.includes(id)) {
@@ -295,7 +295,7 @@ const RankingPage = () => {
 
   const submitVotes = async () => {
     if (!account) {
-      setShowLoginModal(true);
+      // setShowLoginModal(true);
       return;
     }
 
@@ -349,39 +349,39 @@ const RankingPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!projects || projects.length === 0) {
-      setIsLocked(false);
-      setIsUnlocked(true);
-      return;
-    }
+  // useEffect(() => {
+  //   if (!projects || projects.length === 0) {
+  //     setIsLocked(false);
+  //     setIsUnlocked(true);
+  //     return;
+  //   }
 
-    const allLocked = lockedItems.length === projects.length && projects.length;
-    const noneLocked = lockedItems.length === 0;
-    const checkedLocked = checkedItems.every(id => lockedItems.includes(id));
-    const checkedUnlocked = checkedItems.every(
-      id => !lockedItems.includes(id)
-    );
-    const someLocked = checkedItems.some(id => lockedItems.includes(id));
-    const someUnlocked = checkedItems.some(id => !lockedItems.includes(id));
+  //   const allLocked = lockedItems.length === projects.length && projects.length;
+  //   const noneLocked = lockedItems.length === 0;
+  //   const checkedLocked = checkedItems.every(id => lockedItems.includes(id));
+  //   const checkedUnlocked = checkedItems.every(
+  //     id => !lockedItems.includes(id)
+  //   );
+  //   const someLocked = checkedItems.some(id => lockedItems.includes(id));
+  //   const someUnlocked = checkedItems.some(id => !lockedItems.includes(id));
 
-    if (allLocked || checkedLocked) {
-      setIsLocked(true);
-      setIsUnlocked(false);
-    }
-    else if (noneLocked || checkedUnlocked) {
-      setIsLocked(false);
-      setIsUnlocked(true);
-    }
-    else if (someLocked || someUnlocked) {
-      setIsLocked(true);
-      setIsUnlocked(true);
-    }
-    else {
-      setIsLocked(false);
-      setIsUnlocked(false);
-    }
-  }, [projects, lockedItems, checkedItems]);
+  //   if (allLocked || checkedLocked) {
+  //     setIsLocked(true);
+  //     setIsUnlocked(false);
+  //   }
+  //   else if (noneLocked || checkedUnlocked) {
+  //     setIsLocked(false);
+  //     setIsUnlocked(true);
+  //   }
+  //   else if (someLocked || someUnlocked) {
+  //     setIsLocked(true);
+  //     setIsUnlocked(true);
+  //   }
+  //   else {
+  //     setIsLocked(false);
+  //     setIsUnlocked(false);
+  //   }
+  // }, [projects, lockedItems, checkedItems]);
 
   useEffect(() => {
     if (ranking) setProjects(ranking?.ranking);

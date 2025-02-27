@@ -27,7 +27,7 @@ type AttestFunc = {
 // 1732032000 -> Tuesday, November 19, 2024 4:00:00 PM GMT
 export const VotingHasEnded = false;
 
-export const attest = async ({ ranking, signer, address, setAttestationState, setAttestationLink, isBudget }: AttestFunc) => {
+export const attest = async ({ ranking, signer, address, setAttestationState, setAttestationLink }: AttestFunc) => {
   // const localStorageTag = process.env.NEXT_PUBLIC_LOCAL_STORAGE_TAG!;
   // const identityString = localStorage.getItem(localStorageTag);
 
