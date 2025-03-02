@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import debounce from 'lodash.debounce';
 import { useAccount } from 'wagmi';
 import RankingRow from './components/RankingRow';
@@ -59,7 +59,7 @@ const votingStatusMap = {
 
 const RankingPage = () => {
   const params = useParams();
-  const router = useRouter();
+  // const router = useRouter();
   // const posthog = usePostHog();
 
   const account = useAccount();
@@ -340,7 +340,7 @@ const RankingPage = () => {
 
   const handleAttestationModalClose = () => {
     if (attestationState === AttestationState.Success || attestationState == AttestationState.FarcasterDelegate) {
-      router.push('/allocation');
+      window.close();
       setAttestationState(AttestationState.Initial);
     }
     else if (attestationState === AttestationState.Error) {
