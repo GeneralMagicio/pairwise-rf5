@@ -633,7 +633,7 @@ const RankingPage = () => {
               </p>
             </div>
           )}
-          <div className="flex justify-between">
+          <div className="flex flex-row-reverse">
             <button
               className={`font-semibold" flex items-center justify-center gap-3 rounded-lg px-10 py-2
               ${
