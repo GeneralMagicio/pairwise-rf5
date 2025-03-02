@@ -17,6 +17,9 @@ export const metadata = {
 
 // Create wagmiConfig
 const chains = process.env.NODE_ENV === 'production' ? [optimism] as const : [optimismSepolia] as const;
+
+console.log('These are the chains and node_env', process.env.NODE_ENV, chains);
+
 export const config = defaultWagmiConfig({
   chains,
   projectId,
