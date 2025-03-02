@@ -27,7 +27,6 @@ import {
   CollectionProgressStatusEnum,
   IProjectRanking,
 } from '@/app/comparison/utils/types';
-import { ArrowLeft2Icon } from '@/public/assets/icon-components/ArrowLeft2';
 import { ArrowRightIcon } from '@/public/assets/icon-components/ArrowRight';
 import { modifyPercentage, RankItem } from '../utils';
 import Modal from '@/app/utils/Modal';
@@ -635,16 +634,6 @@ const RankingPage = () => {
             </div>
           )}
           <div className="flex justify-between">
-            <button
-              className="flex items-center justify-center gap-3 rounded-lg border bg-gray-50 px-4 py-2 font-semibold text-gray-700"
-              onClick={() => {
-                // posthog.capture('Back to categories');
-                router.push('/allocation');
-              }}
-            >
-              <ArrowLeft2Icon />
-              Back to Categories
-            </button>
             <button
               className={`font-semibold" flex items-center justify-center gap-3 rounded-lg px-10 py-2
               ${
